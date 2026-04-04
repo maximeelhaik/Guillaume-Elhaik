@@ -250,7 +250,7 @@ const About = () => {
           <motion.h3 
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            className="text-grenat uppercase tracking-[0.3em] text-xs font-black mb-8"
+            className="text-grenat uppercase tracking-[0.3em] text-xs font-bold mb-8"
           >
             Le Cabinet
           </motion.h3>
@@ -288,7 +288,7 @@ const About = () => {
               </p>
               <motion.button 
                 whileHover={{ x: 10 }}
-                className="group flex items-center gap-6 text-acajou font-black uppercase tracking-[0.2em] text-xs border-b-2 border-acajou/10 pb-2"
+                className="group flex items-center gap-6 text-acajou font-bold uppercase tracking-[0.2em] text-xs border-b-2 border-acajou/10 pb-2"
               >
                 Découvrir notre parcours <ArrowRight size={18} className="text-grenat" />
               </motion.button>
@@ -341,7 +341,7 @@ const Expertise = () => {
             <motion.h3 
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              className="text-lin uppercase tracking-[0.3em] text-xs font-black"
+              className="text-lin uppercase tracking-[0.3em] text-xs font-bold"
             >
               Expertises
             </motion.h3>
@@ -399,7 +399,7 @@ const Testimonials = () => {
     <section id="testimonials" className="py-32 md:py-56 px-6 bg-porcelaine relative overflow-hidden">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-20 items-center">
         <div className="md:col-span-3">
-          <h3 className="text-grenat uppercase tracking-[0.3em] text-xs font-black">Témoignages</h3>
+          <h3 className="text-grenat uppercase tracking-[0.3em] text-xs font-bold">Témoignages</h3>
         </div>
         
         <div className="md:col-span-5 relative">
@@ -416,7 +416,7 @@ const Testimonials = () => {
             </p>
             <div className="flex justify-between items-end">
               <div>
-                <p className="font-black text-acajou uppercase tracking-widest text-sm">Ahmed B.</p>
+                <p className="font-bold text-acajou uppercase tracking-widest text-sm">Ahmed B.</p>
                 <p className="text-acajou/40 text-xs uppercase tracking-widest mt-1">Naturalisation · 2025</p>
               </div>
               <div className="flex gap-2">
@@ -479,7 +479,7 @@ const FAQ = () => {
         <motion.h3 
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          className="text-grenat uppercase tracking-[0.3em] text-xs font-black mb-20"
+          className="text-grenat uppercase tracking-[0.3em] text-xs font-bold mb-20"
         >
           Questions Fréquentes
         </motion.h3>
@@ -539,7 +539,7 @@ const Contact = () => {
             <motion.h3 
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              className="text-lin uppercase tracking-[0.3em] text-xs font-black mb-12"
+              className="text-lin uppercase tracking-[0.3em] text-xs font-bold mb-12"
             >
               Contact
             </motion.h3>
@@ -569,7 +569,7 @@ const Contact = () => {
                   <item.icon size={28} className="text-lin group-hover:text-acajou transition-colors" />
                 </div>
                 <div>
-                  <p className="text-lin/40 text-xs uppercase tracking-[0.3em] font-black mb-2">{item.label}</p>
+                  <p className="text-lin/40 text-xs uppercase tracking-[0.3em] font-bold mb-2">{item.label}</p>
                   <p className="text-2xl md:text-3xl font-serif italic group-hover:text-lin transition-colors">{item.value}</p>
                 </div>
               </motion.div>
@@ -586,20 +586,20 @@ const Contact = () => {
           <form className="space-y-10">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
               <div className="space-y-3">
-                <label className="text-[10px] uppercase tracking-[0.4em] text-lin font-black">Prénom</label>
+                <label className="text-[10px] uppercase tracking-[0.4em] text-lin font-bold">Prénom</label>
                 <input type="text" className="w-full bg-transparent border-b border-porcelaine/20 py-4 focus:border-lin outline-none transition-all duration-500 placeholder:text-porcelaine/10" placeholder="Jean" />
               </div>
               <div className="space-y-3">
-                <label className="text-[10px] uppercase tracking-[0.4em] text-lin font-black">Nom</label>
+                <label className="text-[10px] uppercase tracking-[0.4em] text-lin font-bold">Nom</label>
                 <input type="text" className="w-full bg-transparent border-b border-porcelaine/20 py-4 focus:border-lin outline-none transition-all duration-500 placeholder:text-porcelaine/10" placeholder="Dupont" />
               </div>
             </div>
             <div className="space-y-3">
-              <label className="text-[10px] uppercase tracking-[0.4em] text-lin font-black">Email</label>
+              <label className="text-[10px] uppercase tracking-[0.4em] text-lin font-bold">Email</label>
               <input type="email" className="w-full bg-transparent border-b border-porcelaine/20 py-4 focus:border-lin outline-none transition-all duration-500 placeholder:text-porcelaine/10" placeholder="jean.dupont@email.com" />
             </div>
             <div className="space-y-3">
-              <label className="text-[10px] uppercase tracking-[0.4em] text-lin font-black">Domaine concerné</label>
+              <label className="text-[10px] uppercase tracking-[0.4em] text-lin font-bold">Domaine concerné</label>
               <div className="relative">
                 <select className="w-full bg-transparent border-b border-porcelaine/20 py-4 focus:border-lin outline-none transition-all duration-500 appearance-none cursor-pointer">
                   <option className="bg-acajou">Droit des étrangers</option>
@@ -611,12 +611,12 @@ const Contact = () => {
               </div>
             </div>
             <div className="space-y-3">
-              <label className="text-[10px] uppercase tracking-[0.4em] text-lin font-black">Message</label>
+              <label className="text-[10px] uppercase tracking-[0.4em] text-lin font-bold">Message</label>
               <textarea rows={4} className="w-full bg-transparent border-b border-porcelaine/20 py-4 focus:border-lin outline-none transition-all duration-500 resize-none placeholder:text-porcelaine/10" placeholder="Décrivez brièvement votre situation..."></textarea>
             </div>
             <motion.button 
               whileTap={{ scale: 0.98 }}
-              className="w-full py-8 bg-lin text-acajou font-black uppercase tracking-[0.3em] text-xs hover:bg-porcelaine transition-all duration-500 shadow-xl"
+              className="w-full py-8 bg-lin text-acajou font-bold uppercase tracking-[0.3em] text-xs hover:bg-porcelaine transition-all duration-500 shadow-xl"
             >
               Envoyer la demande
             </motion.button>
@@ -638,7 +638,7 @@ const Footer = () => {
         
         <div className="flex flex-col items-center gap-4">
           <p className="text-xs uppercase tracking-[0.2em] font-medium">© 2026 Cabinet Guillaume Elhaik. Tous droits réservés.</p>
-          <div className="flex gap-10 text-[10px] uppercase tracking-[0.3em] font-black">
+          <div className="flex gap-10 text-[10px] uppercase tracking-[0.3em] font-bold">
             <a href="#" className="hover:text-lin transition-colors">Mentions Légales</a>
             <a href="#" className="hover:text-lin transition-colors">Confidentialité</a>
             <a href="#" className="hover:text-lin transition-colors">Cookies</a>

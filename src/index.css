@@ -1,9 +1,58 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Inter:wght@100..900&display=swap');
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'Elegane';
+  src: url('./assets/fonts/Elegane.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Agenda One family */
+@font-face {
+  font-family: 'AgendaOne';
+  src: url('./assets/fonts/AgendaOne-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'AgendaOne';
+  src: url('./assets/fonts/AgendaOne-LightItalic.otf') format('opentype');
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'AgendaOne';
+  src: url('./assets/fonts/AgendaOne-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'AgendaOne';
+  src: url('./assets/fonts/AgendaOne-Italic.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'AgendaOne';
+  src: url('./assets/fonts/AgendaOne-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'AgendaOne';
+  src: url('./assets/fonts/AgendaOne-BoldItalic.otf') format('opentype');
+  font-weight: 700;
+  font-style: italic;
+}
+
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "Fraunces", ui-serif, Georgia, serif;
+  --font-sans: "AgendaOne", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Elegane", ui-serif, Georgia, serif;
 
   --color-grenat: #5A0A09;
   --color-acajou: #3D060C;
