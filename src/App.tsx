@@ -14,9 +14,9 @@ import {
   MapPin, 
   ChevronDown, 
   ChevronRight,
-  Quote,
-  Scale
+  Quote
 } from 'lucide-react';
+import { LogoHorizontal, LogoIcon, LogoBlason } from './components/Logos';
 
 // --- Components ---
 
@@ -43,11 +43,9 @@ const Navbar = () => {
     <>
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 px-6 py-4 ${scrolled ? 'bg-acajou/95 backdrop-blur-md shadow-2xl py-3' : 'bg-transparent'}`}>
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <div className="flex items-center gap-2 group cursor-pointer">
-            <Scale className={`transition-colors duration-300 ${scrolled ? 'text-lin' : 'text-grenat'}`} size={32} />
-            <span className={`font-serif text-xl font-bold tracking-tight transition-colors duration-300 ${scrolled ? 'text-porcelaine' : 'text-acajou'}`}>
-              GUILLAUME EL HAIK
-            </span>
+          <div className="flex items-center gap-3 group cursor-pointer">
+            <LogoIcon className={`transition-colors duration-300 w-8 h-10 ${scrolled ? 'text-lin' : 'text-grenat'}`} />
+            <LogoHorizontal className={`transition-colors duration-300 h-8 ${scrolled ? 'text-porcelaine' : 'text-acajou'}`} />
           </div>
 
           <div className="hidden md:flex items-center gap-10">
@@ -82,9 +80,9 @@ const Navbar = () => {
             className="fixed inset-0 z-[60] bg-acajou text-porcelaine flex flex-col"
           >
             <div className="p-6 flex justify-between items-center border-b border-porcelaine/5">
-              <div className="flex items-center gap-2">
-                <Scale className="text-lin" size={32} />
-                <span className="font-serif text-xl font-bold tracking-tight">EL HAIK</span>
+              <div className="flex items-center gap-3">
+                <LogoIcon className="text-lin w-8 h-10" />
+                <LogoHorizontal className="text-porcelaine h-10" />
               </div>
               <button onClick={() => setIsOpen(false)} className="hover:rotate-90 transition-transform duration-500 p-2">
                 <X size={40} />
@@ -218,14 +216,12 @@ const Hero = () => {
 
       <div className="absolute bottom-12 left-0 right-0 flex flex-col items-center z-30 pointer-events-none">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.2, duration: 1 }}
-          className="text-center"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 1.2, duration: 1.5 }}
+          className="text-center w-full max-w-4xl px-12"
         >
-          <h1 className="text-porcelaine text-7xl md:text-[180px] font-serif font-bold tracking-tighter leading-[0.8] drop-shadow-2xl">
-            Guillaume <br /> <span className="italic text-lin ml-12 md:ml-32">Elhaik</span>
-          </h1>
+          <LogoBlason className="text-porcelaine/90 drop-shadow-2xl mx-auto" />
         </motion.div>
       </div>
       
@@ -631,9 +627,9 @@ const Footer = () => {
   return (
     <footer className="py-20 px-6 bg-acajou border-t border-porcelaine/5 text-porcelaine/30">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
-        <div className="flex items-center gap-3 group cursor-pointer">
-          <Scale size={28} className="text-lin/50 group-hover:text-lin transition-colors" />
-          <span className="font-serif font-bold text-xl text-porcelaine/80 tracking-tighter">EL HAIK</span>
+        <div className="flex items-center gap-4 group cursor-pointer">
+          <LogoIcon className="w-8 h-10 text-lin/50 group-hover:text-lin transition-colors" />
+          <LogoHorizontal className="h-8 text-porcelaine/80" />
         </div>
         
         <div className="flex flex-col items-center gap-4">
