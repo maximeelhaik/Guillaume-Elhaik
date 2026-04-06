@@ -21,6 +21,14 @@ import {
 } from 'lucide-react';
 import { LogoHorizontal, LogoIcon, LogoAvocat } from './components/Logos';
 
+// --- Img Imports for Vite/Vercel compatibility ---
+import heroBg from './assets/images/hero_bg.png';
+import guillaumeHero from './assets/images/guillaume1-R.jpg';
+import cabinetOffice from './assets/images/cabinet_office.png';
+import expertiseEtrangers from './assets/images/expertise_etrangers.png';
+import expertiseNationalite from './assets/images/expertise_nationalite.png';
+import expertiseProcessuel from './assets/images/expertise_processuel.png';
+
 // --- Utilities ---
 
 /**
@@ -193,10 +201,9 @@ const Hero = () => {
         className="absolute inset-0"
       >
         <img
-          src="/src/assets/images/hero_bg.png"
+          src={heroBg}
           alt="Arrière-plan texturé flou du cabinet" loading="lazy" decoding="async"
           className="w-full h-full object-cover grayscale opacity-40 mix-blend-luminosity"
-          referrerPolicy="no-referrer"
         />
       </motion.div>
 
@@ -222,10 +229,9 @@ const Hero = () => {
           >
             <div className="absolute inset-0 bg-grenat/20 mix-blend-overlay z-10 rounded-sm"></div>
             <img
-              src="/src/assets/images/guillaume1-R.jpg"
+              src={guillaumeHero}
               alt="Guillaume Elhaik, Avocat spécialisé au Tribunal de Versailles"
               className="w-full h-full object-cover rounded-sm shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)]"
-              referrerPolicy="no-referrer"
             />
 
           </motion.div>
@@ -347,10 +353,9 @@ const About = () => {
             <div className="aspect-[4/3] bg-acajou/5 rounded-sm overflow-hidden relative group shadow-2xl">
               <div className="absolute inset-0 bg-grenat/10 group-hover:bg-transparent transition-colors duration-300 z-10" />
               <img
-                src="/src/assets/images/cabinet_office.png"
+                src={cabinetOffice}
                 alt="Intérieur du cabinet d'avocats à Versailles" loading="lazy" decoding="async"
                 className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-300"
-                referrerPolicy="no-referrer"
               />
             </div>
           </div>
@@ -366,19 +371,19 @@ const Expertise = () => {
       id: "01",
       title: "Droit des Étrangers",
       desc: "Accompagnement stratégique pour titres de séjour, visas et protection contre les mesures d'éloignement (OQTF).",
-      img: "/src/assets/images/expertise_etrangers.png"
+      img: expertiseEtrangers
     },
     {
       id: "02",
       title: "Nationalité Française",
       desc: "Expertise pointue en naturalisation, réintégration et contentieux du certificat de nationalité française.",
-      img: "/src/assets/images/expertise_nationalite.png"
+      img: expertiseNationalite
     },
     {
       id: "03",
       title: "Droit Processuel",
       desc: "Maîtrise rigoureuse des règles de procédure pour sécuriser vos recours devant les juridictions administratives.",
-      img: "/src/assets/images/expertise_processuel.png"
+      img: expertiseProcessuel
     }
   ];
 
