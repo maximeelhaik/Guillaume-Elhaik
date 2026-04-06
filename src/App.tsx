@@ -198,14 +198,26 @@ const Hero = () => {
   // Layer 2: Decorative background Name "Elhaik"
   const nameY = useTransform(scrollY, [0, 1000], [0, 100]);
 
-  // Layer 3: Portrait Image (Middle)
-  const imgY = useTransform(scrollY, [0, 1000], [0, 0]);
+  // Layer 3: Portrait Image (Middle) - Subtle floating parallax
+  const imgY = useTransform(scrollY, [0, 1000], [0, 80]);
+  const imgScale = useTransform(scrollY, [0, 500], [1, 1.05]);
+  const heroOpacity = useTransform(scrollY, [0, 500], [1, 0.85]);
 
   // Layer 4: Texts and CTA (Top/Front) - Moves slightly up (reverse parallax)
   const textY = useTransform(scrollY, [0, 1000], [0, -100]);
 
   return (
     <section className="sticky top-0 h-screen min-h-[750px] flex items-center justify-center overflow-hidden bg-acajou -z-10">
+      {/* Dynamic Light Wave / Flare Background Animation */}
+      <motion.div
+        animate={{ 
+          scale: [1, 1.2, 1],
+          rotate: [0, 45, 0],
+          opacity: [0.1, 0.2, 0.1]
+        }}
+        transition={{ duration: 15, repeat: Infinity, ease: 'linear' }}
+        className="absolute -top-1/2 -left-1/2 w-[200%] h-[200%] bg-[radial-gradient(circle_at_center,var(--color-lin)_0%,transparent_50%)] pointer-events-none mix-blend-soft-light z-0 opacity-20"
+      />
       <motion.div
         initial={{ scale: 1.1, opacity: 0 }}
         animate={{ scale: 1, opacity: 0.15 }}
@@ -220,10 +232,14 @@ const Hero = () => {
         />
       </motion.div>
 
+      {/* Subliminal Light Flare */}
       <motion.div
-        animate={{ x: ['-200%', '300%'], opacity: [0, 0.4, 0] }}
+        animate={{ 
+          x: ['-100%', '100%'],
+          opacity: [0, 0.4, 0]
+        }}
         transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
-        className="absolute top-0 bottom-0 w-1/3 bg-gradient-to-r from-transparent via-porcelaine to-transparent skew-x-[30deg] z-0 pointer-events-none mix-blend-overlay"
+        className="absolute top-0 bottom-0 w-1/4 bg-gradient-to-r from-transparent via-lin/20 to-transparent skew-x-[35deg] z-[1] pointer-events-none mix-blend-overlay"
       />
 
       <div className="relative max-w-7xl mx-auto px-6 w-full grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center mt-[-60px] md:mt-0">
@@ -254,13 +270,17 @@ const Hero = () => {
             }}
             className="btn-interactive relative w-56 h-[320px] md:w-96 md:h-[600px] z-20 rounded-sm"
           >
-            <div className="absolute inset-0 bg-grenat/20 mix-blend-overlay z-10 rounded-sm"></div>
-            <img
-              src={guillaumeHero}
-              alt="Guillaume Elhaik, Avocat spécialisé au Tribunal de Versailles"
-              className="w-full h-full object-cover rounded-sm shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)]"
-            />
-
+            <motion.div 
+               style={{ scale: imgScale }} 
+               className="w-full h-full"
+            >
+              <div className="absolute inset-0 bg-grenat/20 mix-blend-overlay z-10 rounded-sm"></div>
+              <img
+                src={guillaumeHero}
+                alt="Guillaume Elhaik, Avocat spécialisé au Tribunal de Versailles"
+                className="w-full h-full object-cover rounded-sm shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)]"
+              />
+            </motion.div>
           </motion.div>
         </div>
 
@@ -312,7 +332,7 @@ const Hero = () => {
       </motion.div>
 
       <motion.div
-        animate={{ y: [0, 10, 0] }}
+        animate={{ y: [0, 10, 0], opacity: [0.3, 0.8, 0.3] }}
         transition={{ duration: 2, repeat: Infinity }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 text-lin/40"
       >
@@ -380,7 +400,7 @@ const About = () => {
               <img
                 src={cabinetOffice}
                 alt="Intérieur du cabinet d'avocats à Versailles" loading="lazy" decoding="async"
-                className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-300"
+                className="w-full h-full object-cover group-hover:scale-110 transition-all duration-700"
               />
             </div>
           </div>
@@ -457,7 +477,7 @@ const Expertise = () => {
                 <img
                   src={area.img}
                   alt={area.title}
-                  className="w-full h-full object-cover grayscale-[40%] group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-all duration-700"
                   referrerPolicy="no-referrer"
                 />
                 
@@ -758,7 +778,7 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="py-12 md:py-56 px-6 bg-acajou text-porcelaine relative overflow-hidden">
+    <section id="contact" className="py-12 md:py-56 px-6 bg-grenat text-porcelaine relative overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none">
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
       </div>
@@ -811,7 +831,7 @@ const Contact = () => {
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8 }}
-          className="bg-grenat p-6 md:p-16 rounded-sm backdrop-blur-sm shadow-2xl"
+          className="bg-acajou p-6 md:p-16 rounded-sm backdrop-blur-sm shadow-2xl border border-lin/5"
         >
           <form className="space-y-6 md:space-y-10" onSubmit={handleSubmit}>
             <div className="flex justify-end -mb-4 md:-mb-0">
