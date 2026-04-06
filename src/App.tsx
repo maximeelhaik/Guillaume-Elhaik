@@ -19,7 +19,7 @@ import {
   Twitter,
   Instagram
 } from 'lucide-react';
-import { LogoHorizontal, LogoIcon, LogoAvocat } from './components/Logos';
+import { LogoHorizontal, LogoIcon, LogoAvocat, LogoFullName } from './components/Logos';
 
 // --- Img Imports for Vite/Vercel compatibility ---
 import heroBg from './assets/images/hero_bg.png';
@@ -28,6 +28,11 @@ import cabinetOffice from './assets/images/cabinet_office.png';
 import expertiseEtrangers from './assets/images/expertise_etrangers.png';
 import expertiseNationalite from './assets/images/expertise_nationalite.png';
 import expertiseProcessuel from './assets/images/expertise_processuel.png';
+
+import t1Img from './assets/images/hansjorg-keller-m_-8_AhhJjE-unsplash.jpg';
+import t2Img from './assets/images/kateryna-hliznitsova--v2MxvXK9OU-unsplash.jpg';
+import t3Img from './assets/images/julio-wolf-OG1cF0cWPfo-unsplash.jpg';
+import t4Img from './assets/images/pierre-antona-wbWrY4NZLZc-unsplash.jpg';
 
 // --- Utilities ---
 
@@ -187,20 +192,20 @@ const Hero = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Layer 1: Background (Deepest)
-  const bgY = useTransform(scrollY, [0, 1000], [0, isMobile ? 50 : 300]);
+  // Layer 1: Background (Deepest) - Moves backward
+  const bgY = useTransform(scrollY, [0, 1000], [0, 250]);
 
   // Layer 2: Decorative background Name "Elhaik"
-  const nameY = useTransform(scrollY, [0, 1000], [0, isMobile ? -20 : -100]);
+  const nameY = useTransform(scrollY, [0, 1000], [0, 100]);
 
   // Layer 3: Portrait Image (Middle)
-  const imgY = useTransform(scrollY, [0, 1000], [0, isMobile ? -50 : -180]);
+  const imgY = useTransform(scrollY, [0, 1000], [0, 0]);
 
-  // Layer 4: Texts and CTA (Top/Front)
-  const textY = useTransform(scrollY, [0, 1000], [0, isMobile ? -80 : -300]);
+  // Layer 4: Texts and CTA (Top/Front) - Moves slightly up (reverse parallax)
+  const textY = useTransform(scrollY, [0, 1000], [0, -100]);
 
   return (
-    <section className="relative h-screen min-h-[750px] flex items-center justify-center overflow-hidden bg-acajou">
+    <section className="sticky top-0 h-screen min-h-[750px] flex items-center justify-center overflow-hidden bg-acajou -z-10">
       <motion.div
         initial={{ scale: 1.1, opacity: 0 }}
         animate={{ scale: 1, opacity: 0.15 }}
@@ -215,8 +220,14 @@ const Hero = () => {
         />
       </motion.div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 w-full grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center mt-[-60px] md:mt-0">
-        <motion.div style={{ y: textY }} className="md:col-span-4 block">
+      <motion.div
+        animate={{ x: ['-200%', '300%'], opacity: [0, 0.4, 0] }}
+        transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
+        className="absolute top-0 bottom-0 w-1/3 bg-gradient-to-r from-transparent via-porcelaine to-transparent skew-x-[30deg] z-0 pointer-events-none mix-blend-overlay"
+      />
+
+      <div className="relative max-w-7xl mx-auto px-6 w-full grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center mt-[-60px] md:mt-0">
+        <motion.div style={{ y: textY }} className="md:col-span-4 block relative z-40">
           <motion.h1
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
@@ -253,7 +264,7 @@ const Hero = () => {
           </motion.div>
         </div>
 
-        <motion.div style={{ y: textY }} className="md:col-span-4 flex flex-col items-end text-right gap-12">
+        <motion.div style={{ y: textY }} className="md:col-span-4 flex flex-col items-end text-right gap-12 relative z-40">
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
@@ -287,17 +298,15 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.2, duration: 1 }}
           >
-            <span className="font-serif text-lin text-[46px] md:text-[140px] font-light tracking-tight leading-none uppercase drop-shadow-2xl">
-              El Haik
-            </span>
+            <LogoFullName className="text-lin w-[95vw] md:w-[85vw] max-w-[900px] drop-shadow-2xl" />
           </motion.div>
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 1.8, duration: 1, ease: "easeOut" }}
-            className="-mt-3 md:-mt-10"
+            className="-mt-8 md:-mt-16"
           >
-            <LogoAvocat className="text-lin h-10 md:h-28 drop-shadow-xl" />
+            <LogoAvocat className="text-lin h-12 md:h-28 drop-shadow-xl" />
           </motion.div>
         </div>
       </motion.div>
@@ -494,7 +503,7 @@ const Testimonials = () => {
       quote: "Je tiens à exprimer toute ma satisfaction concernant le travail de Maître El Haik. Son professionnalisme, sa disponibilité et sa clarté ont été d'une grande aide tout au long du dossier.",
       author: "Jaouadi H.",
       meta: "Accompagnement Juridique · 2026",
-      img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=800",
+      img: t1Img,
       layoutReversed: false,
     },
     {
@@ -502,7 +511,7 @@ const Testimonials = () => {
       quote: "Après un long parcours face à l'administration, la stratégie de Maître Elhaik a fait toute la différence devant le juge. Une rigueur impressionnante.",
       author: "Sylvie C.",
       meta: "Contentieux Administratif · 2024",
-      img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=800",
+      img: t2Img,
       layoutReversed: true,
     },
     {
@@ -510,7 +519,7 @@ const Testimonials = () => {
       quote: "Une approche humaine et très réactive. Le cabinet m'a accompagné avec clarté dès le premier rendez-vous jusqu'à l'obtention de mon titre.",
       author: "Hassan R.",
       meta: "Titre de séjour · 2025",
-      img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800",
+      img: t3Img,
       layoutReversed: false,
     },
     {
@@ -518,7 +527,7 @@ const Testimonials = () => {
       quote: "Un professionnalisme exceptionnel. Maître Elhaik prend le temps d'expliquer chaque détail, et son engagement pour son client est total.",
       author: "Elena M.",
       meta: "Regroupement familial · 2023",
-      img: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=800",
+      img: t4Img,
       layoutReversed: true,
     }
   ];
@@ -572,7 +581,7 @@ const Testimonials = () => {
                       <img
                         src={t.img}
                         alt={`Photo de ${t.author}`} loading="lazy" decoding="async"
-                        className="w-full h-full object-cover grayscale"
+                        className="w-full h-full object-cover"
                         referrerPolicy="no-referrer"
                       />
                     </motion.div>
@@ -585,7 +594,7 @@ const Testimonials = () => {
                         style={{ x: imgX }}
                         src={t.img}
                         alt={`Photo illustrative de ${t.author}`} loading="lazy" decoding="async"
-                        className="w-[120%] h-full object-cover grayscale"
+                        className="w-[120%] h-full object-cover"
                         referrerPolicy="no-referrer"
                       />
                     </div>
@@ -802,7 +811,7 @@ const Contact = () => {
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8 }}
-          className="bg-porcelaine/5 p-6 md:p-16 rounded-sm backdrop-blur-sm border border-porcelaine/10 shadow-2xl"
+          className="bg-grenat p-6 md:p-16 rounded-sm backdrop-blur-sm shadow-2xl"
         >
           <form className="space-y-6 md:space-y-10" onSubmit={handleSubmit}>
             <div className="flex justify-end -mb-4 md:-mb-0">
