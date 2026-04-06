@@ -230,10 +230,18 @@ const Hero = () => {
         <div className="md:col-span-4 flex flex-col items-center relative">
           <motion.div
             initial={{ opacity: 0, y: 60 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={{ 
+              opacity: 1, 
+              y: [0, -15, 0],
+            }}
             style={{ y: imgY }}
-            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-            className="relative w-56 h-[320px] md:w-96 md:h-[600px] z-20"
+            transition={{ 
+              duration: 4, 
+              repeat: Infinity, 
+              ease: "easeInOut",
+              opacity: { duration: 1.2, ease: [0.22, 1, 0.36, 1] }
+            }}
+            className="btn-interactive relative w-56 h-[320px] md:w-96 md:h-[600px] z-20 rounded-sm"
           >
             <div className="absolute inset-0 bg-grenat/20 mix-blend-overlay z-10 rounded-sm"></div>
             <img
@@ -430,7 +438,7 @@ const Expertise = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.2, duration: 0.8 }}
-              className="group flex flex-col gap-8"
+              className="btn-interactive group flex flex-col gap-8 rounded-sm"
             >
               <div className="aspect-[3/4] overflow-hidden rounded-sm relative shadow-2xl">
                 <div className="absolute inset-0 bg-acajou/60 group-hover:bg-acajou/20 transition-all duration-300 z-10"></div>
@@ -765,7 +773,7 @@ const Contact = () => {
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.2 }}
-                className="flex items-start gap-5 md:gap-8 group cursor-pointer"
+                className="btn-interactive flex items-start gap-5 md:gap-8 group cursor-pointer p-4 -ml-4 rounded-sm"
               >
                 <div className="w-12 h-12 md:w-16 md:h-16 shrink-0 bg-porcelaine/5 rounded-full flex items-center justify-center group-hover:bg-lin group-hover:text-acajou transition-all duration-300">
                   <item.icon className="w-5 h-5 md:w-7 md:h-7 text-lin group-hover:text-acajou transition-colors" />
@@ -863,7 +871,7 @@ const Footer = () => {
 
         <div className="flex flex-wrap gap-6">
           {[{ k: 'LinkedIn', i: Linkedin }, { k: 'Twitter', i: Twitter }, { k: 'Instagram', i: Instagram }].map(social => (
-            <button aria-label={`Aller sur ${social.k}`} key={social.k} className="w-12 h-12 min-w-[44px] min-h-[44px] rounded-full border border-porcelaine/10 flex items-center justify-center hover:border-lin hover:text-lin transition-all duration-300 cursor-pointer text-xs font-bold">
+            <button aria-label={`Aller sur ${social.k}`} key={social.k} className="btn-interactive w-12 h-12 min-w-[44px] min-h-[44px] rounded-full border border-porcelaine/10 flex items-center justify-center hover:border-lin hover:text-lin transition-all duration-300 cursor-pointer text-xs font-bold">
               <social.i size={20} />
             </button>
           ))}
