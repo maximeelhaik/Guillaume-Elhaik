@@ -16,7 +16,7 @@ import {
   ChevronRight,
   Quote
 } from 'lucide-react';
-import { LogoHorizontal, LogoIcon, LogoBlason } from './components/Logos';
+import { LogoHorizontal, LogoIcon, LogoAvocat } from './components/Logos';
 
 // --- Components ---
 
@@ -44,8 +44,8 @@ const Navbar = () => {
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 px-6 py-4 ${scrolled ? 'bg-acajou/95 backdrop-blur-md shadow-2xl py-3' : 'bg-transparent'}`}>
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-3 group cursor-pointer">
-            <LogoIcon className={`transition-colors duration-300 w-8 h-10 ${scrolled ? 'text-lin' : 'text-grenat'}`} />
-            <LogoHorizontal className={`transition-colors duration-300 h-8 ${scrolled ? 'text-porcelaine' : 'text-acajou'}`} />
+            <LogoIcon className={`transition-colors duration-300 w-8 h-10 ${scrolled ? 'text-porcelaine' : 'text-lin'}`} />
+            <LogoHorizontal className={`transition-colors duration-300 h-8 ${scrolled ? 'text-porcelaine' : 'text-lin'}`} />
           </div>
 
           <div className="hidden md:flex items-center gap-10">
@@ -215,14 +215,22 @@ const Hero = () => {
       </div>
 
       <div className="absolute bottom-12 left-0 right-0 flex flex-col items-center z-30 pointer-events-none">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 1.2, duration: 1.5 }}
-          className="text-center w-full max-w-4xl px-12"
-        >
-          <LogoBlason className="text-porcelaine/90 drop-shadow-2xl mx-auto" />
-        </motion.div>
+        <div className="flex flex-col items-center gap-2">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.2, duration: 1 }}
+          >
+            <LogoHorizontal className="text-porcelaine h-20 md:h-32 drop-shadow-2xl" />
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 1.8, duration: 1, ease: "easeOut" }}
+          >
+            <LogoAvocat className="text-lin h-12 md:h-16 -mt-4 drop-shadow-xl" />
+          </motion.div>
+        </div>
       </div>
       
       <motion.div 
