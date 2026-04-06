@@ -363,7 +363,7 @@ const About = () => {
                 whileHover={{ x: 10 }}
                 className="btn-interactive rounded-sm px-6 py-4 bg-acajou/5 flex items-center gap-6 text-acajou font-bold uppercase tracking-[0.2em] text-xs border border-acajou/10"
               >
-                Découvrir notre parcours <ArrowRight size={18} className="text-grenat" />
+                Découvrir mon parcours <ArrowRight size={18} className="text-grenat" />
               </motion.button>
             </div>
             <div className="aspect-[4/3] bg-acajou/5 rounded-sm overflow-hidden relative group shadow-2xl">
@@ -430,7 +430,7 @@ const Expertise = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
           {areas.map((area, i) => (
             <motion.div
               key={area.title}
@@ -438,22 +438,33 @@ const Expertise = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.2, duration: 0.8 }}
-              className="btn-interactive group flex flex-col gap-8 rounded-sm"
+              className="btn-interactive group flex flex-col rounded-sm h-[320px] md:h-auto"
             >
-              <div className="aspect-[3/4] overflow-hidden rounded-sm relative shadow-2xl">
-                <div className="absolute inset-0 bg-acajou/60 group-hover:bg-acajou/20 transition-all duration-300 z-10"></div>
+              <div className="relative w-full h-full md:aspect-[4/3] overflow-hidden rounded-sm shadow-2xl">
+                {/* Red Overlay - Appears only on hover */}
+                <div className="absolute inset-0 bg-grenat/90 opacity-0 group-hover:opacity-100 transition-all duration-500 z-10"></div>
+                
+                {/* Background Image - Less grayscale on hover */}
                 <img
                   src={area.img}
                   alt={area.title}
-                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-300"
+                  className="w-full h-full object-cover grayscale-[40%] group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700"
                   referrerPolicy="no-referrer"
                 />
-                <div className="absolute top-8 left-8 z-20">
-                  <span className="font-serif text-5xl text-lin/30 italic">{area.id}</span>
+                
+                {/* Top Content: Title + ID */}
+                <div className="absolute top-6 left-6 right-6 z-20 flex justify-between items-start gap-4">
+                  <h4 className="font-serif text-2xl md:text-3xl text-porcelaine group-hover:text-lin transition-colors duration-300 leading-tight">
+                    {area.title}
+                  </h4>
+                  <span className="font-serif text-3xl md:text-5xl text-lin/30 italic shrink-0 group-hover:text-porcelaine/20 transition-colors">
+                    {area.id}
+                  </span>
                 </div>
-                <div className="absolute bottom-10 left-10 right-10 z-20">
-                  <h4 className="font-serif text-3xl md:text-4xl mb-4 group-hover:text-lin transition-colors duration-300">{area.title}</h4>
-                  <p className="text-porcelaine/80 text-base leading-relaxed opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all duration-300 translate-y-0 md:translate-y-4 md:group-hover:translate-y-0">
+                
+                {/* Bottom Content: Description */}
+                <div className="absolute bottom-6 left-6 right-6 z-20">
+                  <p className="text-porcelaine/90 text-sm md:text-base leading-relaxed opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0">
                     {area.desc}
                   </p>
                 </div>
@@ -596,19 +607,19 @@ const FAQ = () => {
   const questions = [
     {
       q: "Comment se déroule le premier rendez-vous ?",
-      a: "Nous analysons votre situation juridique, étudions vos documents et définissons ensemble la meilleure stratégie à adopter. Un devis transparent vous est remis à l'issue."
+      a: "J'analyse votre situation juridique, j'étudie vos documents et je définis avec vous la meilleure stratégie à adopter. Un devis transparent vous est remis à l'issue."
     },
     {
       q: "Intervenez-vous partout en France ?",
-      a: "Bien que basés à Versailles, nous intervenons devant toutes les juridictions administratives françaises pour les dossiers de droit des étrangers et de nationalité."
+      a: "Bien que basé à Versailles, j'interviens devant toutes les juridictions administratives françaises pour les dossiers de droit des étrangers et de nationalité."
     },
     {
       q: "Quels sont vos honoraires ?",
-      a: "Nos honoraires sont fixés en toute transparence, généralement au forfait selon la complexité du dossier. Une convention d'honoraires est systématiquement signée."
+      a: "Mes honoraires sont fixés en toute transparence, généralement au forfait selon la complexité du dossier. Une convention d'honoraires est systématiquement signée."
     },
     {
       q: "Quel est le délai pour un recours OQTF ?",
-      a: "Les délais sont extrêmement courts (souvent 48h, 15 jours ou 30 jours). Il est impératif de nous contacter dès réception de la décision."
+      a: "Les délais sont extrêmement courts (souvent 48h, 15 jours ou 30 jours). Il est impératif de me contacter dès réception de la décision."
     }
   ];
 
