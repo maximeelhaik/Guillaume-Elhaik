@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
 import {
   Menu,
@@ -459,57 +459,124 @@ const Expertise = () => {
 };
 
 const Testimonials = () => {
+  const targetRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: targetRef });
+  
+  // Transform scroll progress to horizontal translation
+  // We have 4 items = 400vw total width. We need to move by -75% to show the last one.
+  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-75%"]);
+  
+  // Image parallax effect inside the container
+  const imgX = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
+
+  const testimonialsData = [
+    {
+      id: 1,
+      quote: "Je tiens à exprimer toute ma satisfaction concernant le travail de Maître El Haik. Son professionnalisme, sa disponibilité et sa clarté ont été d'une grande aide tout au long du dossier.",
+      author: "Jaouadi H.",
+      meta: "Accompagnement Juridique · 2026",
+      img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=800",
+      layoutReversed: false,
+    },
+    {
+      id: 2,
+      quote: "Après un long parcours face à l'administration, la stratégie de Maître Elhaik a fait toute la différence devant le juge. Une rigueur impressionnante.",
+      author: "Sylvie C.",
+      meta: "Contentieux Administratif · 2024",
+      img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=800",
+      layoutReversed: true,
+    },
+    {
+      id: 3,
+      quote: "Une approche humaine et très réactive. Le cabinet m'a accompagné avec clarté dès le premier rendez-vous jusqu'à l'obtention de mon titre.",
+      author: "Hassan R.",
+      meta: "Titre de séjour · 2025",
+      img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800",
+      layoutReversed: false,
+    },
+    {
+      id: 4,
+      quote: "Un professionnalisme exceptionnel. Maître Elhaik prend le temps d'expliquer chaque détail, et son engagement pour son client est total.",
+      author: "Elena M.",
+      meta: "Regroupement familial · 2023",
+      img: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=800",
+      layoutReversed: true,
+    }
+  ];
+
   return (
-    <section id="testimonials" className="py-12 md:py-56 px-6 bg-porcelaine relative overflow-hidden">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-20 items-center">
-        <div className="md:col-span-3">
-          <h3 className="text-grenat">Témoignages</h3>
+    <section ref={targetRef} id="testimonials" className="relative h-[400vh] bg-porcelaine">
+      <div className="sticky top-0 h-screen flex items-center overflow-hidden">
+        
+        {/* Section Title - Fixed during scroll */}
+        <div className="absolute top-12 md:top-24 left-6 md:left-[10%] z-20 pointer-events-none">
+          <h3 className="text-grenat mix-blend-multiply opacity-80 md:opacity-100">Témoignages</h3>
         </div>
 
-        <div className="md:col-span-5 relative">
-          <motion.div
-            initial={{ opacity: 0, x: -40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="flex flex-col gap-12"
-          >
-            <Quote className="text-lin/40" size={80} strokeWidth={1} />
-            <p className="font-serif text-4xl md:text-5xl leading-tight text-acajou italic text-balance">
-              “Maître Elhaik a su transformer une situation administrative bloquée depuis des années en un succès rapide. Son écoute et sa maîtrise technique sont exceptionnelles.”
-            </p>
-            <div className="flex justify-between items-end">
-              <div>
-                <p className="font-bold text-acajou uppercase tracking-widest text-sm">Ahmed B.</p>
-                <p className="text-acajou/70 text-xs uppercase tracking-[0.2em] mt-2 font-sans font-light">Naturalisation · 2025</p>
-              </div>
-              <div className="flex gap-2">
-                <button className="btn-interactive w-14 h-14 min-w-[44px] min-h-[44px] rounded-sm flex items-center justify-center border border-acajou/10 hover:bg-acajou hover:text-porcelaine transition-all duration-300 group">
-                  <ChevronRight size={24} className="rotate-180 group-hover:-translate-x-1 transition-transform" />
-                </button>
-                <button className="btn-interactive w-14 h-14 min-w-[44px] min-h-[44px] rounded-sm flex items-center justify-center border border-acajou/10 hover:bg-acajou hover:text-porcelaine transition-all duration-300 group">
-                  <ChevronRight size={24} className="group-hover:translate-x-1 transition-transform" />
-                </button>
-              </div>
-            </div>
-          </motion.div>
-        </div>
+        <motion.div style={{ x }} className="flex w-[400vw] h-full items-center will-change-transform">
+          {testimonialsData.map((t, index) => {
+            return (
+              <div key={t.id} className="w-[100vw] h-full flex flex-col justify-center px-6 md:px-0 relative">
+                
+                {/* Decorative background element per card */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-acajou/[0.02] font-serif text-[40vh] md:text-[60vh] italic font-bold pointer-events-none select-none">
+                  0{index + 1}
+                </div>
 
-        <div className="md:col-span-4">
-          <motion.div
-            initial={{ opacity: 0, scale: 1.1 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.5 }}
-            className="aspect-[3/4] bg-acajou/5 rounded-sm overflow-hidden relative shadow-[40px_40px_80px_-20px_rgba(0,0,0,0.1)]"
-          >
-            <img
-              src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=800"
-              alt="Photo illustrative du client" loading="lazy" decoding="async"
-              className="w-full h-full object-cover grayscale"
-              referrerPolicy="no-referrer"
-            />
-          </motion.div>
-        </div>
+                <div className="max-w-7xl mx-auto w-full grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-20 items-center relative z-10">
+                  
+                  {/* TEXT CONTENT */}
+                  <div className={`flex flex-col gap-6 md:gap-12 relative order-2 ${t.layoutReversed ? 'md:order-2 md:col-span-6 md:col-start-7' : 'md:order-1 md:col-span-6 md:col-start-2'}`}>
+                    <Quote className="text-lin/40 hidden md:block" size={60} strokeWidth={1} />
+                    <Quote className="text-lin/40 block md:hidden mb-[-10px] ml-4" size={40} strokeWidth={1} />
+
+                    <p className="font-serif text-2xl md:text-5xl leading-tight md:leading-[1.2] text-acajou italic text-balance mt-4 md:mt-0 px-4 md:px-0">
+                      “{t.quote}”
+                    </p>
+                    
+                    <div className="flex flex-col px-4 md:px-0 border-l border-lin/30 pl-4 md:pl-8 ml-2 mt-4 md:mt-6">
+                      <p className="font-bold text-acajou uppercase tracking-widest text-xs md:text-sm">{t.author}</p>
+                      <p className="text-acajou/60 text-[10px] md:text-xs uppercase tracking-[0.2em] mt-1 font-sans font-light">{t.meta}</p>
+                    </div>
+                  </div>
+
+                  {/* IMAGE CONTENT */}
+                  <div className={`order-1 ${t.layoutReversed ? 'md:order-1 md:col-span-4 md:col-start-2' : 'md:order-2 md:col-span-4 md:col-start-8'} flex justify-center mt-24 md:mt-0 relative`}>
+                    
+                    {/* Mobile Bubble Layout */}
+                    <motion.div 
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      whileInView={{ scale: 1, opacity: 1 }}
+                      transition={{ duration: 0.6 }}
+                      className="block md:hidden w-36 h-36 rounded-full overflow-hidden border-4 border-porcelaine shadow-2xl -mb-12 relative z-10"
+                    >
+                      <img
+                        src={t.img}
+                        alt={`Photo de ${t.author}`} loading="lazy" decoding="async"
+                        className="w-full h-full object-cover grayscale"
+                        referrerPolicy="no-referrer"
+                      />
+                    </motion.div>
+                    
+                    {/* Desktop Parallax Rectangle Layout */}
+                    <div
+                      className={`hidden md:block w-full bg-acajou/5 rounded-sm overflow-hidden relative shadow-2xl transition-all duration-700 ${index % 2 === 0 ? 'aspect-[3/4] mt-0' : 'aspect-square mt-24'}`}
+                    >
+                      <motion.img
+                        style={{ x: imgX }}
+                        src={t.img}
+                        alt={`Photo illustrative de ${t.author}`} loading="lazy" decoding="async"
+                        className="w-[120%] h-full object-cover grayscale"
+                        referrerPolicy="no-referrer"
+                      />
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            );
+          })}
+        </motion.div>
       </div>
     </section>
   );
