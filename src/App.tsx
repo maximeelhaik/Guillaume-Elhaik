@@ -146,12 +146,12 @@ const Navbar = () => {
 
               <div className="md:w-1/3 flex flex-col justify-center gap-12 border-t md:border-t-0 md:border-l border-porcelaine/10 pt-12 md:pt-0 md:pl-16">
                 <div className="space-y-4">
-                  <h4 className="text-lin uppercase tracking-[0.3em] text-xs font-bold">Contact</h4>
+                  <h4 className="text-lin uppercase tracking-[0.3em] text-xs font-sans font-light">Contact</h4>
                   <p className="text-2xl md:text-3xl font-serif italic">06 67 83 64 43</p>
                   <p className="text-lg opacity-50 hover:opacity-100 transition-opacity cursor-pointer">g.elhaik.avocat@gmail.com</p>
                 </div>
                 <div className="space-y-4">
-                  <h4 className="text-lin uppercase tracking-[0.3em] text-xs font-bold">Adresse</h4>
+                  <h4 className="text-lin uppercase tracking-[0.3em] text-xs font-sans font-light">Adresse</h4>
                   <p className="text-xl opacity-70 leading-relaxed">16 rue Saint-Simon<br />78000 Versailles</p>
                 </div>
                 <div className="flex flex-wrap gap-6">
@@ -206,7 +206,7 @@ const Hero = () => {
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1, delay: 0.5 }}
-            className="text-porcelaine/60 text-lg md:text-xl leading-relaxed max-w-xs font-light"
+            className="text-porcelaine/60 text-lg md:text-xl leading-relaxed max-w-xs font-sans font-light"
           >
             Expertise juridique rigoureuse et défense engagée au cœur de Versailles. Expérience en droit des étrangers et de la nationalité.
           </motion.h1>
@@ -218,7 +218,7 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             style={{ y: imgY }}
             transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-            className="relative w-72 h-[450px] md:w-96 md:h-[600px] z-20"
+            className="relative w-64 h-[400px] md:w-96 md:h-[600px] z-20"
           >
             <div className="absolute inset-0 bg-grenat/20 mix-blend-overlay z-10 rounded-sm"></div>
             <img
@@ -241,7 +241,7 @@ const Hero = () => {
             <a href="tel:0139500000" className="text-lin text-3xl md:text-4xl font-serif hover:text-porcelaine transition-all duration-300 italic">
               06 67 83 64 43
             </a>
-            <p className="text-porcelaine/60 text-xs uppercase tracking-[0.3em] font-bold">Ligne directe cabinet</p>
+            <p className="text-porcelaine/60 text-xs uppercase tracking-[0.3em] font-sans font-light">Ligne directe cabinet</p>
           </motion.div>
 
           <motion.div
@@ -253,7 +253,7 @@ const Hero = () => {
             <a href="mailto:g.elhaik.avocat@gmail.com" className="text-lin text-3xl md:text-4xl font-serif hover:text-porcelaine transition-all duration-300 italic">
               g.elhaik.avocat@gmail.com
             </a>
-            <p className="text-porcelaine/60 text-xs uppercase tracking-[0.3em] font-bold">Étude de votre dossier</p>
+            <p className="text-porcelaine/60 text-xs uppercase tracking-[0.3em] font-sans font-light">Étude de votre dossier</p>
           </motion.div>
         </motion.div>
       </div>
@@ -265,7 +265,7 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.2, duration: 1 }}
           >
-            <span className="font-serif text-lin text-7xl md:text-[140px] font-light tracking-tight leading-none uppercase drop-shadow-2xl">
+            <span className="font-serif text-lin text-6xl md:text-[140px] font-light tracking-tight leading-none uppercase drop-shadow-2xl">
               El Haik
             </span>
           </motion.div>
@@ -293,7 +293,7 @@ const Hero = () => {
 
 const About = () => {
   return (
-    <section id="about" className="py-32 md:py-56 px-6 bg-porcelaine relative overflow-hidden">
+    <section id="about" className="py-20 md:py-56 px-6 bg-porcelaine relative overflow-hidden">
       <div className="absolute top-0 right-0 w-1/3 h-full bg-lin/5 -skew-x-12 translate-x-1/2" />
 
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-16 items-start relative z-10">
@@ -383,7 +383,7 @@ const Expertise = () => {
   ];
 
   return (
-    <section id="expertise" className="py-32 md:py-56 px-6 bg-acajou text-porcelaine relative overflow-hidden">
+    <section id="expertise" className="py-20 md:py-56 px-6 bg-acajou text-porcelaine relative overflow-hidden">
       <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
 
       <div className="max-w-7xl mx-auto relative z-10">
@@ -447,7 +447,7 @@ const Expertise = () => {
 
 const Testimonials = () => {
   return (
-    <section id="testimonials" className="py-32 md:py-56 px-6 bg-porcelaine relative overflow-hidden">
+    <section id="testimonials" className="py-20 md:py-56 px-6 bg-porcelaine relative overflow-hidden">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-20 items-center">
         <div className="md:col-span-3">
           <h3 className="text-grenat">Témoignages</h3>
@@ -468,7 +468,7 @@ const Testimonials = () => {
             <div className="flex justify-between items-end">
               <div>
                 <p className="font-bold text-acajou uppercase tracking-widest text-sm">Ahmed B.</p>
-                <p className="text-acajou/70 text-xs uppercase tracking-[0.2em] mt-2 font-bold">Naturalisation · 2025</p>
+                <p className="text-acajou/70 text-xs uppercase tracking-[0.2em] mt-2 font-sans font-light">Naturalisation · 2025</p>
               </div>
               <div className="flex gap-2">
                 <button className="btn-interactive w-14 h-14 min-w-[44px] min-h-[44px] rounded-sm flex items-center justify-center border border-acajou/10 hover:bg-acajou hover:text-porcelaine transition-all duration-300 group">
@@ -525,7 +525,7 @@ const FAQ = () => {
   ];
 
   return (
-    <section id="faq" className="py-32 md:py-56 px-6 bg-porcelaine relative">
+    <section id="faq" className="py-20 md:py-56 px-6 bg-porcelaine relative">
       <div className="max-w-4xl mx-auto">
         <motion.h3
           initial={{ opacity: 0 }}
@@ -650,7 +650,7 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="py-32 md:py-56 px-6 bg-acajou text-porcelaine relative overflow-hidden">
+    <section id="contact" className="py-20 md:py-56 px-6 bg-acajou text-porcelaine relative overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none">
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
       </div>
@@ -691,7 +691,7 @@ const Contact = () => {
                   <item.icon size={28} className="text-lin group-hover:text-acajou transition-colors" />
                 </div>
                 <div>
-                  <p className="text-lin/60 text-xs uppercase tracking-[0.3em] font-bold mb-2">{item.label}</p>
+                  <p className="text-lin/60 text-xs uppercase tracking-[0.3em] font-sans font-light mb-2">{item.label}</p>
                   <p className="text-2xl md:text-3xl font-serif italic group-hover:text-lin transition-colors duration-300">{item.value}</p>
                 </div>
               </motion.div>
@@ -752,7 +752,7 @@ const Contact = () => {
             <motion.button
               type="submit"
               whileTap={{ scale: 0.98 }}
-              className="btn-interactive w-full py-8 min-h-[44px] bg-lin text-acajou font-bold uppercase tracking-[0.3em] text-xs hover:bg-porcelaine transition-all duration-300 shadow-xl rounded-sm mt-8"
+              className="btn-interactive w-full py-4 md:py-8 min-h-[44px] bg-lin text-acajou font-bold uppercase tracking-[0.3em] text-xs hover:bg-porcelaine transition-all duration-300 shadow-xl rounded-sm mt-8"
             >
               Envoyer la demande
             </motion.button>

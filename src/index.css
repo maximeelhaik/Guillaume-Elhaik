@@ -65,12 +65,12 @@
     @apply bg-porcelaine text-acajou font-sans antialiased text-[18px] leading-relaxed;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1, h2, h4, h5, h6 {
     @apply font-serif;
   }
 
   h3 {
-    @apply uppercase tracking-[0.3em] text-sm font-bold;
+    @apply uppercase tracking-[0.3em] text-sm font-sans font-light;
   }
 }
 
