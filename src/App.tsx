@@ -135,8 +135,8 @@ const Navbar = () => {
               </button>
             </div>
 
-            <div className="flex-1 flex flex-col md:flex-row p-8 md:p-20 gap-16 overflow-y-auto">
-              <div className="flex-1 flex flex-col justify-center gap-4 md:gap-8">
+            <div className="flex-1 flex flex-col md:flex-row p-6 md:p-20 gap-8 md:gap-16 overflow-y-auto">
+              <div className="flex-1 flex flex-col justify-center gap-3 md:gap-8">
                 {navLinks.map((link, i) => (
                   <motion.a
                     key={link.name}
@@ -145,14 +145,14 @@ const Navbar = () => {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.2 + i * 0.1 }}
                     onClick={(e) => scrollToSection(e, link.href)}
-                    className="font-serif text-5xl md:text-8xl hover:text-lin transition-all duration-300 italic hover:pl-4"
+                    className="font-serif text-[32px] sm:text-4xl md:text-8xl hover:text-lin transition-all duration-300 italic hover:pl-4 leading-tight"
                   >
                     {link.name}
                   </motion.a>
                 ))}
               </div>
 
-              <div className="md:w-1/3 flex flex-col justify-center gap-12 border-t md:border-t-0 md:border-l border-porcelaine/10 pt-12 md:pt-0 md:pl-16">
+              <div className="md:w-1/3 flex flex-col justify-center gap-6 md:gap-12 border-t md:border-t-0 md:border-l border-porcelaine/10 pt-6 md:pt-0 md:pl-16">
                 <div className="space-y-4">
                   <h4 className="text-lin uppercase tracking-[0.3em] text-xs font-sans font-light">Contact</h4>
                   <p className="text-2xl md:text-3xl font-serif italic">06 67 83 64 43</p>
@@ -178,18 +178,26 @@ const Navbar = () => {
 
 const Hero = () => {
   const { scrollY } = useScroll();
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Layer 1: Background (Deepest)
-  const bgY = useTransform(scrollY, [0, 1000], [0, 300]);
+  const bgY = useTransform(scrollY, [0, 1000], [0, isMobile ? 50 : 300]);
 
   // Layer 2: Decorative background Name "Elhaik"
-  const nameY = useTransform(scrollY, [0, 1000], [0, -100]);
+  const nameY = useTransform(scrollY, [0, 1000], [0, isMobile ? -20 : -100]);
 
   // Layer 3: Portrait Image (Middle)
-  const imgY = useTransform(scrollY, [0, 1000], [0, -180]);
+  const imgY = useTransform(scrollY, [0, 1000], [0, isMobile ? -50 : -180]);
 
   // Layer 4: Texts and CTA (Top/Front)
-  const textY = useTransform(scrollY, [0, 1000], [0, -300]);
+  const textY = useTransform(scrollY, [0, 1000], [0, isMobile ? -80 : -300]);
 
   return (
     <section className="relative h-screen min-h-[750px] flex items-center justify-center overflow-hidden bg-acajou">
@@ -207,13 +215,13 @@ const Hero = () => {
         />
       </motion.div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 w-full grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 w-full grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center mt-[-60px] md:mt-0">
         <motion.div style={{ y: textY }} className="md:col-span-4 block">
           <motion.h1
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1, delay: 0.5 }}
-            className="text-porcelaine/60 text-lg md:text-xl leading-relaxed max-w-xs font-sans font-light"
+            className="text-porcelaine/60 text-base md:text-xl leading-relaxed max-w-xs font-sans font-light"
           >
             Expertise juridique rigoureuse et défense engagée au cœur de Versailles. Expérience en droit des étrangers et de la nationalité.
           </motion.h1>
@@ -225,7 +233,7 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             style={{ y: imgY }}
             transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-            className="relative w-64 h-[400px] md:w-96 md:h-[600px] z-20"
+            className="relative w-56 h-[320px] md:w-96 md:h-[600px] z-20"
           >
             <div className="absolute inset-0 bg-grenat/20 mix-blend-overlay z-10 rounded-sm"></div>
             <img
@@ -264,14 +272,14 @@ const Hero = () => {
         </motion.div>
       </div>
 
-      <motion.div style={{ y: textY }} className="absolute bottom-10 left-0 right-0 flex flex-col items-center z-30 pointer-events-none">
+      <motion.div style={{ y: textY }} className="absolute bottom-6 md:bottom-10 left-0 right-0 flex flex-col items-center z-30 pointer-events-none">
         <div className="flex flex-col items-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.2, duration: 1 }}
           >
-            <span className="font-serif text-lin text-6xl md:text-[140px] font-light tracking-tight leading-none uppercase drop-shadow-2xl">
+            <span className="font-serif text-lin text-[46px] md:text-[140px] font-light tracking-tight leading-none uppercase drop-shadow-2xl">
               El Haik
             </span>
           </motion.div>
@@ -279,9 +287,9 @@ const Hero = () => {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 1.8, duration: 1, ease: "easeOut" }}
-            className="-mt-4 md:-mt-10"
+            className="-mt-3 md:-mt-10"
           >
-            <LogoAvocat className="text-lin h-14 md:h-28 drop-shadow-xl" />
+            <LogoAvocat className="text-lin h-10 md:h-28 drop-shadow-xl" />
           </motion.div>
         </div>
       </motion.div>
@@ -299,21 +307,21 @@ const Hero = () => {
 
 const About = () => {
   return (
-    <section id="about" className="py-20 md:py-56 px-6 bg-porcelaine relative overflow-hidden">
+    <section id="about" className="py-12 md:py-56 px-6 bg-porcelaine relative overflow-hidden">
       <div className="absolute top-0 right-0 w-1/3 h-full bg-lin/5 -skew-x-12 translate-x-1/2" />
 
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-16 items-start relative z-10">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16 items-start relative z-10">
         <div className="md:col-span-3">
           <motion.h3
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            className="text-grenat mb-8"
+            className="text-grenat mb-4 md:mb-8"
           >
             Le Cabinet
           </motion.h3>
         </div>
 
-        <div className="md:col-span-9 flex flex-col gap-20">
+        <div className="md:col-span-9 flex flex-col gap-10 md:gap-20">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -321,21 +329,21 @@ const About = () => {
             viewport={{ once: true, margin: "-100px" }}
             className="relative"
           >
-            <p className="font-serif text-4xl md:text-7xl leading-[1.1] text-acajou italic text-balance">
+            <p className="font-serif text-[28px] md:text-7xl leading-[1.1] text-acajou italic text-balance">
               “Une expertise forgée par des centaines de décisions rendues par les plus hautes juridictions administratives.”
             </p>
-            <div className="mt-16 flex justify-end">
+            <div className="mt-6 md:mt-16 flex justify-end">
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 whileInView={{ opacity: 0.3, scale: 1 }}
-                className="w-64 h-32 relative"
+                className="w-48 h-24 md:w-64 md:h-32 relative"
               >
                 <img src="https://framerusercontent.com/images/VCNSEUHw9CEtEpV1IRrCnP4RJwE.svg" alt="Signature graphique" loading="lazy" decoding="async" className="w-full h-full object-contain" />
               </motion.div>
             </div>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-20 items-center">
             <div className="space-y-8">
               <p className="text-2xl text-acajou/70 leading-relaxed font-light">
                 Le Cabinet de Maître Guillaume Elhaik est situé à Versailles. Il intervient principalement devant le Tribunal administratif de Cergy-Pontoise, le Tribunal administratif de Versailles et la Cour d'appel de Versailles.
@@ -388,11 +396,11 @@ const Expertise = () => {
   ];
 
   return (
-    <section id="expertise" className="py-20 md:py-56 px-6 bg-acajou text-porcelaine relative overflow-hidden">
+    <section id="expertise" className="py-12 md:py-56 px-6 bg-acajou text-porcelaine relative overflow-hidden">
       <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
 
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-16 mb-32">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16 mb-16 md:mb-32">
           <div className="md:col-span-3">
             <motion.h3
               initial={{ opacity: 0 }}
@@ -452,8 +460,8 @@ const Expertise = () => {
 
 const Testimonials = () => {
   return (
-    <section id="testimonials" className="py-20 md:py-56 px-6 bg-porcelaine relative overflow-hidden">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-20 items-center">
+    <section id="testimonials" className="py-12 md:py-56 px-6 bg-porcelaine relative overflow-hidden">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-20 items-center">
         <div className="md:col-span-3">
           <h3 className="text-grenat">Témoignages</h3>
         </div>
@@ -530,12 +538,12 @@ const FAQ = () => {
   ];
 
   return (
-    <section id="faq" className="py-20 md:py-56 px-6 bg-porcelaine relative">
+    <section id="faq" className="py-12 md:py-56 px-6 bg-porcelaine relative">
       <div className="max-w-4xl mx-auto">
         <motion.h3
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          className="text-grenat mb-20"
+          className="text-grenat mb-10 md:mb-20"
         >
           Questions Fréquentes
         </motion.h3>
@@ -655,13 +663,13 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="py-20 md:py-56 px-6 bg-acajou text-porcelaine relative overflow-hidden">
+    <section id="contact" className="py-12 md:py-56 px-6 bg-acajou text-porcelaine relative overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none">
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
       </div>
 
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-24 relative z-10">
-        <div className="flex flex-col gap-16">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-24 relative z-10">
+        <div className="flex flex-col gap-10 md:gap-16">
           <div>
             <motion.h3
               initial={{ opacity: 0 }}
@@ -679,7 +687,7 @@ const Contact = () => {
             </motion.h2>
           </div>
 
-          <div className="space-y-12">
+          <div className="space-y-8 md:space-y-12">
             {[
               { icon: Phone, label: "Téléphone", value: "06 67 83 64 43" },
               { icon: Mail, label: "Email", value: "g.elhaik.avocat@gmail.com" },
@@ -690,14 +698,14 @@ const Contact = () => {
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.2 }}
-                className="flex items-start gap-8 group cursor-pointer"
+                className="flex items-start gap-5 md:gap-8 group cursor-pointer"
               >
-                <div className="w-16 h-16 bg-porcelaine/5 rounded-full flex items-center justify-center group-hover:bg-lin group-hover:text-acajou transition-all duration-300">
-                  <item.icon size={28} className="text-lin group-hover:text-acajou transition-colors" />
+                <div className="w-12 h-12 md:w-16 md:h-16 shrink-0 bg-porcelaine/5 rounded-full flex items-center justify-center group-hover:bg-lin group-hover:text-acajou transition-all duration-300">
+                  <item.icon className="w-5 h-5 md:w-7 md:h-7 text-lin group-hover:text-acajou transition-colors" />
                 </div>
                 <div>
-                  <p className="text-lin/60 text-xs uppercase tracking-[0.3em] font-sans font-light mb-2">{item.label}</p>
-                  <p className="text-2xl md:text-3xl font-serif italic group-hover:text-lin transition-colors duration-300">{item.value}</p>
+                  <p className="text-lin/60 text-[10px] md:text-xs uppercase tracking-[0.2em] md:tracking-[0.3em] font-sans font-light mb-1 md:mb-2">{item.label}</p>
+                  <p className="text-[20px] md:text-3xl font-serif italic group-hover:text-lin transition-colors duration-300 leading-tight">{item.value}</p>
                 </div>
               </motion.div>
             ))}
@@ -708,10 +716,10 @@ const Contact = () => {
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8 }}
-          className="bg-porcelaine/5 p-10 md:p-16 rounded-sm backdrop-blur-sm border border-porcelaine/10 shadow-2xl"
+          className="bg-porcelaine/5 p-6 md:p-16 rounded-sm backdrop-blur-sm border border-porcelaine/10 shadow-2xl"
         >
-          <form className="space-y-10" onSubmit={handleSubmit}>
-            <div className="flex justify-end">
+          <form className="space-y-6 md:space-y-10" onSubmit={handleSubmit}>
+            <div className="flex justify-end -mb-4 md:-mb-0">
               <button
                 type="button"
                 onClick={handleClear}
@@ -720,27 +728,27 @@ const Contact = () => {
                 Tout effacer
               </button>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-              <div className="space-y-3 relative">
-                <label htmlFor="firstName" className="text-xs uppercase tracking-[0.3em] text-lin font-bold block">Prénom</label>
-                <input id="firstName" value={formData.firstName} onChange={handleChange} onBlur={() => handleBlur('firstName')} type="text" className={`w-full bg-transparent border-b py-4 outline-none transition-all duration-300 placeholder:text-porcelaine/30 text-lg ${errors.firstName ? 'border-red-400 focus:border-red-500' : 'border-porcelaine/20 focus:border-lin'}`} placeholder="Jean" aria-invalid={!!errors.firstName} />
-                {errors.firstName && <span className="absolute -bottom-6 left-0 text-red-400 text-xs font-bold">{errors.firstName}</span>}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
+              <div className="space-y-2 md:space-y-3 relative">
+                <label htmlFor="firstName" className="text-[10px] md:text-xs uppercase tracking-[0.3em] text-lin font-bold block">Prénom</label>
+                <input id="firstName" value={formData.firstName} onChange={handleChange} onBlur={() => handleBlur('firstName')} type="text" className={`w-full bg-transparent border-b py-2 md:py-4 outline-none transition-all duration-300 placeholder:text-porcelaine/30 text-base md:text-lg ${errors.firstName ? 'border-red-400 focus:border-red-500' : 'border-porcelaine/20 focus:border-lin'}`} placeholder="Jean" aria-invalid={!!errors.firstName} />
+                {errors.firstName && <span className="absolute -bottom-5 left-0 text-red-400 text-[10px] md:text-xs font-bold">{errors.firstName}</span>}
               </div>
-              <div className="space-y-3 relative">
-                <label htmlFor="lastName" className="text-xs uppercase tracking-[0.3em] text-lin font-bold block">Nom</label>
-                <input id="lastName" value={formData.lastName} onChange={handleChange} onBlur={() => handleBlur('lastName')} type="text" className={`w-full bg-transparent border-b py-4 outline-none transition-all duration-300 placeholder:text-porcelaine/30 text-lg ${errors.lastName ? 'border-red-400 focus:border-red-500' : 'border-porcelaine/20 focus:border-lin'}`} placeholder="Dupont" aria-invalid={!!errors.lastName} />
-                {errors.lastName && <span className="absolute -bottom-6 left-0 text-red-400 text-xs font-bold">{errors.lastName}</span>}
+              <div className="space-y-2 md:space-y-3 relative">
+                <label htmlFor="lastName" className="text-[10px] md:text-xs uppercase tracking-[0.3em] text-lin font-bold block">Nom</label>
+                <input id="lastName" value={formData.lastName} onChange={handleChange} onBlur={() => handleBlur('lastName')} type="text" className={`w-full bg-transparent border-b py-2 md:py-4 outline-none transition-all duration-300 placeholder:text-porcelaine/30 text-base md:text-lg ${errors.lastName ? 'border-red-400 focus:border-red-500' : 'border-porcelaine/20 focus:border-lin'}`} placeholder="Dupont" aria-invalid={!!errors.lastName} />
+                {errors.lastName && <span className="absolute -bottom-5 left-0 text-red-400 text-[10px] md:text-xs font-bold">{errors.lastName}</span>}
               </div>
             </div>
-            <div className="space-y-3 relative">
-              <label htmlFor="email" className="text-xs uppercase tracking-[0.3em] text-lin font-bold block">Email</label>
-              <input id="email" value={formData.email} onChange={handleChange} onBlur={() => handleBlur('email')} type="email" className={`w-full bg-transparent border-b py-4 outline-none transition-all duration-300 placeholder:text-porcelaine/30 text-lg ${errors.email ? 'border-red-400 focus:border-red-500' : 'border-porcelaine/20 focus:border-lin'}`} placeholder="jean.dupont@email.com" aria-invalid={!!errors.email} />
-              {errors.email && <span className="absolute -bottom-6 left-0 text-red-400 text-xs font-bold">{errors.email}</span>}
+            <div className="space-y-2 md:space-y-3 relative">
+              <label htmlFor="email" className="text-[10px] md:text-xs uppercase tracking-[0.3em] text-lin font-bold block">Email</label>
+              <input id="email" value={formData.email} onChange={handleChange} onBlur={() => handleBlur('email')} type="email" className={`w-full bg-transparent border-b py-2 md:py-4 outline-none transition-all duration-300 placeholder:text-porcelaine/30 text-base md:text-lg ${errors.email ? 'border-red-400 focus:border-red-500' : 'border-porcelaine/20 focus:border-lin'}`} placeholder="jean.dupont@email.com" aria-invalid={!!errors.email} />
+              {errors.email && <span className="absolute -bottom-5 left-0 text-red-400 text-[10px] md:text-xs font-bold">{errors.email}</span>}
             </div>
-            <div className="space-y-3 relative">
-              <label htmlFor="domain" className="text-xs uppercase tracking-[0.3em] text-lin font-bold block">Domaine concerné</label>
+            <div className="space-y-2 md:space-y-3 relative">
+              <label htmlFor="domain" className="text-[10px] md:text-xs uppercase tracking-[0.3em] text-lin font-bold block">Domaine concerné</label>
               <div className="relative">
-                <select id="domain" value={formData.domain} onChange={handleChange} className="w-full bg-transparent border-b border-porcelaine/20 py-4 focus:border-lin outline-none transition-all duration-300 appearance-none cursor-pointer text-porcelaine text-lg">
+                <select id="domain" value={formData.domain} onChange={handleChange} className="w-full bg-transparent border-b border-porcelaine/20 py-2 md:py-4 focus:border-lin outline-none transition-all duration-300 appearance-none cursor-pointer text-porcelaine text-base md:text-lg">
                   <option className="bg-acajou">Droit des étrangers</option>
                   <option className="bg-acajou">Nationalité française</option>
                   <option className="bg-acajou">Contentieux administratif</option>
@@ -749,15 +757,15 @@ const Contact = () => {
                 <ChevronDown className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none text-lin/40" size={16} />
               </div>
             </div>
-            <div className="space-y-3 relative">
-              <label htmlFor="message" className="text-xs uppercase tracking-[0.3em] text-lin font-bold block">Message</label>
-              <textarea id="message" value={formData.message} onChange={handleChange} onBlur={() => handleBlur('message')} rows={4} className={`w-full bg-transparent border-b py-4 outline-none transition-all duration-300 resize-y min-h-[120px] placeholder:text-porcelaine/30 text-lg ${errors.message ? 'border-red-400 focus:border-red-500' : 'border-porcelaine/20 focus:border-lin'}`} placeholder="Décrivez brièvement votre situation..." aria-invalid={!!errors.message}></textarea>
-              {errors.message && <span className="absolute -bottom-6 left-0 text-red-400 text-xs font-bold">{errors.message}</span>}
+            <div className="space-y-2 md:space-y-3 relative">
+              <label htmlFor="message" className="text-[10px] md:text-xs uppercase tracking-[0.3em] text-lin font-bold block">Message</label>
+              <textarea id="message" value={formData.message} onChange={handleChange} onBlur={() => handleBlur('message')} rows={3} className={`w-full bg-transparent border-b py-2 md:py-4 outline-none transition-all duration-300 resize-y min-h-[60px] md:min-h-[120px] placeholder:text-porcelaine/30 text-base md:text-lg ${errors.message ? 'border-red-400 focus:border-red-500' : 'border-porcelaine/20 focus:border-lin'}`} placeholder="Décrivez brièvement votre situation..." aria-invalid={!!errors.message}></textarea>
+              {errors.message && <span className="absolute -bottom-5 left-0 text-red-400 text-[10px] md:text-xs font-bold">{errors.message}</span>}
             </div>
             <motion.button
               type="submit"
               whileTap={{ scale: 0.98 }}
-              className="btn-interactive w-full py-4 md:py-8 min-h-[44px] bg-lin text-acajou font-bold uppercase tracking-[0.3em] text-xs hover:bg-porcelaine transition-all duration-300 shadow-xl rounded-sm mt-8"
+              className="btn-interactive w-full py-4 md:py-8 min-h-[44px] bg-lin text-acajou font-bold uppercase tracking-[0.3em] text-[10px] md:text-xs hover:bg-porcelaine transition-all duration-300 shadow-xl rounded-sm mt-4 md:mt-8"
             >
               Envoyer la demande
             </motion.button>
