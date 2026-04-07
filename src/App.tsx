@@ -22,17 +22,17 @@ import {
 import { LogoHorizontal, LogoIcon, LogoAvocat, LogoFullName } from './components/Logos';
 
 // --- Img Imports for Vite/Vercel compatibility ---
-import heroBg from './assets/images/hero_bg.png';
-import guillaumeHero from './assets/images/guillaume1-R.jpg';
-import cabinetOffice from './assets/images/cabinet_office.png';
-import expertiseEtrangers from './assets/images/expertise_etrangers.png';
-import expertiseNationalite from './assets/images/expertise_nationalite.png';
-import expertiseProcessuel from './assets/images/expertise_processuel.png';
+import heroBg from './assets/images/hero_bg.webp';
+import guillaumeHero from './assets/images/guillaume1-R.webp';
+import cabinetOffice from './assets/images/cabinet_office.webp';
+import expertiseEtrangers from './assets/images/expertise_etrangers.webp';
+import expertiseNationalite from './assets/images/expertise_nationalite.webp';
+import expertiseProcessuel from './assets/images/expertise_processuel.webp';
 
-import t1Img from './assets/images/hansjorg-keller-m_-8_AhhJjE-unsplash.jpg';
-import t2Img from './assets/images/kateryna-hliznitsova--v2MxvXK9OU-unsplash.jpg';
-import t3Img from './assets/images/julio-wolf-OG1cF0cWPfo-unsplash.jpg';
-import t4Img from './assets/images/pierre-antona-wbWrY4NZLZc-unsplash.jpg';
+import t1Img from './assets/images/hansjorg-keller-m_-8_AhhJjE-unsplash.webp';
+import t2Img from './assets/images/kateryna-hliznitsova-v2MxvXK9OU-unsplash.webp';
+import t3Img from './assets/images/julio-wolf-OG1cF0cWPfo-unsplash.webp';
+import t4Img from './assets/images/pierre-antona-wbWrY4NZLZc-unsplash.webp';
 
 // --- Utilities ---
 
@@ -183,41 +183,23 @@ const Navbar = () => {
 
 const Hero = () => {
   const { scrollY } = useScroll();
-  const [isMobile, setIsMobile] = useState(false);
 
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 768);
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  // Layer 1: Background (Deepest) - Moves backward
+  // Parallax layers
   const bgY = useTransform(scrollY, [0, 1000], [0, 250]);
-
-  // Layer 2: Decorative background Name "Elhaik"
-  const nameY = useTransform(scrollY, [0, 1000], [0, 100]);
-
-  // Layer 3: Portrait Image (Middle) - Subtle floating parallax
-  const imgY = useTransform(scrollY, [0, 1000], [0, 80]);
+  const imgY = useTransform(scrollY, [0, 1000], [0, 60]);
   const imgScale = useTransform(scrollY, [0, 500], [1, 1.05]);
-  const heroOpacity = useTransform(scrollY, [0, 500], [1, 0.85]);
-
-  // Layer 4: Texts and CTA (Top/Front) - Moves slightly up (reverse parallax)
-  const textY = useTransform(scrollY, [0, 1000], [0, -100]);
+  const textY = useTransform(scrollY, [0, 1000], [0, -80]);
 
   return (
-    <section className="sticky top-0 h-screen min-h-[750px] flex items-center justify-center overflow-hidden bg-acajou -z-10">
-      {/* Dynamic Light Wave / Flare Background Animation */}
+    <section className="sticky top-0 h-screen min-h-[700px] flex overflow-hidden bg-acajou -z-10">
+      {/* Animated background light wave */}
       <motion.div
-        animate={{ 
-          scale: [1, 1.2, 1],
-          rotate: [0, 45, 0],
-          opacity: [0.1, 0.2, 0.1]
-        }}
+        animate={{ scale: [1, 1.2, 1], rotate: [0, 45, 0], opacity: [0.1, 0.2, 0.1] }}
         transition={{ duration: 15, repeat: Infinity, ease: 'linear' }}
         className="absolute -top-1/2 -left-1/2 w-[200%] h-[200%] bg-[radial-gradient(circle_at_center,var(--color-lin)_0%,transparent_50%)] pointer-events-none mix-blend-soft-light z-0 opacity-20"
       />
+
+      {/* Blurred BG image */}
       <motion.div
         initial={{ scale: 1.1, opacity: 0 }}
         animate={{ scale: 1, opacity: 0.15 }}
@@ -225,118 +207,189 @@ const Hero = () => {
         transition={{ duration: 2 }}
         className="absolute inset-0"
       >
-        <img
-          src={heroBg}
-          alt="Arrière-plan texturé flou du cabinet" loading="lazy" decoding="async"
+        <img src={heroBg} alt="" aria-hidden="true" loading="lazy" decoding="async"
           className="w-full h-full object-cover grayscale opacity-40 mix-blend-luminosity"
         />
       </motion.div>
 
-      {/* Subliminal Light Flare */}
+      {/* Light flare sweep */}
       <motion.div
-        animate={{ 
-          x: ['-100%', '100%'],
-          opacity: [0, 0.4, 0]
-        }}
+        animate={{ x: ['-100%', '100%'], opacity: [0, 0.4, 0] }}
         transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
         className="absolute top-0 bottom-0 w-1/4 bg-gradient-to-r from-transparent via-lin/20 to-transparent skew-x-[35deg] z-[1] pointer-events-none mix-blend-overlay"
       />
 
-      <div className="relative max-w-7xl mx-auto px-6 w-full grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center mt-[-60px] md:mt-0">
-        <motion.div style={{ y: textY }} className="md:col-span-4 block relative z-40">
-          <motion.h1
-            initial={{ opacity: 0, x: -30 }}
+      {/* ===================== DESKTOP LAYOUT (lg+) ===================== */}
+      <div className="hidden lg:flex relative w-full max-w-7xl mx-auto px-8 xl:px-12 items-center justify-between gap-8 pt-20">
+
+        {/* Left: Tagline */}
+        <motion.div
+          style={{ y: textY }}
+          className="flex-1 flex flex-col justify-center z-40 max-w-xs xl:max-w-sm"
+        >
+          <motion.p
+            initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1, delay: 0.5 }}
-            className="text-porcelaine/60 text-base md:text-xl leading-relaxed max-w-xs font-sans font-light"
+            className="text-porcelaine/85 text-lg xl:text-xl leading-relaxed font-sans font-light"
           >
             Expertise juridique rigoureuse et défense engagée au cœur de Versailles. Expérience en droit des étrangers et de la nationalité.
-          </motion.h1>
+          </motion.p>
         </motion.div>
 
-        <div className="md:col-span-4 flex flex-col items-center relative">
+        {/* Center: Portrait */}
+        <div className="flex-shrink-0 flex flex-col items-center relative z-20">
           <motion.div
-            initial={{ opacity: 0, y: 60 }}
-            animate={{ 
-              opacity: 1, 
-              y: [0, -15, 0],
-            }}
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: [0, -12, 0] }}
             style={{ y: imgY }}
-            transition={{ 
-              duration: 4, 
-              repeat: Infinity, 
-              ease: "easeInOut",
-              opacity: { duration: 1.2, ease: [0.22, 1, 0.36, 1] }
+            transition={{
+              opacity: { duration: 1, ease: [0.22, 1, 0.36, 1] },
+              y: { duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 1 }
             }}
-            className="btn-interactive relative w-56 h-[320px] md:w-96 md:h-[600px] z-20 rounded-sm"
+            className="relative w-72 xl:w-80 2xl:w-96 rounded-sm"
           >
-            <motion.div 
-               style={{ scale: imgScale }} 
-               className="w-full h-full"
-            >
-              <div className="absolute inset-0 bg-grenat/20 mix-blend-overlay z-10 rounded-sm"></div>
+            <motion.div style={{ scale: imgScale }} className="w-full">
+              <div className="absolute inset-0 bg-grenat/15 mix-blend-overlay z-10 rounded-sm" />
               <img
                 src={guillaumeHero}
                 alt="Guillaume Elhaik, Avocat spécialisé au Tribunal de Versailles"
-                className="w-full h-full object-cover rounded-sm shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)]"
+                className="w-full aspect-[3/4] object-cover rounded-sm shadow-[0_60px_120px_-20px_rgba(0,0,0,0.6)]"
               />
             </motion.div>
           </motion.div>
         </div>
 
-        <motion.div style={{ y: textY }} className="md:col-span-4 flex flex-col items-end text-right gap-12 relative z-40">
+        {/* Right: Contact info */}
+        <motion.div
+          style={{ y: textY }}
+          className="flex-1 flex flex-col items-end justify-center gap-8 z-40 max-w-xs xl:max-w-sm"
+        >
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
+            initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1, delay: 0.7 }}
-            className="flex flex-col gap-3"
+            className="flex flex-col items-end gap-1"
           >
-            <a href="tel:0139500000" className="text-lin text-3xl md:text-4xl font-serif hover:text-porcelaine transition-all duration-300 italic">
+            <a href="tel:0667836443" className="text-lin text-3xl xl:text-4xl font-serif hover:text-porcelaine transition-all duration-300 italic">
               06 67 83 64 43
             </a>
-            <p className="text-porcelaine/60 text-xs uppercase tracking-[0.3em] font-sans font-light">Ligne directe cabinet</p>
+            <p className="text-porcelaine/60 text-[10px] uppercase tracking-[0.3em] font-sans font-light">Ligne directe cabinet</p>
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
+            initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1, delay: 0.9 }}
-            className="flex flex-col gap-3"
+            className="flex flex-col items-end gap-1"
           >
-            <a href="mailto:g.elhaik.avocat@gmail.com" className="text-lin text-3xl md:text-4xl font-serif hover:text-porcelaine transition-all duration-300 italic">
+            <a href="mailto:g.elhaik.avocat@gmail.com" className="text-lin text-xl xl:text-2xl font-serif hover:text-porcelaine transition-all duration-300 italic whitespace-nowrap">
               g.elhaik.avocat@gmail.com
             </a>
-            <p className="text-porcelaine/60 text-xs uppercase tracking-[0.3em] font-sans font-light">Étude de votre dossier</p>
+            <p className="text-porcelaine/60 text-[10px] uppercase tracking-[0.3em] font-sans font-light">Étude de votre dossier</p>
           </motion.div>
         </motion.div>
       </div>
 
-      <motion.div style={{ y: textY }} className="absolute bottom-6 md:bottom-10 left-0 right-0 flex flex-col items-center z-30 pointer-events-none">
-        <div className="flex flex-col items-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.2, duration: 1 }}
-          >
-            <LogoFullName className="text-lin w-[95vw] md:w-[85vw] max-w-[900px] drop-shadow-2xl" />
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 1.8, duration: 1, ease: "easeOut" }}
-            className="-mt-8 md:-mt-16"
-          >
-            <LogoAvocat className="text-lin h-12 md:h-28 drop-shadow-xl" />
-          </motion.div>
-        </div>
+      {/* DESKTOP: Logo name + Avocat at bottom */}
+      <motion.div
+        style={{ y: textY }}
+        className="hidden lg:flex absolute bottom-6 xl:bottom-8 left-0 right-0 flex-col items-center z-10 pointer-events-none"
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.2, duration: 1 }}
+        >
+          <LogoFullName className="text-lin w-[65vw] max-w-[600px] drop-shadow-2xl opacity-75" />
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 1.8, duration: 1, ease: 'easeOut' }}
+          className="-mt-8 xl:-mt-10"
+        >
+          <LogoAvocat className="text-lin h-14 xl:h-16 drop-shadow-xl" />
+        </motion.div>
       </motion.div>
 
+      {/* ===================== MOBILE LAYOUT (< lg) ===================== */}
+      <div className="lg:hidden relative w-full flex flex-col items-center justify-start pt-20 pb-4 px-5 z-20 overflow-y-auto">
+
+        {/* 1. Name logo banner */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+          className="w-full flex flex-col items-center mb-4"
+        >
+          <LogoFullName className="text-lin w-[85vw] max-w-[340px] drop-shadow-xl opacity-90" />
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8, duration: 0.8 }}
+            className="-mt-3"
+          >
+            <LogoAvocat className="text-lin h-8 drop-shadow" />
+          </motion.div>
+        </motion.div>
+
+        {/* 2. Portrait */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, delay: 0.5 }}
+          className="relative z-20 mb-5"
+        >
+          <div className="absolute inset-0 bg-grenat/15 mix-blend-overlay z-10 rounded-sm" />
+          <img
+            src={guillaumeHero}
+            alt="Guillaume Elhaik, Avocat à Versailles"
+            className="w-[220px] aspect-[3/4] object-cover rounded-sm shadow-[0_30px_80px_-10px_rgba(0,0,0,0.7)]"
+          />
+        </motion.div>
+
+        {/* 3. Tagline */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.8 }}
+          className="text-center mb-5 px-2"
+        >
+          <p className="text-porcelaine/85 text-[15px] leading-relaxed font-sans font-light max-w-[300px] mx-auto">
+            Expertise juridique rigoureuse et défense engagée au cœur de Versailles. Expérience en droit des étrangers et de la nationalité.
+          </p>
+        </motion.div>
+
+        {/* 4. Contact info */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 1 }}
+          className="flex flex-col items-center gap-3 w-full"
+        >
+          <div className="flex flex-col items-center gap-0.5">
+            <a href="tel:0667836443" className="text-lin text-2xl font-serif hover:text-porcelaine transition-all duration-300 italic">
+              06 67 83 64 43
+            </a>
+            <p className="text-porcelaine/55 text-[9px] uppercase tracking-[0.3em] font-sans font-light">Ligne directe cabinet</p>
+          </div>
+          <div className="flex flex-col items-center gap-0.5">
+            <a href="mailto:g.elhaik.avocat@gmail.com" className="text-lin text-[15px] font-serif hover:text-porcelaine transition-all duration-300 italic">
+              g.elhaik.avocat@gmail.com
+            </a>
+            <p className="text-porcelaine/55 text-[9px] uppercase tracking-[0.3em] font-sans font-light">Étude de votre dossier</p>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Scroll indicator */}
       <motion.div
         animate={{ y: [0, 10, 0], opacity: [0.3, 0.8, 0.3] }}
         transition={{ duration: 2, repeat: Infinity }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-lin/40"
+        className="absolute bottom-4 left-1/2 -translate-x-1/2 text-lin/40 z-30"
       >
-        <ChevronDown size={32} />
+        <ChevronDown size={28} />
       </motion.div>
     </section>
   );
@@ -366,7 +419,7 @@ const About = () => {
             viewport={{ once: true, margin: "-100px" }}
             className="relative"
           >
-            <p className="font-serif text-[28px] md:text-7xl leading-[1.1] text-acajou italic text-balance">
+            <p className="font-serif text-[28px] md:text-5xl lg:text-7xl leading-[1.3] text-acajou italic text-balance">
               “Une expertise forgée par des centaines de décisions rendues par les plus hautes juridictions administratives.”
             </p>
             <div className="mt-6 md:mt-16 flex justify-end">
@@ -813,9 +866,9 @@ const Contact = () => {
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.2 }}
-                className="btn-interactive flex items-start gap-5 md:gap-8 group cursor-pointer p-4 -ml-4 rounded-sm"
+                className="flex items-start gap-5 md:gap-8 group cursor-pointer p-4 -ml-4 rounded-sm"
               >
-                <div className="w-12 h-12 md:w-16 md:h-16 shrink-0 bg-porcelaine/5 rounded-full flex items-center justify-center group-hover:bg-lin group-hover:text-acajou transition-all duration-300">
+                <div className="btn-interactive group-btn-interactive w-12 h-12 md:w-16 md:h-16 shrink-0 bg-porcelaine/5 rounded-full flex items-center justify-center transition-all duration-300 group-hover:bg-lin group-hover:text-acajou">
                   <item.icon className="w-5 h-5 md:w-7 md:h-7 text-lin group-hover:text-acajou transition-colors" />
                 </div>
                 <div>
@@ -845,23 +898,23 @@ const Contact = () => {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
               <div className="space-y-2 md:space-y-3 relative">
-                <label htmlFor="firstName" className="text-[10px] md:text-xs uppercase tracking-[0.3em] text-lin font-bold block">Prénom</label>
+                <label htmlFor="firstName" className="text-xs md:text-sm uppercase tracking-[0.3em] text-lin font-bold block">Prénom</label>
                 <input id="firstName" value={formData.firstName} onChange={handleChange} onBlur={() => handleBlur('firstName')} type="text" className={`w-full bg-transparent border-b py-2 md:py-4 outline-none transition-all duration-300 placeholder:text-porcelaine/30 text-base md:text-lg ${errors.firstName ? 'border-red-400 focus:border-red-500' : 'border-porcelaine/20 focus:border-lin'}`} placeholder="Jean" aria-invalid={!!errors.firstName} />
                 {errors.firstName && <span className="absolute -bottom-5 left-0 text-red-400 text-[10px] md:text-xs font-bold">{errors.firstName}</span>}
               </div>
               <div className="space-y-2 md:space-y-3 relative">
-                <label htmlFor="lastName" className="text-[10px] md:text-xs uppercase tracking-[0.3em] text-lin font-bold block">Nom</label>
+                <label htmlFor="lastName" className="text-xs md:text-sm uppercase tracking-[0.3em] text-lin font-bold block">Nom</label>
                 <input id="lastName" value={formData.lastName} onChange={handleChange} onBlur={() => handleBlur('lastName')} type="text" className={`w-full bg-transparent border-b py-2 md:py-4 outline-none transition-all duration-300 placeholder:text-porcelaine/30 text-base md:text-lg ${errors.lastName ? 'border-red-400 focus:border-red-500' : 'border-porcelaine/20 focus:border-lin'}`} placeholder="Dupont" aria-invalid={!!errors.lastName} />
                 {errors.lastName && <span className="absolute -bottom-5 left-0 text-red-400 text-[10px] md:text-xs font-bold">{errors.lastName}</span>}
               </div>
             </div>
             <div className="space-y-2 md:space-y-3 relative">
-              <label htmlFor="email" className="text-[10px] md:text-xs uppercase tracking-[0.3em] text-lin font-bold block">Email</label>
+              <label htmlFor="email" className="text-xs md:text-sm uppercase tracking-[0.3em] text-lin font-bold block">Email</label>
               <input id="email" value={formData.email} onChange={handleChange} onBlur={() => handleBlur('email')} type="email" className={`w-full bg-transparent border-b py-2 md:py-4 outline-none transition-all duration-300 placeholder:text-porcelaine/30 text-base md:text-lg ${errors.email ? 'border-red-400 focus:border-red-500' : 'border-porcelaine/20 focus:border-lin'}`} placeholder="jean.dupont@email.com" aria-invalid={!!errors.email} />
               {errors.email && <span className="absolute -bottom-5 left-0 text-red-400 text-[10px] md:text-xs font-bold">{errors.email}</span>}
             </div>
             <div className="space-y-2 md:space-y-3 relative">
-              <label htmlFor="domain" className="text-[10px] md:text-xs uppercase tracking-[0.3em] text-lin font-bold block">Domaine concerné</label>
+              <label htmlFor="domain" className="text-xs md:text-sm uppercase tracking-[0.3em] text-lin font-bold block">Domaine concerné</label>
               <div className="relative">
                 <select id="domain" value={formData.domain} onChange={handleChange} className="w-full bg-transparent border-b border-porcelaine/20 py-2 md:py-4 focus:border-lin outline-none transition-all duration-300 appearance-none cursor-pointer text-porcelaine text-base md:text-lg">
                   <option className="bg-acajou">Droit des étrangers</option>
@@ -873,7 +926,7 @@ const Contact = () => {
               </div>
             </div>
             <div className="space-y-2 md:space-y-3 relative">
-              <label htmlFor="message" className="text-[10px] md:text-xs uppercase tracking-[0.3em] text-lin font-bold block">Message</label>
+              <label htmlFor="message" className="text-xs md:text-sm uppercase tracking-[0.3em] text-lin font-bold block">Message</label>
               <textarea id="message" value={formData.message} onChange={handleChange} onBlur={() => handleBlur('message')} rows={3} className={`w-full bg-transparent border-b py-2 md:py-4 outline-none transition-all duration-300 resize-y min-h-[60px] md:min-h-[120px] placeholder:text-porcelaine/30 text-base md:text-lg ${errors.message ? 'border-red-400 focus:border-red-500' : 'border-porcelaine/20 focus:border-lin'}`} placeholder="Décrivez brièvement votre situation..." aria-invalid={!!errors.message}></textarea>
               {errors.message && <span className="absolute -bottom-5 left-0 text-red-400 text-[10px] md:text-xs font-bold">{errors.message}</span>}
             </div>
