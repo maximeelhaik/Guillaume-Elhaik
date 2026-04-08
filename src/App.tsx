@@ -240,10 +240,10 @@ const Navbar = () => {
 
               {/* Right Column: Contact Info */}
               <div className="md:w-[350px] lg:w-[450px] flex flex-col justify-end md:justify-center gap-[1.5dvh] md:gap-[4dvh] border-t md:border-t-0 md:border-l border-porcelaine/10 pt-[2dvh] md:pt-0 pl-1 md:pl-16 shrink-0 min-h-0 mt-auto md:mt-0">
-                <div className="space-y-[0.5dvh] md:space-y-3">
+                <div className="space-y-[0.5dvh] md:space-y-2">
                   <h4 className="text-lin uppercase tracking-[0.3em] text-[min(10px,2dvh)] md:text-sm font-sans font-light hidden md:block">Contact</h4>
-                  <p className="text-[clamp(1.5rem,5.5dvh,4rem)] font-serif italic leading-[1]">06 67 83 64 43</p>
-                  <p className="text-[clamp(0.9rem,2.2dvh,1.6rem)] md:text-[clamp(1rem,2.5dvh,2rem)] opacity-50 hover:opacity-100 transition-opacity cursor-pointer">g.elhaik.avocat@gmail.com</p>
+                  <a href="tel:0667836443" className="text-[clamp(1.1rem,3dvh,2.2rem)] font-serif italic text-lin hover:text-porcelaine transition-all duration-300 block">06 67 83 64 43</a>
+                  <a href="mailto:g.elhaik.avocat@gmail.com" className="text-[clamp(1.1rem,3dvh,2.2rem)] font-serif italic text-lin hover:text-porcelaine transition-all duration-300 block">g.elhaik.avocat@gmail.com</a>
                 </div>
                 <div className="space-y-[0.5dvh] md:space-y-3">
                   <h4 className="text-lin uppercase tracking-[0.3em] text-[min(10px,2dvh)] md:text-sm font-sans font-light hidden md:block">Adresse</h4>
@@ -365,7 +365,7 @@ const Hero = () => {
             transition={{ duration: 0.8, delay: 1.2 }}
             className="mt-3 text-porcelaine/40 text-[11px] uppercase tracking-[0.2em] font-sans"
           >
-            Consultation gratuite · Sans engagement
+            Étude de votre dossier
           </motion.p>
         </motion.div>
 
@@ -512,29 +512,7 @@ const Hero = () => {
           >
             Exposer ma situation <ArrowRight size={13} />
           </button>
-          <p className="text-porcelaine/35 text-xs uppercase tracking-[0.2em] font-sans text-center">Consultation gratuite · Sans engagement</p>
-        </motion.div>
-
-        {/* 5. Contact info */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.1 }}
-          className="flex flex-col items-center gap-3 w-full"
-        >
-          <div className="flex flex-col items-center gap-0.5">
-            <a href="tel:0667836443" className="text-lin text-2xl font-serif hover:text-porcelaine transition-all duration-300 italic">
-              06 67 83 64 43
-            </a>
-            <p className="text-porcelaine/55 text-xs uppercase tracking-[0.3em] font-sans font-light">Ligne directe cabinet</p>
-            <p className="text-porcelaine/30 text-[11px] uppercase tracking-[0.2em] font-sans mt-1">Avocat au Barreau de Versailles</p>
-          </div>
-          <div className="flex flex-col items-center gap-0.5">
-            <a href="mailto:g.elhaik.avocat@gmail.com" className="text-lin text-[15px] font-serif hover:text-porcelaine transition-all duration-300 italic">
-              g.elhaik.avocat@gmail.com
-            </a>
-            <p className="text-porcelaine/55 text-xs uppercase tracking-[0.3em] font-sans font-light">Étude de votre dossier</p>
-          </div>
+          <p className="text-porcelaine/35 text-xs uppercase tracking-[0.2em] font-sans text-center">Étude de votre dossier</p>
         </motion.div>
       </div>
 
@@ -1075,7 +1053,370 @@ const Contact = () => {
   );
 };
 
-const Footer = () => {
+// --- Legal Modals ---
+
+type LegalPage = 'mentions' | 'confidentialite' | 'cookies' | null;
+
+const LegalModal = ({ page, onClose }: { page: LegalPage; onClose: () => void }) => {
+  useEffect(() => {
+    if (page) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [page]);
+
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [onClose]);
+
+  const titles: Record<NonNullable<LegalPage>, string> = {
+    mentions: 'Mentions Légales',
+    confidentialite: 'Politique de Confidentialité',
+    cookies: 'Politique de Cookies',
+  };
+
+  return (
+    <AnimatePresence>
+      {page && (
+        <motion.div
+          key={page}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          className="fixed inset-0 z-[200] bg-acajou/80 backdrop-blur-md flex items-start justify-center p-4 md:p-8 overflow-y-auto"
+          onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+        >
+          <motion.div
+            initial={{ opacity: 0, y: 40, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.98 }}
+            transition={{ type: 'spring', damping: 30, stiffness: 200 }}
+            className="relative bg-porcelaine text-acajou w-full max-w-4xl rounded-sm shadow-[0_40px_100px_-20px_rgba(0,0,0,0.5)] my-4 md:my-8"
+            role="dialog"
+            aria-modal="true"
+            aria-label={page ? titles[page] : ''}
+          >
+            {/* Header */}
+            <div className="sticky top-0 z-10 bg-porcelaine border-b border-acajou/10 px-8 md:px-16 py-6 flex justify-between items-center rounded-t-sm">
+              <div>
+                <p className="text-grenat text-[10px] uppercase tracking-[0.3em] font-sans font-light mb-1">Cabinet Guillaume Elhaik</p>
+                <h2 className="font-serif text-2xl md:text-3xl italic text-acajou">{page ? titles[page] : ''}</h2>
+              </div>
+              <button
+                onClick={onClose}
+                aria-label="Fermer"
+                className="w-11 h-11 rounded-full border border-acajou/15 flex items-center justify-center hover:bg-acajou hover:text-porcelaine transition-all duration-300 shrink-0"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="px-8 md:px-16 py-10 md:py-14 space-y-10 text-acajou/80 leading-relaxed">
+              {page === 'mentions' && <MentionsLegalesContent />}
+              {page === 'confidentialite' && <ConfidentialiteContent />}
+              {page === 'cookies' && <CookiesContent />}
+            </div>
+
+            {/* Footer */}
+            <div className="border-t border-acajou/10 px-8 md:px-16 py-6 flex justify-between items-center text-[10px] uppercase tracking-[0.2em] text-acajou/40 font-sans">
+              <span>© 2026 Cabinet Guillaume Elhaik — Avocat au Barreau de Versailles</span>
+              <button onClick={onClose} className="hover:text-acajou transition-colors">Fermer ×</button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
+const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
+  <div className="space-y-4">
+    <h3 className="font-serif text-xl md:text-2xl text-acajou italic not-uppercase tracking-normal border-b border-acajou/10 pb-3">{title}</h3>
+    <div className="space-y-3 text-[15px] md:text-base">{children}</div>
+  </div>
+);
+
+const MentionsLegalesContent = () => (
+  <div className="space-y-10">
+    <div className="bg-acajou/5 rounded-sm p-6 border-l-2 border-lin">
+      <p className="text-sm text-acajou/70 leading-relaxed">
+        Conformément aux dispositions de la loi n° 2004-575 du 21 juin 2004 pour la confiance dans l'économie numérique, les présentes mentions légales sont portées à la connaissance des utilisateurs et visiteurs du site.
+      </p>
+    </div>
+
+    <Section title="Éditeur du site">
+      <p><strong className="text-acajou">Raison sociale :</strong> Cabinet Guillaume Elhaik, Avocat</p>
+      <p><strong className="text-acajou">Statut :</strong> Avocat inscrit au Barreau de Versailles</p>
+      <p><strong className="text-acajou">Adresse :</strong> 16 rue Saint-Simon, 78000 Versailles, France</p>
+      <p><strong className="text-acajou">Téléphone :</strong> 06 67 83 64 43</p>
+      <p><strong className="text-acajou">Email :</strong> g.elhaik.avocat@gmail.com</p>
+      <p><strong className="text-acajou">TOQUE (N° de barreau) :</strong> Inscrit au Barreau de Versailles</p>
+      <p><strong className="text-acajou">Autorité de tutelle :</strong> Barreau de Versailles, Ordre des Avocats du Barreau de Versailles, Palais de Justice, Place André Mignot, 78000 Versailles</p>
+    </Section>
+
+    <Section title="Règles professionnelles applicables">
+      <p>Maître Guillaume Elhaik exerce la profession d'avocat conformément aux règles professionnelles fixées par :</p>
+      <ul className="list-disc list-inside space-y-2 pl-2">
+        <li>La loi n° 71-1130 du 31 décembre 1971 modifiée, portant réforme de certaines professions judiciaires et juridiques</li>
+        <li>Le décret n° 91-1197 du 27 novembre 1991 organisant la profession d'avocat</li>
+        <li>Le Règlement Intérieur National (RIN) de la profession d'avocat</li>
+        <li>Le Règlement Intérieur du Barreau de Versailles</li>
+      </ul>
+      <p className="mt-2">Ces textes sont accessibles sur le site du Conseil National des Barreaux : <span className="text-grenat">www.cnb.avocat.fr</span></p>
+    </Section>
+
+    <Section title="Assurance responsabilité civile professionnelle">
+      <p>Maître Guillaume Elhaik est couvert par une assurance responsabilité civile professionnelle souscrite auprès d'un organisme agréé, conformément aux dispositions de l'article 27 de la loi du 31 décembre 1971.</p>
+    </Section>
+
+    <Section title="Directeur de la publication">
+      <p>Maître Guillaume Elhaik, en sa qualité d'éditeur du site.</p>
+    </Section>
+
+    <Section title="Hébergement">
+      <p><strong className="text-acajou">Hébergeur :</strong> Vercel Inc.</p>
+      <p><strong className="text-acajou">Adresse :</strong> 340 Pine Street, Suite 701, San Francisco, California 94104, États-Unis</p>
+      <p><strong className="text-acajou">Site web :</strong> www.vercel.com</p>
+    </Section>
+
+    <Section title="Propriété intellectuelle">
+      <p>L'ensemble de ce site relève de la législation française et internationale sur le droit d'auteur et la propriété intellectuelle. Tous les droits de reproduction sont réservés, y compris pour les documents téléchargeables et les représentations iconographiques et photographiques.</p>
+      <p>La reproduction de tout ou partie de ce site sur un support électronique quel qu'il soit est formellement interdite sauf autorisation expresse de Maître Guillaume Elhaik.</p>
+    </Section>
+
+    <Section title="Limitation de responsabilité">
+      <p>Les informations contenues sur ce site sont aussi précises que possible et le site est régulièrement mis à jour. Cependant, elles ne sauraient engager la responsabilité de l'éditeur. Les informations publiées sur ce site ont un caractère purement informatif et ne constituent en aucun cas une consultation juridique.</p>
+      <p>Toute consultation juridique personnalisée doit être réalisée directement auprès de Maître Guillaume Elhaik dans le cadre d'un mandat confié au cabinet.</p>
+    </Section>
+
+    <Section title="Interdiction du démarchage">
+      <p>Conformément aux dispositions des articles 15 et suivants du Règlement Intérieur National de la profession d'avocat, le démarchage est interdit. Ce site a pour unique objet de présenter le cabinet et ses domaines d'intervention. Il ne constitue pas un acte de démarchage.</p>
+    </Section>
+
+    <Section title="Droit applicable et juridiction compétente">
+      <p>Les présentes mentions légales sont soumises au droit français. En cas de litige, les tribunaux français seront seuls compétents.</p>
+    </Section>
+  </div>
+);
+
+const ConfidentialiteContent = () => (
+  <div className="space-y-10">
+    <div className="bg-acajou/5 rounded-sm p-6 border-l-2 border-lin">
+      <p className="text-sm text-acajou/70 leading-relaxed">
+        La protection de vos données personnelles est une priorité pour le Cabinet Guillaume Elhaik. La présente politique de confidentialité vous informe de la manière dont vos données sont collectées, traitées et protégées, conformément au Règlement Général sur la Protection des Données (RGPD) n° 2016/679 du 27 avril 2016 et à la loi Informatique et Libertés du 6 janvier 1978 modifiée.
+      </p>
+    </div>
+
+    <Section title="Responsable du traitement">
+      <p><strong className="text-acajou">Identité :</strong> Maître Guillaume Elhaik, Avocat</p>
+      <p><strong className="text-acajou">Adresse :</strong> 16 rue Saint-Simon, 78000 Versailles</p>
+      <p><strong className="text-acajou">Email :</strong> g.elhaik.avocat@gmail.com</p>
+      <p><strong className="text-acajou">Téléphone :</strong> 06 67 83 64 43</p>
+    </Section>
+
+    <Section title="Données collectées">
+      <p>Dans le cadre de l'utilisation de ce site et du formulaire de contact, les données suivantes peuvent être collectées :</p>
+      <ul className="list-disc list-inside space-y-2 pl-2">
+        <li>Nom et prénom</li>
+        <li>Adresse email</li>
+        <li>Numéro de téléphone (si communiqué librement)</li>
+        <li>Les informations contenues dans votre message</li>
+        <li>Données de navigation (adresse IP, pages visitées, durée de visite)</li>
+      </ul>
+    </Section>
+
+    <Section title="Finalités et bases légales du traitement">
+      <div className="space-y-4">
+        <div className="bg-acajou/5 rounded-sm p-4">
+          <p className="font-bold text-acajou text-sm mb-1">Répondre à vos demandes de contact</p>
+          <p className="text-sm">Base légale : Intérêt légitime (art. 6.1.f du RGPD) — Les données collectées via le formulaire de contact sont traitées dans le seul but de traiter votre demande et d'y répondre.</p>
+        </div>
+        <div className="bg-acajou/5 rounded-sm p-4">
+          <p className="font-bold text-acajou text-sm mb-1">Gestion de la relation client et des mandats</p>
+          <p className="text-sm">Base légale : Exécution du contrat (art. 6.1.b du RGPD) — Dans le cadre d'un mandat confié au cabinet, vos données sont traitées pour la bonne exécution de notre mission de représentation et de conseil.</p>
+        </div>
+        <div className="bg-acajou/5 rounded-sm p-4">
+          <p className="font-bold text-acajou text-sm mb-1">Mesure d'audience du site</p>
+          <p className="text-sm">Base légale : Consentement (art. 6.1.a du RGPD) — Des outils d'analyse d'audience peuvent être utilisés sous réserve de votre consentement, conformément à notre politique de cookies.</p>
+        </div>
+      </div>
+    </Section>
+
+    <Section title="Secret professionnel de l'avocat">
+      <p className="font-medium text-acajou">Toutes les informations que vous nous communiquez dans le cadre d'une relation client sont protégées par le secret professionnel de l'avocat, prévu par l'article 66-5 de la loi du 31 décembre 1971.</p>
+      <p>Cette obligation de secret couvre en particulier :</p>
+      <ul className="list-disc list-inside space-y-2 pl-2">
+        <li>Les consultations adressées à un avocat</li>
+        <li>Les correspondances échangées entre le client et son avocat</li>
+        <li>Les notes d'entretien et, plus généralement, toutes les pièces du dossier</li>
+      </ul>
+    </Section>
+
+    <Section title="Durée de conservation">
+      <p>Vos données personnelles sont conservées pendant les durées suivantes :</p>
+      <ul className="list-disc list-inside space-y-2 pl-2">
+        <li><strong className="text-acajou">Demandes de contact sans suite donnée :</strong> 3 ans à compter du dernier contact</li>
+        <li><strong className="text-acajou">Données relatives aux mandats :</strong> 5 ans après la clôture du dossier, conformément aux obligations professionnelles de l'avocat</li>
+        <li><strong className="text-acajou">Données de facturation :</strong> 10 ans, conformément aux obligations comptables et fiscales</li>
+        <li><strong className="text-acajou">Données de navigation :</strong> 13 mois maximum</li>
+      </ul>
+    </Section>
+
+    <Section title="Destinataires des données">
+      <p>Vos données personnelles ne sont pas vendues, cédées ou louées à des tiers. Elles peuvent être communiquées uniquement :</p>
+      <ul className="list-disc list-inside space-y-2 pl-2">
+        <li>Aux prestataires techniques strictement nécessaires au fonctionnement du site (hébergeur), liés par des obligations contractuelles de confidentialité</li>
+        <li>Aux autorités judiciaires ou administratives si le cabinet y est légalement tenu</li>
+        <li>Avec votre consentement explicite, à d'autres avocats ou auxiliaires de justice dans le cadre de votre dossier</li>
+      </ul>
+    </Section>
+
+    <Section title="Transfert hors Union Européenne">
+      <p>L'hébergement du site est assuré par Vercel Inc., société américaine. Ce transfert est encadré par des clauses contractuelles types adoptées par la Commission européenne, garantissant un niveau de protection adéquat de vos données.</p>
+    </Section>
+
+    <Section title="Vos droits">
+      <p>Conformément au RGPD et à la loi Informatique et Libertés, vous disposez des droits suivants :</p>
+      <ul className="list-disc list-inside space-y-2 pl-2">
+        <li><strong className="text-acajou">Droit d'accès</strong> (art. 15 RGPD) : obtenir la confirmation que des données vous concernant sont traitées et en obtenir une copie</li>
+        <li><strong className="text-acajou">Droit de rectification</strong> (art. 16 RGPD) : faire corriger des données inexactes ou incomplètes</li>
+        <li><strong className="text-acajou">Droit à l'effacement</strong> (art. 17 RGPD) : obtenir la suppression de vos données dans les cas prévus par le RGPD</li>
+        <li><strong className="text-acajou">Droit à la limitation</strong> (art. 18 RGPD) : obtenir la limitation du traitement de vos données</li>
+        <li><strong className="text-acajou">Droit à la portabilité</strong> (art. 20 RGPD) : recevoir vos données dans un format structuré</li>
+        <li><strong className="text-acajou">Droit d'opposition</strong> (art. 21 RGPD) : vous opposer au traitement de vos données pour des raisons tenant à votre situation particulière</li>
+      </ul>
+      <p className="mt-3">Pour exercer ces droits, adressez votre demande par email à : <strong className="text-grenat">g.elhaik.avocat@gmail.com</strong> ou par courrier à l'adresse du cabinet. Nous répondrons dans un délai d'un mois.</p>
+      <p>Si vous estimez que le traitement de vos données constitue une violation de la réglementation, vous disposez du droit d'introduire une réclamation auprès de la <strong className="text-acajou">CNIL</strong> (Commission Nationale de l'Informatique et des Libertés) — <span className="text-grenat">www.cnil.fr</span>.</p>
+    </Section>
+
+    <Section title="Sécurité">
+      <p>Le cabinet met en œuvre des mesures techniques et organisationnelles appropriées pour protéger vos données personnelles contre toute destruction, perte, altération, divulgation ou accès non autorisé. Les communications avec le site sont chiffrées via le protocole HTTPS.</p>
+    </Section>
+
+    <Section title="Modifications de la présente politique">
+      <p>La présente politique de confidentialité peut être modifiée à tout moment. La version en vigueur est celle accessible sur ce site. Nous vous invitons à la consulter régulièrement.</p>
+      <p><strong className="text-acajou">Dernière mise à jour :</strong> Avril 2026</p>
+    </Section>
+  </div>
+);
+
+const CookiesContent = () => (
+  <div className="space-y-10">
+    <div className="bg-acajou/5 rounded-sm p-6 border-l-2 border-lin">
+      <p className="text-sm text-acajou/70 leading-relaxed">
+        La présente politique de cookies vous informe sur l'utilisation des cookies et traceurs sur le site du Cabinet Guillaume Elhaik, conformément à la réglementation applicable (article 82 de la loi Informatique et Libertés, recommandations de la CNIL).
+      </p>
+    </div>
+
+    <Section title="Qu'est-ce qu'un cookie ?">
+      <p>Un cookie est un petit fichier texte déposé sur votre terminal (ordinateur, tablette, smartphone) lors de la visite d'un site internet. Il permet au site de mémoriser des informations sur votre visite, comme vos préférences linguistiques ou d'autres paramètres, ce qui peut faciliter votre prochaine visite.</p>
+    </Section>
+
+    <Section title="Cookies utilisés sur ce site">
+      <div className="space-y-6">
+        <div>
+          <h4 className="font-bold text-acajou text-sm uppercase tracking-widest mb-3">1. Cookies strictement nécessaires</h4>
+          <div className="bg-acajou/5 rounded-sm overflow-hidden">
+            <table className="w-full text-sm">
+              <thead className="bg-acajou/10">
+                <tr>
+                  <th className="text-left p-3 font-bold text-acajou text-xs uppercase tracking-widest">Nom</th>
+                  <th className="text-left p-3 font-bold text-acajou text-xs uppercase tracking-widest">Finalité</th>
+                  <th className="text-left p-3 font-bold text-acajou text-xs uppercase tracking-widest">Durée</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-t border-acajou/10">
+                  <td className="p-3 font-mono text-xs">__session</td>
+                  <td className="p-3">Maintien de la session et sécurité des formulaires</td>
+                  <td className="p-3">Session</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p className="text-xs text-acajou/50 mt-2">Ces cookies sont indispensables au fonctionnement du site. Ils ne nécessitent pas de consentement préalable.</p>
+        </div>
+
+        <div>
+          <h4 className="font-bold text-acajou text-sm uppercase tracking-widest mb-3">2. Cookies de mesure d'audience (Analytics)</h4>
+          <div className="bg-acajou/5 rounded-sm overflow-hidden">
+            <table className="w-full text-sm">
+              <thead className="bg-acajou/10">
+                <tr>
+                  <th className="text-left p-3 font-bold text-acajou text-xs uppercase tracking-widest">Nom</th>
+                  <th className="text-left p-3 font-bold text-acajou text-xs uppercase tracking-widest">Finalité</th>
+                  <th className="text-left p-3 font-bold text-acajou text-xs uppercase tracking-widest">Durée</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-t border-acajou/10">
+                  <td className="p-3 font-mono text-xs">_ga</td>
+                  <td className="p-3">Mesure de l'audience et analyse du comportement des visiteurs (Google Analytics)</td>
+                  <td className="p-3">13 mois</td>
+                </tr>
+                <tr className="border-t border-acajou/10">
+                  <td className="p-3 font-mono text-xs">_ga_*</td>
+                  <td className="p-3">Cookie de session Google Analytics</td>
+                  <td className="p-3">13 mois</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p className="text-xs text-acajou/50 mt-2">Ces cookies ne sont déposés qu'avec votre consentement préalable. Vous pouvez le retirer à tout moment.</p>
+        </div>
+      </div>
+    </Section>
+
+    <Section title="Votre consentement">
+      <p>Conformément aux recommandations de la CNIL, les cookies qui ne sont pas strictement nécessaires au fonctionnement du site (notamment les cookies analytics) ne sont déposés qu'après recueil de votre consentement explicite.</p>
+      <p>Ce consentement est valable pour une durée maximale de <strong className="text-acajou">13 mois</strong>. Au-delà de cette durée, ou si vous n'avez pas interagi avec le site, votre consentement sera de nouveau sollicité.</p>
+    </Section>
+
+    <Section title="Comment gérer vos cookies ?">
+      <p>Vous disposez de plusieurs moyens pour gérer les cookies :</p>
+      <div className="space-y-4">
+        <div className="bg-acajou/5 rounded-sm p-4">
+          <p className="font-bold text-acajou text-sm mb-1">Depuis votre navigateur</p>
+          <p className="text-sm">La plupart des navigateurs vous permettent de refuser ou de supprimer les cookies. Voici comment procéder selon votre navigateur :</p>
+          <ul className="list-disc list-inside space-y-1 pl-2 mt-2 text-sm">
+            <li><strong className="text-acajou">Google Chrome :</strong> Paramètres → Confidentialité et sécurité → Cookies et autres données de sites</li>
+            <li><strong className="text-acajou">Mozilla Firefox :</strong> Options → Vie privée et sécurité → Cookies et données de sites</li>
+            <li><strong className="text-acajou">Safari :</strong> Préférences → Confidentialité → Cookies et données de sites web</li>
+            <li><strong className="text-acajou">Microsoft Edge :</strong> Paramètres → Cookies et autorisations du site</li>
+          </ul>
+        </div>
+        <div className="bg-acajou/5 rounded-sm p-4">
+          <p className="font-bold text-acajou text-sm mb-1">Opt-out Google Analytics</p>
+          <p className="text-sm">Vous pouvez désactiver Google Analytics en téléchargeant le module complémentaire de navigateur disponible à l'adresse : <span className="text-grenat">tools.google.com/dlpage/gaoptout</span></p>
+        </div>
+      </div>
+      <p className="text-sm text-acajou/60 mt-4">Attention : le refus des cookies peut limiter certaines fonctionnalités du site.</p>
+    </Section>
+
+    <Section title="Cookies tiers">
+      <p>Ce site peut intégrer des contenus de services tiers (polices de caractères, etc.) susceptibles de déposer leurs propres cookies. Le cabinet n'a pas de contrôle sur ces cookies. Nous vous invitons à consulter les politiques de confidentialité de ces tiers.</p>
+    </Section>
+
+    <Section title="Mise à jour de la politique">
+      <p>La présente politique de cookies est susceptible d'être modifiée à tout moment, notamment pour se conformer à d'éventuels changements législatifs ou réglementaires.</p>
+      <p><strong className="text-acajou">Dernière mise à jour :</strong> Avril 2026</p>
+    </Section>
+
+    <Section title="Contact">
+      <p>Pour toute question relative à l'utilisation des cookies sur ce site, vous pouvez nous contacter :</p>
+      <p>Email : <strong className="text-grenat">g.elhaik.avocat@gmail.com</strong></p>
+      <p>Courrier : Cabinet Guillaume Elhaik — 16 rue Saint-Simon, 78000 Versailles</p>
+    </Section>
+  </div>
+);
+
+const Footer = ({ onOpenLegal }: { onOpenLegal: (page: LegalPage) => void }) => {
   return (
     <footer className="py-20 px-6 bg-acajou border-t border-porcelaine/5 text-porcelaine/60">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
@@ -1087,9 +1428,9 @@ const Footer = () => {
         <div className="flex flex-col items-center gap-4">
           <p className="text-xs uppercase tracking-[0.2em] font-medium">© 2026 Cabinet Guillaume Elhaik. Tous droits réservés.</p>
           <div className="flex gap-10 text-[10px] uppercase tracking-[0.3em] font-bold">
-            <a href="#" className="hover:text-lin transition-colors">Mentions Légales</a>
-            <a href="#" className="hover:text-lin transition-colors">Confidentialité</a>
-            <a href="#" className="hover:text-lin transition-colors">Cookies</a>
+            <button onClick={() => onOpenLegal('mentions')} className="hover:text-lin transition-colors cursor-pointer">Mentions Légales</button>
+            <button onClick={() => onOpenLegal('confidentialite')} className="hover:text-lin transition-colors cursor-pointer">Confidentialité</button>
+            <button onClick={() => onOpenLegal('cookies')} className="hover:text-lin transition-colors cursor-pointer">Cookies</button>
           </div>
         </div>
 
@@ -1113,6 +1454,10 @@ const Footer = () => {
 // --- Main App ---
 
 export default function App() {
+  const [legalPage, setLegalPage] = useState<LegalPage>(null);
+
+  const handleCloseLegal = useCallback(() => setLegalPage(null), []);
+
   return (
     <div className="relative selection:bg-lin selection:text-acajou">
       <Navbar />
@@ -1122,7 +1467,8 @@ export default function App() {
       <Testimonials />
       <FAQ />
       <Contact />
-      <Footer />
+      <Footer onOpenLegal={setLegalPage} />
+      <LegalModal page={legalPage} onClose={handleCloseLegal} />
     </div>
   );
 }
