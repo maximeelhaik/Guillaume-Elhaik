@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform, useReducedMotion } from 'motion/react';
 import {
   Menu,
   X,
@@ -33,6 +33,99 @@ import t1Img from './assets/images/hansjorg-keller-m_-8_AhhJjE-unsplash.webp';
 import t2Img from './assets/images/kateryna-hliznitsova-v2MxvXK9OU-unsplash.webp';
 import t3Img from './assets/images/julio-wolf-OG1cF0cWPfo-unsplash.webp';
 import t4Img from './assets/images/pierre-antona-wbWrY4NZLZc-unsplash.webp';
+import signatureImg from './assets/images/signature.svg';
+import carbonFibreImg from './assets/images/carbon-fibre.png';
+
+
+const NAV_LINKS = [
+  { name: 'Accueil', href: '#' },
+  { name: 'Le Cabinet', href: '#about' },
+  { name: 'Expertises', href: '#expertise' },
+  { name: 'Témoignages', href: '#testimonials' },
+  { name: 'FAQ', href: '#faq' },
+  { name: 'Contact', href: '#contact' },
+];
+
+const SOCIAL_LINKS = [
+  { name: 'LinkedIn', icon: Linkedin, href: '#' },
+  { name: 'Twitter', icon: Twitter, href: '#' },
+  { name: 'Instagram', icon: Instagram, href: '#' },
+];
+
+const EXPERTISE_AREAS = [
+  {
+    id: "01",
+    title: "Droit des Étrangers",
+    desc: "Accompagnement stratégique pour titres de séjour, visas et protection contre les mesures d'éloignement (OQTF).",
+    img: expertiseEtrangers
+  },
+  {
+    id: "02",
+    title: "Nationalité Française",
+    desc: "Expertise pointue en naturalisation, réintégration et contentieux du certificat de nationalité française.",
+    img: expertiseNationalite
+  },
+  {
+    id: "03",
+    title: "Droit Processuel",
+    desc: "Maîtrise rigoureuse des règles de procédure pour sécuriser vos recours devant les juridictions administratives.",
+    img: expertiseProcessuel
+  }
+];
+
+const TESTIMONIALS_DATA = [
+  {
+    id: 1,
+    quote: "Je tiens à exprimer toute ma satisfaction concernant le travail de Maître El Haik. Son professionnalisme, sa disponibilité et sa clarté ont été d'une grande aide tout au long du dossier.",
+    author: "Jaouadi H.",
+    meta: "Accompagnement Juridique · 2026",
+    img: t1Img,
+    layoutReversed: false,
+  },
+  {
+    id: 2,
+    quote: "Après un long parcours face à l'administration, la stratégie de Maître Elhaik a fait toute la différence devant le juge. Une rigueur impressionnante.",
+    author: "Sylvie C.",
+    meta: "Contentieux Administratif · 2024",
+    img: t2Img,
+    layoutReversed: true,
+  },
+  {
+    id: 3,
+    quote: "Une approche humaine et très réactive. Le cabinet m'a accompagné avec clarté dès le premier rendez-vous jusqu'à l'obtention de mon titre.",
+    author: "Hassan R.",
+    meta: "Titre de séjour · 2025",
+    img: t3Img,
+    layoutReversed: false,
+  },
+  {
+    id: 4,
+    quote: "Un professionnalisme exceptionnel. Maître Elhaik prend le temps d'expliquer chaque détail, et son engagement pour son client est total.",
+    author: "Elena M.",
+    meta: "Regroupement familial · 2023",
+    img: t4Img,
+    layoutReversed: true,
+  }
+];
+
+const FAQ_QUESTIONS = [
+  {
+    q: "Comment se déroule le premier rendez-vous ?",
+    a: "J'analyse votre situation juridique, j'étudie vos documents et je définis avec vous la meilleure stratégie à adopter. Un devis transparent vous est remis à l'issue."
+  },
+  {
+    q: "Intervenez-vous partout en France ?",
+    a: "Bien que basé à Versailles, j'interviens devant toutes les juridictions administratives françaises pour les dossiers de droit des étrangers et de nationalité."
+  },
+  {
+    q: "Quels sont vos honoraires ?",
+    a: "Mes honoraires sont fixés en toute transparence, généralement au forfait selon la complexité du dossier. Une convention d'honoraires est systématiquement signée."
+  },
+  {
+    q: "Quel est le délai pour un recours OQTF ?",
+    a: "Les délais sont extrêmement courts (souvent 48h, 15 jours ou 30 jours). Il est impératif de me contacter dès réception de la décision."
+  }
+];
 
 // --- Utilities ---
 
@@ -57,14 +150,7 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navLinks = [
-    { name: 'Accueil', href: '#' },
-    { name: 'Le Cabinet', href: '#about' },
-    { name: 'Expertises', href: '#expertise' },
-    { name: 'Témoignages', href: '#testimonials' },
-    { name: 'FAQ', href: '#faq' },
-    { name: 'Contact', href: '#contact' },
-  ];
+
 
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>, id: string) => {
     e.preventDefault();
@@ -128,51 +214,74 @@ const Navbar = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: '-100%' }}
             transition={{ type: 'spring', damping: 30, stiffness: 200 }}
-            className="fixed inset-0 z-[60] bg-acajou text-porcelaine flex flex-col"
+            className="fixed inset-0 z-[60] bg-acajou text-porcelaine flex flex-col overflow-hidden"
           >
-            <div className="p-6 flex justify-between items-center border-b border-porcelaine/5">
+            {/* Header: align perfectly with default navbar */}
+            <div className="px-6 py-4 flex justify-between items-center border-b border-porcelaine/5 shrink-0">
               <div className="flex items-center gap-3">
                 <LogoIcon className="text-lin w-8 h-10" />
-                <LogoHorizontal className="text-porcelaine h-10" />
+                <LogoHorizontal className="text-porcelaine h-8" />
               </div>
-              <button onClick={() => setIsOpen(false)} className="hover:rotate-90 transition-transform duration-300 min-w-[44px] min-h-[44px] flex items-center justify-center p-2" aria-label="Fermer le menu">
+              <button 
+                onClick={() => setIsOpen(false)} 
+                className="hover:rotate-90 transition-transform duration-300 min-w-[44px] min-h-[44px] flex items-center justify-center p-2" 
+                aria-label="Fermer le menu"
+              >
                 <X size={40} />
               </button>
             </div>
 
-            <div className="flex-1 flex flex-col md:flex-row p-6 md:p-20 gap-8 md:gap-16 overflow-y-auto">
-              <div className="flex-1 flex flex-col justify-center gap-3 md:gap-8">
-                {navLinks.map((link, i) => (
-                  <motion.a
-                    key={link.name}
-                    href={link.href}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.2 + i * 0.1 }}
-                    onClick={(e) => scrollToSection(e, link.href)}
-                    className="font-serif text-[32px] sm:text-4xl md:text-8xl hover:text-lin transition-all duration-300 italic hover:pl-4 leading-tight"
-                  >
-                    {link.name}
-                  </motion.a>
-                ))}
-              </div>
-
-              <div className="md:w-1/3 flex flex-col justify-center gap-6 md:gap-12 border-t md:border-t-0 md:border-l border-porcelaine/10 pt-6 md:pt-0 md:pl-16">
-                <div className="space-y-4">
-                  <h4 className="text-lin uppercase tracking-[0.3em] text-xs font-sans font-light">Contact</h4>
-                  <p className="text-2xl md:text-3xl font-serif italic">06 67 83 64 43</p>
-                  <p className="text-lg opacity-50 hover:opacity-100 transition-opacity cursor-pointer">g.elhaik.avocat@gmail.com</p>
-                </div>
-                <div className="space-y-4">
-                  <h4 className="text-lin uppercase tracking-[0.3em] text-xs font-sans font-light">Adresse</h4>
-                  <p className="text-xl opacity-70 leading-relaxed">16 rue Saint-Simon<br />78000 Versailles</p>
-                </div>
-                <div className="flex flex-wrap gap-6">
-                  {['LinkedIn', 'Twitter', 'Instagram'].map(social => (
-                    <a key={social} href="#" aria-label={`Lien vers ${social}`} className="text-sm uppercase tracking-widest hover:text-lin transition-colors border-b border-transparent hover:border-lin pb-1 min-h-[44px] flex items-center">{social}</a>
+            {/* Content: Fixed viewport height, flex boxes filling the space fluidly */}
+            <div className="flex-1 flex flex-col md:flex-row px-6 md:px-12 lg:px-20 py-[2dvh] md:py-[5dvh] min-h-0 gap-[2dvh] md:gap-16">
+              
+              {/* Left Column: Links */}
+              <div className="flex-1 flex flex-col justify-start md:justify-center min-h-0">
+                <div className="flex flex-col justify-start md:justify-center h-full gap-[0.5dvh] md:gap-[2dvh]">
+                  {NAV_LINKS.map((link, i) => (
+                    <motion.a
+                      key={link.name}
+                      href={link.href}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.1 + i * 0.05 }}
+                      onClick={(e) => scrollToSection(e, link.href)}
+                      className="font-serif text-[clamp(1rem,min(7dvh,9vw),4rem)] md:text-[clamp(3rem,min(11dvh,9vw),9rem)] leading-[0.95] text-porcelaine hover:text-lin transition-all duration-300 italic md:hover:translate-x-6 origin-left block"
+                    >
+                      {link.name}
+                    </motion.a>
                   ))}
                 </div>
               </div>
+
+              {/* Right Column: Contact Info */}
+              <div className="md:w-[350px] lg:w-[450px] flex flex-col justify-end md:justify-center gap-[1.5dvh] md:gap-[4dvh] border-t md:border-t-0 md:border-l border-porcelaine/10 pt-[2dvh] md:pt-0 pl-1 md:pl-16 shrink-0 min-h-0 mt-auto md:mt-0">
+                <div className="space-y-[0.5dvh] md:space-y-3">
+                  <h4 className="text-lin uppercase tracking-[0.3em] text-[min(10px,2dvh)] md:text-sm font-sans font-light hidden md:block">Contact</h4>
+                  <p className="text-[clamp(1rem,4dvh,2.5rem)] md:text-[clamp(2rem,5dvh,4.5rem)] font-serif italic leading-[1]">06 67 83 64 43</p>
+                  <p className="text-[clamp(0.7rem,2dvh,1.5rem)] md:text-[clamp(1rem,2.5dvh,2rem)] opacity-50 hover:opacity-100 transition-opacity cursor-pointer">g.elhaik.avocat@gmail.com</p>
+                </div>
+                <div className="space-y-[0.5dvh] md:space-y-3">
+                  <h4 className="text-lin uppercase tracking-[0.3em] text-[min(10px,2dvh)] md:text-sm font-sans font-light hidden md:block">Adresse</h4>
+                  <p className="text-[clamp(0.7rem,2dvh,1.5rem)] opacity-70 leading-relaxed md:hidden">16 rue Saint-Simon, 78000 Versailles</p>
+                  <p className="text-[clamp(0.7rem,2dvh,1.5rem)] md:text-[clamp(1rem,2.5dvh,2rem)] opacity-70 leading-relaxed hidden md:block">16 rue Saint-Simon<br />78000 Versailles</p>
+                </div>
+                <div className="flex flex-wrap gap-4 md:gap-6 pt-[0.5dvh] md:pt-2">
+                  {SOCIAL_LINKS.map((social, i) => (
+                    <motion.a 
+                      key={social.name} 
+                      href={social.href} 
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.4 + i * 0.1 }}
+                      aria-label={`Lien vers ${social.name}`} 
+                      className="btn-interactive w-10 h-10 md:w-12 md:h-12 min-w-[40px] min-h-[40px] rounded-full border border-porcelaine/10 flex items-center justify-center hover:border-lin transition-all duration-300 cursor-pointer"
+                    >
+                      <social.icon size={20} />
+                    </motion.a>
+                  ))}
+                </div>
+              </div>
+
             </div>
           </motion.div>
         )}
@@ -183,19 +292,38 @@ const Navbar = () => {
 
 const Hero = () => {
   const { scrollY } = useScroll();
+  const prefersReducedMotion = useReducedMotion();
+  const scrollOpacity = useTransform(scrollY, [0, 200], [1, 0]);
 
   // Parallax layers
-  const bgY = useTransform(scrollY, [0, 1000], [0, 250]);
-  const imgY = useTransform(scrollY, [0, 1000], [0, 60]);
-  const imgScale = useTransform(scrollY, [0, 500], [1, 1.05]);
-  const textY = useTransform(scrollY, [0, 1000], [0, -80]);
+  const bgY = useTransform(scrollY, [0, 1000], [0, prefersReducedMotion ? 0 : 250]);
+  const imgY = useTransform(scrollY, [0, 1000], [0, prefersReducedMotion ? 0 : 60]);
+  const imgScale = useTransform(scrollY, [0, 500], [1, prefersReducedMotion ? 1 : 1.05]);
+  const textY = useTransform(scrollY, [0, 1000], [0, prefersReducedMotion ? 0 : -80]);
+
+  const scrollToContact = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const el = document.getElementById('contact');
+    if (el) {
+      const offset = 80;
+      const top = el.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+  };
+
+  const blobAnimation = prefersReducedMotion ? { opacity: 0.15 } : { scale: [1, 1.2, 1], rotate: [0, 45, 0], opacity: [0.1, 0.2, 0.1] };
+  const blobTransition = prefersReducedMotion ? {} : { duration: 15, repeat: Infinity, ease: 'linear' };
+
+  const flareAnimation = prefersReducedMotion ? { opacity: 0 } : { x: ['-100%', '100%'], opacity: [0, 0.4, 0] };
+  const flareTransition = prefersReducedMotion ? {} : { duration: 7, repeat: Infinity, ease: 'easeInOut' };
 
   return (
-    <section className="sticky top-0 h-screen min-h-[700px] flex overflow-hidden bg-acajou -z-10">
+    <section className="relative h-screen min-h-[650px] flex overflow-hidden bg-acajou">
       {/* Animated background light wave */}
       <motion.div
-        animate={{ scale: [1, 1.2, 1], rotate: [0, 45, 0], opacity: [0.1, 0.2, 0.1] }}
-        transition={{ duration: 15, repeat: Infinity, ease: 'linear' }}
+        animate={blobAnimation}
+        transition={blobTransition}
+        style={{ willChange: 'transform, opacity' }}
         className="absolute -top-1/2 -left-1/2 w-[200%] h-[200%] bg-[radial-gradient(circle_at_center,var(--color-lin)_0%,transparent_50%)] pointer-events-none mix-blend-soft-light z-0 opacity-20"
       />
 
@@ -203,28 +331,29 @@ const Hero = () => {
       <motion.div
         initial={{ scale: 1.1, opacity: 0 }}
         animate={{ scale: 1, opacity: 0.15 }}
-        style={{ y: bgY }}
+        style={{ y: bgY, willChange: 'transform' }}
         transition={{ duration: 2 }}
         className="absolute inset-0"
       >
-        <img src={heroBg} alt="" aria-hidden="true" loading="lazy" decoding="async"
-          className="w-full h-full object-cover grayscale opacity-40 mix-blend-luminosity"
+        <img src={heroBg} alt="" aria-hidden="true" loading="eager" fetchPriority="high" decoding="async"
+          className="w-full h-full object-cover grayscale opacity-40 mix-blend-luminosity will-change-transform"
         />
       </motion.div>
 
       {/* Light flare sweep */}
       <motion.div
-        animate={{ x: ['-100%', '100%'], opacity: [0, 0.4, 0] }}
-        transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
+        animate={flareAnimation}
+        transition={flareTransition}
+        style={{ willChange: 'transform, opacity' }}
         className="absolute top-0 bottom-0 w-1/4 bg-gradient-to-r from-transparent via-lin/20 to-transparent skew-x-[35deg] z-[1] pointer-events-none mix-blend-overlay"
       />
 
       {/* ===================== DESKTOP LAYOUT (lg+) ===================== */}
-      <div className="hidden lg:flex relative w-full max-w-7xl mx-auto px-8 xl:px-12 items-center justify-between gap-8 pt-20">
+      <div className="hidden lg:flex relative w-full max-w-7xl mx-auto px-8 xl:px-12 items-center justify-between gap-8 pb-32 xl:pb-40">
 
         {/* Left: Tagline */}
         <motion.div
-          style={{ y: textY }}
+          style={{ y: textY, willChange: 'transform' }}
           className="flex-1 flex flex-col justify-center z-40 max-w-xs xl:max-w-sm"
         >
           <motion.p
@@ -233,29 +362,52 @@ const Hero = () => {
             transition={{ duration: 1, delay: 0.5 }}
             className="text-porcelaine/85 text-lg xl:text-xl leading-relaxed font-sans font-light"
           >
-            Expertise juridique rigoureuse et défense engagée au cœur de Versailles. Expérience en droit des étrangers et de la nationalité.
+            Ne laissez pas une erreur de procédure briser votre avenir en France. Une défense stratégique et engagée, dès le premier rendez-vous.
+          </motion.p>
+          <motion.button
+            onClick={(e) => scrollToContact(e)}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.9 }}
+            whileHover={{ x: 6 }}
+            className="mt-8 px-7 py-4 bg-lin text-acajou font-bold uppercase tracking-[0.2em] text-xs rounded-sm hover:bg-porcelaine transition-all duration-300 shadow-xl flex items-center gap-3 self-start"
+          >
+            Protéger ma situation <ArrowRight size={14} />
+          </motion.button>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 1.2 }}
+            className="mt-3 text-porcelaine/40 text-[11px] uppercase tracking-[0.2em] font-sans"
+          >
+            Consultation gratuite · Sans engagement
           </motion.p>
         </motion.div>
 
         {/* Center: Portrait */}
         <div className="flex-shrink-0 flex flex-col items-center relative z-20">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: [0, -12, 0] }}
-            style={{ y: imgY }}
-            transition={{
-              opacity: { duration: 1, ease: [0.22, 1, 0.36, 1] },
-              y: { duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 1 }
-            }}
-            className="relative w-72 xl:w-80 2xl:w-96 rounded-sm"
-          >
-            <motion.div style={{ scale: imgScale }} className="w-full">
-              <div className="absolute inset-0 bg-grenat/15 mix-blend-overlay z-10 rounded-sm" />
-              <img
-                src={guillaumeHero}
-                alt="Guillaume Elhaik, Avocat spécialisé au Tribunal de Versailles"
-                className="w-full aspect-[3/4] object-cover rounded-sm shadow-[0_60px_120px_-20px_rgba(0,0,0,0.6)]"
-              />
+          <motion.div style={{ y: imgY, willChange: 'transform' }} className="relative w-72 xl:w-80 2xl:w-96 rounded-sm">
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              animate={prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 1, y: [0, -12, 0] }}
+              transition={prefersReducedMotion ? { opacity: { duration: 1, ease: [0.22, 1, 0.36, 1] } } : {
+                opacity: { duration: 1, ease: [0.22, 1, 0.36, 1] },
+                y: { duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 1 }
+              }}
+              style={{ willChange: 'transform, opacity' }}
+            >
+              <motion.div style={{ scale: imgScale, willChange: 'transform' }} className="w-full">
+                <div className="absolute inset-0 bg-grenat/15 mix-blend-overlay z-10 rounded-sm" />
+                <img
+                  src={guillaumeHero}
+                  alt="Guillaume Elhaik, Avocat spécialisé au Tribunal de Versailles"
+                  loading="eager"
+                  fetchPriority="high"
+                  width="400"
+                  height="533"
+                  className="w-full aspect-[3/4] object-cover rounded-sm shadow-[0_60px_120px_-20px_rgba(0,0,0,0.6)]"
+                />
+              </motion.div>
             </motion.div>
           </motion.div>
         </div>
@@ -274,7 +426,8 @@ const Hero = () => {
             <a href="tel:0667836443" className="text-lin text-3xl xl:text-4xl font-serif hover:text-porcelaine transition-all duration-300 italic">
               06 67 83 64 43
             </a>
-            <p className="text-porcelaine/60 text-[10px] uppercase tracking-[0.3em] font-sans font-light">Ligne directe cabinet</p>
+            <p className="text-porcelaine/60 text-xs uppercase tracking-[0.3em] font-sans font-light">Ligne directe cabinet</p>
+            <p className="text-porcelaine/35 text-[11px] uppercase tracking-[0.2em] font-sans font-light mt-1">Avocat au Barreau de Versailles</p>
           </motion.div>
 
           <motion.div
@@ -286,7 +439,7 @@ const Hero = () => {
             <a href="mailto:g.elhaik.avocat@gmail.com" className="text-lin text-xl xl:text-2xl font-serif hover:text-porcelaine transition-all duration-300 italic whitespace-nowrap">
               g.elhaik.avocat@gmail.com
             </a>
-            <p className="text-porcelaine/60 text-[10px] uppercase tracking-[0.3em] font-sans font-light">Étude de votre dossier</p>
+            <p className="text-porcelaine/60 text-xs uppercase tracking-[0.3em] font-sans font-light">Étude de votre dossier</p>
           </motion.div>
         </motion.div>
       </div>
@@ -294,7 +447,7 @@ const Hero = () => {
       {/* DESKTOP: Logo name + Avocat at bottom */}
       <motion.div
         style={{ y: textY }}
-        className="hidden lg:flex absolute bottom-6 xl:bottom-8 left-0 right-0 flex-col items-center z-10 pointer-events-none"
+        className="hidden lg:flex absolute bottom-8 xl:bottom-12 left-0 right-0 flex-col items-center z-30 pointer-events-none"
       >
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -357,37 +510,55 @@ const Hero = () => {
           className="text-center mb-5 px-2"
         >
           <p className="text-porcelaine/85 text-[15px] leading-relaxed font-sans font-light max-w-[300px] mx-auto">
-            Expertise juridique rigoureuse et défense engagée au cœur de Versailles. Expérience en droit des étrangers et de la nationalité.
+            Ne laissez pas une erreur de procédure briser votre avenir en France. Une défense stratégique, dès le premier rendez-vous.
           </p>
         </motion.div>
 
-        {/* 4. Contact info */}
+        {/* 4. CTA primaire mobile */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1 }}
+          transition={{ duration: 0.8, delay: 0.95 }}
+          className="flex flex-col items-center gap-2 w-full mb-4"
+        >
+          <button
+            onClick={scrollToContact}
+            className="w-full max-w-[300px] py-4 bg-lin text-acajou font-bold uppercase tracking-[0.2em] text-xs rounded-sm hover:bg-porcelaine transition-all duration-300 shadow-xl flex items-center justify-center gap-2"
+          >
+            Protéger ma situation <ArrowRight size={13} />
+          </button>
+          <p className="text-porcelaine/35 text-xs uppercase tracking-[0.2em] font-sans text-center">Consultation gratuite · Sans engagement</p>
+        </motion.div>
+
+        {/* 5. Contact info */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 1.1 }}
           className="flex flex-col items-center gap-3 w-full"
         >
           <div className="flex flex-col items-center gap-0.5">
             <a href="tel:0667836443" className="text-lin text-2xl font-serif hover:text-porcelaine transition-all duration-300 italic">
               06 67 83 64 43
             </a>
-            <p className="text-porcelaine/55 text-[9px] uppercase tracking-[0.3em] font-sans font-light">Ligne directe cabinet</p>
+            <p className="text-porcelaine/55 text-xs uppercase tracking-[0.3em] font-sans font-light">Ligne directe cabinet</p>
+            <p className="text-porcelaine/30 text-[11px] uppercase tracking-[0.2em] font-sans mt-1">Avocat au Barreau de Versailles</p>
           </div>
           <div className="flex flex-col items-center gap-0.5">
             <a href="mailto:g.elhaik.avocat@gmail.com" className="text-lin text-[15px] font-serif hover:text-porcelaine transition-all duration-300 italic">
               g.elhaik.avocat@gmail.com
             </a>
-            <p className="text-porcelaine/55 text-[9px] uppercase tracking-[0.3em] font-sans font-light">Étude de votre dossier</p>
+            <p className="text-porcelaine/55 text-xs uppercase tracking-[0.3em] font-sans font-light">Étude de votre dossier</p>
           </div>
         </motion.div>
       </div>
 
       {/* Scroll indicator */}
       <motion.div
-        animate={{ y: [0, 10, 0], opacity: [0.3, 0.8, 0.3] }}
-        transition={{ duration: 2, repeat: Infinity }}
-        className="absolute bottom-4 left-1/2 -translate-x-1/2 text-lin/40 z-30"
+        animate={prefersReducedMotion ? { y: 0 } : { y: [0, 10, 0] }}
+        style={{ opacity: scrollOpacity, willChange: 'transform, opacity' }}
+        transition={prefersReducedMotion ? {} : { duration: 2, repeat: Infinity }}
+        className="absolute bottom-4 left-1/2 -translate-x-1/2 text-lin/40"
       >
         <ChevronDown size={28} />
       </motion.div>
@@ -397,7 +568,7 @@ const Hero = () => {
 
 const About = () => {
   return (
-    <section id="about" className="py-12 md:py-56 px-6 bg-porcelaine relative overflow-hidden">
+    <section id="about" className="py-24 md:py-32 px-6 bg-porcelaine relative overflow-hidden">
       <div className="absolute top-0 right-0 w-1/3 h-full bg-lin/5 -skew-x-12 translate-x-1/2" />
 
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16 items-start relative z-10">
@@ -428,7 +599,7 @@ const About = () => {
                 whileInView={{ opacity: 0.3, scale: 1 }}
                 className="w-48 h-24 md:w-64 md:h-32 relative"
               >
-                <img src="https://framerusercontent.com/images/VCNSEUHw9CEtEpV1IRrCnP4RJwE.svg" alt="Signature graphique" loading="lazy" decoding="async" className="w-full h-full object-contain" />
+                <img src={signatureImg} alt="Signature graphique" loading="lazy" decoding="async" className="w-full h-full object-contain" />
               </motion.div>
             </div>
           </motion.div>
@@ -441,12 +612,15 @@ const About = () => {
               <p className="text-lg text-acajou/80 leading-relaxed">
                 Ces décisions témoignent de la compétence et de l’expertise du cabinet en droit des étrangers et de la nationalité, ainsi qu'en droit processuel.
               </p>
-              <motion.button
-                whileHover={{ x: 10 }}
-                className="btn-interactive rounded-sm px-6 py-4 bg-acajou/5 flex items-center gap-6 text-acajou font-bold uppercase tracking-[0.2em] text-xs border border-acajou/10"
+              <button
+                onClick={() => {
+                  const el = document.getElementById('contact');
+                  if (el) { const top = el.getBoundingClientRect().top + window.scrollY - 80; window.scrollTo({ top, behavior: 'smooth' }); }
+                }}
+                className="btn-interactive group rounded-sm px-6 py-4 bg-acajou/5 flex items-center gap-6 text-acajou font-bold uppercase tracking-[0.2em] text-xs border border-acajou/10 hover:shadow-lg hover:bg-acajou/10 hover:translate-x-2 transition-transform duration-300"
               >
-                Découvrir mon parcours <ArrowRight size={18} className="text-grenat" />
-              </motion.button>
+                Consulter le cabinet → <ArrowRight size={18} className="text-grenat group-hover:translate-x-1 transition-transform" />
+              </button>
             </div>
             <div className="aspect-[4/3] bg-acajou/5 rounded-sm overflow-hidden relative group shadow-2xl">
               <div className="absolute inset-0 bg-grenat/10 group-hover:bg-transparent transition-colors duration-300 z-10" />
@@ -464,29 +638,9 @@ const About = () => {
 };
 
 const Expertise = () => {
-  const areas = [
-    {
-      id: "01",
-      title: "Droit des Étrangers",
-      desc: "Accompagnement stratégique pour titres de séjour, visas et protection contre les mesures d'éloignement (OQTF).",
-      img: expertiseEtrangers
-    },
-    {
-      id: "02",
-      title: "Nationalité Française",
-      desc: "Expertise pointue en naturalisation, réintégration et contentieux du certificat de nationalité française.",
-      img: expertiseNationalite
-    },
-    {
-      id: "03",
-      title: "Droit Processuel",
-      desc: "Maîtrise rigoureuse des règles de procédure pour sécuriser vos recours devant les juridictions administratives.",
-      img: expertiseProcessuel
-    }
-  ];
 
   return (
-    <section id="expertise" className="py-12 md:py-56 px-6 bg-acajou text-porcelaine relative overflow-hidden">
+    <section id="expertise" className="py-24 md:py-32 px-6 bg-acajou text-porcelaine relative overflow-hidden">
       <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
 
       <div className="max-w-7xl mx-auto relative z-10">
@@ -513,7 +667,7 @@ const Expertise = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
-          {areas.map((area, i) => (
+          {EXPERTISE_AREAS.map((area, i) => (
             <motion.div
               key={area.title}
               initial={{ opacity: 0, y: 50 }}
@@ -522,10 +676,10 @@ const Expertise = () => {
               transition={{ delay: i * 0.2, duration: 0.8 }}
               className="btn-interactive group flex flex-col rounded-sm h-[320px] md:h-auto"
             >
-              <div className="relative w-full h-full md:aspect-[4/3] overflow-hidden rounded-sm shadow-2xl">
+              <div className="relative w-full h-full md:aspect-[4/3] overflow-hidden rounded-sm shadow-xl group-hover:shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)] group-hover:-translate-y-2 transition-all duration-500">
                 {/* Red Overlay - Appears only on hover */}
                 <div className="absolute inset-0 bg-grenat/90 opacity-0 group-hover:opacity-100 transition-all duration-500 z-10"></div>
-                
+
                 {/* Background Image - Less grayscale on hover */}
                 <img
                   src={area.img}
@@ -533,7 +687,7 @@ const Expertise = () => {
                   className="w-full h-full object-cover group-hover:scale-110 transition-all duration-700"
                   referrerPolicy="no-referrer"
                 />
-                
+
                 {/* Top Content: Title + ID */}
                 <div className="absolute top-6 left-6 right-6 z-20 flex justify-between items-start gap-4">
                   <h4 className="font-serif text-2xl md:text-3xl text-porcelaine group-hover:text-lin transition-colors duration-300 leading-tight">
@@ -543,7 +697,7 @@ const Expertise = () => {
                     {area.id}
                   </span>
                 </div>
-                
+
                 {/* Bottom Content: Description */}
                 <div className="absolute bottom-6 left-6 right-6 z-20">
                   <p className="text-porcelaine/90 text-sm md:text-base leading-relaxed opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0">
@@ -562,70 +716,36 @@ const Expertise = () => {
 const Testimonials = () => {
   const targetRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: targetRef });
-  
+
   // Transform scroll progress to horizontal translation
   // We have 4 items = 400vw total width. We need to move by -75% to show the last one.
   const x = useTransform(scrollYProgress, [0, 1], ["0%", "-75%"]);
-  
+
   // Image parallax effect inside the container
   const imgX = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
 
-  const testimonialsData = [
-    {
-      id: 1,
-      quote: "Je tiens à exprimer toute ma satisfaction concernant le travail de Maître El Haik. Son professionnalisme, sa disponibilité et sa clarté ont été d'une grande aide tout au long du dossier.",
-      author: "Jaouadi H.",
-      meta: "Accompagnement Juridique · 2026",
-      img: t1Img,
-      layoutReversed: false,
-    },
-    {
-      id: 2,
-      quote: "Après un long parcours face à l'administration, la stratégie de Maître Elhaik a fait toute la différence devant le juge. Une rigueur impressionnante.",
-      author: "Sylvie C.",
-      meta: "Contentieux Administratif · 2024",
-      img: t2Img,
-      layoutReversed: true,
-    },
-    {
-      id: 3,
-      quote: "Une approche humaine et très réactive. Le cabinet m'a accompagné avec clarté dès le premier rendez-vous jusqu'à l'obtention de mon titre.",
-      author: "Hassan R.",
-      meta: "Titre de séjour · 2025",
-      img: t3Img,
-      layoutReversed: false,
-    },
-    {
-      id: 4,
-      quote: "Un professionnalisme exceptionnel. Maître Elhaik prend le temps d'expliquer chaque détail, et son engagement pour son client est total.",
-      author: "Elena M.",
-      meta: "Regroupement familial · 2023",
-      img: t4Img,
-      layoutReversed: true,
-    }
-  ];
 
   return (
     <section ref={targetRef} id="testimonials" className="relative h-[400vh] bg-porcelaine">
       <div className="sticky top-0 h-screen flex items-center overflow-hidden">
-        
+
         {/* Section Title - Fixed during scroll */}
         <div className="absolute top-12 md:top-24 left-6 md:left-[10%] z-20 pointer-events-none">
           <h3 className="text-grenat mix-blend-multiply opacity-80 md:opacity-100">Témoignages</h3>
         </div>
 
         <motion.div style={{ x }} className="flex w-[400vw] h-full items-center will-change-transform">
-          {testimonialsData.map((t, index) => {
+          {TESTIMONIALS_DATA.map((t, index) => {
             return (
               <div key={t.id} className="w-[100vw] h-full flex flex-col justify-center px-6 md:px-0 relative">
-                
+
                 {/* Decorative background element per card */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-acajou/[0.02] font-serif text-[40vh] md:text-[60vh] italic font-bold pointer-events-none select-none">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-acajou/[0.05] font-serif text-[40vh] md:text-[60vh] italic font-bold pointer-events-none select-none">
                   0{index + 1}
                 </div>
 
                 <div className="max-w-7xl mx-auto w-full grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-20 items-center relative z-10">
-                  
+
                   {/* TEXT CONTENT */}
                   <div className={`flex flex-col gap-6 md:gap-12 relative order-2 ${t.layoutReversed ? 'md:order-2 md:col-span-6 md:col-start-7' : 'md:order-1 md:col-span-6 md:col-start-2'}`}>
                     <Quote className="text-lin/40 hidden md:block" size={60} strokeWidth={1} />
@@ -634,18 +754,18 @@ const Testimonials = () => {
                     <p className="font-serif text-2xl md:text-5xl leading-tight md:leading-[1.2] text-acajou italic text-balance mt-4 md:mt-0 px-4 md:px-0">
                       “{t.quote}”
                     </p>
-                    
+
                     <div className="flex flex-col px-4 md:px-0 border-l border-lin/30 pl-4 md:pl-8 ml-2 mt-4 md:mt-6">
                       <p className="font-bold text-acajou uppercase tracking-widest text-xs md:text-sm">{t.author}</p>
-                      <p className="text-acajou/60 text-[10px] md:text-xs uppercase tracking-[0.2em] mt-1 font-sans font-light">{t.meta}</p>
+                      <p className="text-acajou/60 text-xs uppercase tracking-[0.2em] mt-1 font-sans font-light">{t.meta}</p>
                     </div>
                   </div>
 
                   {/* IMAGE CONTENT */}
                   <div className={`order-1 ${t.layoutReversed ? 'md:order-1 md:col-span-4 md:col-start-2' : 'md:order-2 md:col-span-4 md:col-start-8'} flex justify-center mt-24 md:mt-0 relative`}>
-                    
+
                     {/* Mobile Bubble Layout */}
-                    <motion.div 
+                    <motion.div
                       initial={{ scale: 0.8, opacity: 0 }}
                       whileInView={{ scale: 1, opacity: 1 }}
                       transition={{ duration: 0.6 }}
@@ -658,7 +778,7 @@ const Testimonials = () => {
                         referrerPolicy="no-referrer"
                       />
                     </motion.div>
-                    
+
                     {/* Desktop Parallax Rectangle Layout */}
                     <div
                       className={`hidden md:block w-full bg-acajou/5 rounded-sm overflow-hidden relative shadow-2xl transition-all duration-700 ${index % 2 === 0 ? 'aspect-[3/4] mt-0' : 'aspect-square mt-24'}`}
@@ -686,27 +806,9 @@ const Testimonials = () => {
 const FAQ = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
-  const questions = [
-    {
-      q: "Comment se déroule le premier rendez-vous ?",
-      a: "J'analyse votre situation juridique, j'étudie vos documents et je définis avec vous la meilleure stratégie à adopter. Un devis transparent vous est remis à l'issue."
-    },
-    {
-      q: "Intervenez-vous partout en France ?",
-      a: "Bien que basé à Versailles, j'interviens devant toutes les juridictions administratives françaises pour les dossiers de droit des étrangers et de nationalité."
-    },
-    {
-      q: "Quels sont vos honoraires ?",
-      a: "Mes honoraires sont fixés en toute transparence, généralement au forfait selon la complexité du dossier. Une convention d'honoraires est systématiquement signée."
-    },
-    {
-      q: "Quel est le délai pour un recours OQTF ?",
-      a: "Les délais sont extrêmement courts (souvent 48h, 15 jours ou 30 jours). Il est impératif de me contacter dès réception de la décision."
-    }
-  ];
 
   return (
-    <section id="faq" className="py-12 md:py-56 px-6 bg-porcelaine relative">
+    <section id="faq" className="py-24 md:py-32 px-6 bg-porcelaine relative">
       <div className="max-w-4xl mx-auto">
         <motion.h3
           initial={{ opacity: 0 }}
@@ -716,9 +818,9 @@ const FAQ = () => {
           Questions Fréquentes
         </motion.h3>
         <div className="space-y-4">
-          {questions.map((item, i) => (
+          {FAQ_QUESTIONS.map((item, i) => (
             <motion.div
-              key={i}
+              key={item.q}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
@@ -726,27 +828,46 @@ const FAQ = () => {
             >
               <button
                 onClick={() => setOpenIndex(openIndex === i ? null : i)}
-                className="w-full flex justify-between items-center text-left group py-4"
+                className="w-full flex justify-between items-center text-left group py-4 gap-4"
               >
                 <span className={`font-serif text-3xl md:text-5xl transition-all duration-300 ${openIndex === i ? 'text-grenat italic' : 'text-acajou/80 group-hover:text-acajou'}`}>
                   {item.q}
                 </span>
-                <div className={`w-10 h-10 rounded-full border border-acajou/10 flex items-center justify-center transition-transform duration-300 ${openIndex === i ? 'rotate-180 bg-acajou text-porcelaine' : ''}`}>
+                <div className={`w-10 h-10 rounded-full border border-acajou/10 shrink-0 flex items-center justify-center transition-transform duration-300 ${openIndex === i ? 'rotate-180 bg-acajou text-porcelaine' : ''}`}>
                   <ChevronDown size={20} />
                 </div>
               </button>
-              <AnimatePresence>
+              <AnimatePresence initial={false}>
                 {openIndex === i && (
                   <motion.div
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: 'auto', opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                    className="overflow-hidden"
+                    transition={{ type: 'spring', duration: 0.4, bounce: 0 }}
+                    style={{ overflow: 'hidden' }}
                   >
-                    <p className="pt-8 text-xl md:text-2xl text-acajou/80 leading-relaxed font-light max-w-2xl">
-                      {item.a}
-                    </p>
+                    <div className="pt-6 pb-2">
+                      <p className="text-xl md:text-2xl text-acajou/80 leading-relaxed font-light max-w-2xl">
+                        {item.a}
+                      </p>
+                      {/* Urgency CTA for OQTF question (last item) */}
+                      {i === 3 && (
+                        <motion.button
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.2 }}
+                          onClick={() => {
+                            const el = document.getElementById('contact');
+                            if (el) { const top = el.getBoundingClientRect().top + window.scrollY - 80; window.scrollTo({ top, behavior: 'smooth' }); }
+                          }}
+                          className="mt-5 flex items-center gap-2 text-grenat font-bold text-sm uppercase tracking-widest hover:gap-4 transition-all duration-300 group"
+                        >
+                          <span className="w-2 h-2 rounded-full bg-grenat animate-pulse" />
+                          Délai en cours ? Contactez le cabinet maintenant
+                          <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                        </motion.button>
+                      )}
+                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -773,6 +894,8 @@ const Contact = () => {
     email: '',
     message: ''
   });
+
+  const [submitted, setSubmitted] = useState(false);
 
   const validateEmail = (email: string) => /^\S+@\S+\.\S+$/.test(email);
 
@@ -825,15 +948,15 @@ const Contact = () => {
       return;
     }
 
-    // Process valid submission (mock)
-    alert('Formulaire envoyé avec succès !');
+    // Show success without alert()
+    setSubmitted(true);
     setFormData({ firstName: '', lastName: '', email: '', domain: 'Droit des étrangers', message: '' });
   };
 
   return (
-    <section id="contact" className="py-12 md:py-56 px-6 bg-grenat text-porcelaine relative overflow-hidden">
+    <section id="contact" className="py-24 md:py-32 px-6 bg-grenat text-porcelaine relative overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none">
-        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
+        <div className="absolute inset-0" style={{ backgroundImage: `url(${carbonFibreImg})` }} />
       </div>
 
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-24 relative z-10">
@@ -851,7 +974,7 @@ const Contact = () => {
               whileInView={{ opacity: 1, y: 0 }}
               className="font-serif text-6xl md:text-8xl leading-[1] italic text-balance"
             >
-              Parlons de votre <span className="text-lin">projet</span>.
+              Protégez vos <span className="text-lin">droits</span>.
             </motion.h2>
           </div>
 
@@ -886,58 +1009,92 @@ const Contact = () => {
           transition={{ duration: 0.8 }}
           className="bg-acajou p-6 md:p-16 rounded-sm backdrop-blur-sm shadow-2xl border border-lin/5"
         >
-          <form className="space-y-6 md:space-y-10" onSubmit={handleSubmit}>
-            <div className="flex justify-end -mb-4 md:-mb-0">
-              <button
-                type="button"
-                onClick={handleClear}
-                className="text-xs uppercase tracking-[0.2em] font-bold text-porcelaine/40 hover:text-porcelaine min-w-[44px] min-h-[44px] flex items-center justify-center transition-colors duration-300"
-              >
-                Tout effacer
-              </button>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
-              <div className="space-y-2 md:space-y-3 relative">
-                <label htmlFor="firstName" className="text-xs md:text-sm uppercase tracking-[0.3em] text-lin font-bold block">Prénom</label>
-                <input id="firstName" value={formData.firstName} onChange={handleChange} onBlur={() => handleBlur('firstName')} type="text" className={`w-full bg-transparent border-b py-2 md:py-4 outline-none transition-all duration-300 placeholder:text-porcelaine/30 text-base md:text-lg ${errors.firstName ? 'border-red-400 focus:border-red-500' : 'border-porcelaine/20 focus:border-lin'}`} placeholder="Jean" aria-invalid={!!errors.firstName} />
-                {errors.firstName && <span className="absolute -bottom-5 left-0 text-red-400 text-[10px] md:text-xs font-bold">{errors.firstName}</span>}
-              </div>
-              <div className="space-y-2 md:space-y-3 relative">
-                <label htmlFor="lastName" className="text-xs md:text-sm uppercase tracking-[0.3em] text-lin font-bold block">Nom</label>
-                <input id="lastName" value={formData.lastName} onChange={handleChange} onBlur={() => handleBlur('lastName')} type="text" className={`w-full bg-transparent border-b py-2 md:py-4 outline-none transition-all duration-300 placeholder:text-porcelaine/30 text-base md:text-lg ${errors.lastName ? 'border-red-400 focus:border-red-500' : 'border-porcelaine/20 focus:border-lin'}`} placeholder="Dupont" aria-invalid={!!errors.lastName} />
-                {errors.lastName && <span className="absolute -bottom-5 left-0 text-red-400 text-[10px] md:text-xs font-bold">{errors.lastName}</span>}
-              </div>
-            </div>
-            <div className="space-y-2 md:space-y-3 relative">
-              <label htmlFor="email" className="text-xs md:text-sm uppercase tracking-[0.3em] text-lin font-bold block">Email</label>
-              <input id="email" value={formData.email} onChange={handleChange} onBlur={() => handleBlur('email')} type="email" className={`w-full bg-transparent border-b py-2 md:py-4 outline-none transition-all duration-300 placeholder:text-porcelaine/30 text-base md:text-lg ${errors.email ? 'border-red-400 focus:border-red-500' : 'border-porcelaine/20 focus:border-lin'}`} placeholder="jean.dupont@email.com" aria-invalid={!!errors.email} />
-              {errors.email && <span className="absolute -bottom-5 left-0 text-red-400 text-[10px] md:text-xs font-bold">{errors.email}</span>}
-            </div>
-            <div className="space-y-2 md:space-y-3 relative">
-              <label htmlFor="domain" className="text-xs md:text-sm uppercase tracking-[0.3em] text-lin font-bold block">Domaine concerné</label>
-              <div className="relative">
-                <select id="domain" value={formData.domain} onChange={handleChange} className="w-full bg-transparent border-b border-porcelaine/20 py-2 md:py-4 focus:border-lin outline-none transition-all duration-300 appearance-none cursor-pointer text-porcelaine text-base md:text-lg">
-                  <option className="bg-acajou">Droit des étrangers</option>
-                  <option className="bg-acajou">Nationalité française</option>
-                  <option className="bg-acajou">Contentieux administratif</option>
-                  <option className="bg-acajou">Autre demande</option>
-                </select>
-                <ChevronDown className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none text-lin/40" size={16} />
-              </div>
-            </div>
-            <div className="space-y-2 md:space-y-3 relative">
-              <label htmlFor="message" className="text-xs md:text-sm uppercase tracking-[0.3em] text-lin font-bold block">Message</label>
-              <textarea id="message" value={formData.message} onChange={handleChange} onBlur={() => handleBlur('message')} rows={3} className={`w-full bg-transparent border-b py-2 md:py-4 outline-none transition-all duration-300 resize-y min-h-[60px] md:min-h-[120px] placeholder:text-porcelaine/30 text-base md:text-lg ${errors.message ? 'border-red-400 focus:border-red-500' : 'border-porcelaine/20 focus:border-lin'}`} placeholder="Décrivez brièvement votre situation..." aria-invalid={!!errors.message}></textarea>
-              {errors.message && <span className="absolute -bottom-5 left-0 text-red-400 text-[10px] md:text-xs font-bold">{errors.message}</span>}
-            </div>
-            <motion.button
-              type="submit"
-              whileTap={{ scale: 0.98 }}
-              className="btn-interactive w-full py-4 md:py-8 min-h-[44px] bg-lin text-acajou font-bold uppercase tracking-[0.3em] text-[10px] md:text-xs hover:bg-porcelaine transition-all duration-300 shadow-xl rounded-sm mt-4 md:mt-8"
+          {submitted ? (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="flex flex-col items-center justify-center gap-6 py-16 text-center min-h-[400px]"
             >
-              Envoyer la demande
-            </motion.button>
-          </form>
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: 'spring', stiffness: 200, damping: 15, delay: 0.2 }}
+                className="w-16 h-16 rounded-full bg-lin flex items-center justify-center"
+              >
+                <span className="text-acajou text-2xl font-bold">✓</span>
+              </motion.div>
+              <p className="font-serif text-4xl italic text-porcelaine">Message reçu.</p>
+              <p className="text-lin/60 text-xs uppercase tracking-[0.2em] font-sans">
+                Maître Elhaik vous contacte sous 24 heures ouvrées.
+              </p>
+              <p className="text-lin/60 text-xs uppercase tracking-[0.2em] font-sans">
+                🔒 Strictement confidentiel · Secret professionnel garanti
+              </p>
+              <button
+                onClick={() => setSubmitted(false)}
+                className="mt-4 text-xs uppercase tracking-[0.2em] font-bold text-porcelaine/40 hover:text-porcelaine transition-colors duration-300"
+              >
+                Envoyer une autre demande
+              </button>
+            </motion.div>
+          ) : (
+            <form className="space-y-6 md:space-y-10" onSubmit={handleSubmit}>
+              <div className="flex justify-end -mb-4 md:-mb-0">
+                <button
+                  type="button"
+                  onClick={handleClear}
+                  className="text-xs uppercase tracking-[0.2em] font-bold text-porcelaine/40 hover:text-porcelaine min-w-[44px] min-h-[44px] flex items-center justify-center transition-colors duration-300"
+                >
+                  Tout effacer
+                </button>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
+                <div className="space-y-2 md:space-y-3 relative">
+                  <label htmlFor="firstName" className="text-xs md:text-sm uppercase tracking-[0.3em] text-lin font-bold block">Prénom</label>
+                  <input id="firstName" value={formData.firstName} onChange={handleChange} onBlur={() => handleBlur('firstName')} type="text" className={`w-full bg-transparent border-b py-2 md:py-4 outline-none transition-all duration-300 placeholder:text-porcelaine/30 text-base md:text-lg ${errors.firstName ? 'border-red-400 focus:border-red-500' : 'border-porcelaine/20 focus:border-lin'}`} placeholder="Jean" aria-invalid={!!errors.firstName} />
+                  {errors.firstName && <span className="absolute -bottom-5 left-0 text-red-400 text-[10px] md:text-xs font-bold">{errors.firstName}</span>}
+                </div>
+                <div className="space-y-2 md:space-y-3 relative">
+                  <label htmlFor="lastName" className="text-xs md:text-sm uppercase tracking-[0.3em] text-lin font-bold block">Nom</label>
+                  <input id="lastName" value={formData.lastName} onChange={handleChange} onBlur={() => handleBlur('lastName')} type="text" className={`w-full bg-transparent border-b py-2 md:py-4 outline-none transition-all duration-300 placeholder:text-porcelaine/30 text-base md:text-lg ${errors.lastName ? 'border-red-400 focus:border-red-500' : 'border-porcelaine/20 focus:border-lin'}`} placeholder="Dupont" aria-invalid={!!errors.lastName} />
+                  {errors.lastName && <span className="absolute -bottom-5 left-0 text-red-400 text-[10px] md:text-xs font-bold">{errors.lastName}</span>}
+                </div>
+              </div>
+              <div className="space-y-2 md:space-y-3 relative">
+                <label htmlFor="email" className="text-xs md:text-sm uppercase tracking-[0.3em] text-lin font-bold block">Email</label>
+                <input id="email" value={formData.email} onChange={handleChange} onBlur={() => handleBlur('email')} type="email" className={`w-full bg-transparent border-b py-2 md:py-4 outline-none transition-all duration-300 placeholder:text-porcelaine/30 text-base md:text-lg ${errors.email ? 'border-red-400 focus:border-red-500' : 'border-porcelaine/20 focus:border-lin'}`} placeholder="jean.dupont@email.com" aria-invalid={!!errors.email} />
+                {errors.email && <span className="absolute -bottom-5 left-0 text-red-400 text-[10px] md:text-xs font-bold">{errors.email}</span>}
+              </div>
+              <div className="space-y-2 md:space-y-3 relative">
+                <label htmlFor="domain" className="text-xs md:text-sm uppercase tracking-[0.3em] text-lin font-bold block">Domaine concerné</label>
+                <div className="relative">
+                  <select id="domain" value={formData.domain} onChange={handleChange} className="w-full bg-transparent border-b border-porcelaine/20 py-2 md:py-4 focus:border-lin outline-none transition-all duration-300 appearance-none cursor-pointer text-porcelaine text-base md:text-lg">
+                    <option className="bg-acajou">Droit des étrangers</option>
+                    <option className="bg-acajou">Nationalité française</option>
+                    <option className="bg-acajou">Contentieux administratif</option>
+                    <option className="bg-acajou">Autre demande</option>
+                  </select>
+                  <ChevronDown className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none text-lin/40" size={16} />
+                </div>
+              </div>
+              <div className="space-y-2 md:space-y-3 relative">
+                <label htmlFor="message" className="text-xs md:text-sm uppercase tracking-[0.3em] text-lin font-bold block">Message</label>
+                <textarea id="message" value={formData.message} onChange={handleChange} onBlur={() => handleBlur('message')} rows={3} className={`w-full bg-transparent border-b py-2 md:py-4 outline-none transition-all duration-300 resize-y min-h-[60px] md:min-h-[120px] placeholder:text-porcelaine/30 text-base md:text-lg ${errors.message ? 'border-red-400 focus:border-red-500' : 'border-porcelaine/20 focus:border-lin'}`} placeholder="Décrivez brièvement votre situation..." aria-invalid={!!errors.message}></textarea>
+                {errors.message && <span className="absolute -bottom-5 left-0 text-red-400 text-[10px] md:text-xs font-bold">{errors.message}</span>}
+              </div>
+              <p className="text-porcelaine/35 text-xs uppercase tracking-[0.2em] text-center font-sans">
+                🔒 Strictement confidentiel · Protégé par le secret professionnel de l’avocat
+              </p>
+              <motion.button
+                type="submit"
+                whileTap={{ scale: 0.98 }}
+                className="btn-interactive w-full py-4 md:py-8 min-h-[44px] bg-lin text-acajou font-bold uppercase tracking-[0.3em] text-xs hover:bg-porcelaine transition-all duration-300 shadow-xl rounded-sm mt-4 md:mt-8"
+              >
+                Envoyer la demande
+              </motion.button>
+            </form>
+          )}
         </motion.div>
       </div>
     </section>
@@ -963,10 +1120,15 @@ const Footer = () => {
         </div>
 
         <div className="flex flex-wrap gap-6">
-          {[{ k: 'LinkedIn', i: Linkedin }, { k: 'Twitter', i: Twitter }, { k: 'Instagram', i: Instagram }].map(social => (
-            <button aria-label={`Aller sur ${social.k}`} key={social.k} className="btn-interactive w-12 h-12 min-w-[44px] min-h-[44px] rounded-full border border-porcelaine/10 flex items-center justify-center hover:border-lin hover:text-lin transition-all duration-300 cursor-pointer text-xs font-bold">
-              <social.i size={20} />
-            </button>
+          {SOCIAL_LINKS.map(social => (
+            <a 
+              key={social.name} 
+              href={social.href} 
+              aria-label={`Aller sur ${social.name}`} 
+              className="btn-interactive w-12 h-12 min-w-[44px] min-h-[44px] rounded-full border border-porcelaine/10 flex items-center justify-center hover:border-lin hover:text-lin transition-all duration-300 cursor-pointer text-xs font-bold"
+            >
+              <social.icon size={20} />
+            </a>
           ))}
         </div>
       </div>
