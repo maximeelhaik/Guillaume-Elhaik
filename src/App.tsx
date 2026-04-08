@@ -56,19 +56,19 @@ const EXPERTISE_AREAS = [
   {
     id: "01",
     title: "Droit des Étrangers",
-    desc: "Accompagnement stratégique pour titres de séjour, visas et protection contre les mesures d'éloignement (OQTF).",
+    desc: "Accompagnement pour les titres de séjour, visas et recours contre les mesures d'éloignement (OQTF).",
     img: expertiseEtrangers
   },
   {
     id: "02",
     title: "Nationalité Française",
-    desc: "Expertise pointue en naturalisation, réintégration et contentieux du certificat de nationalité française.",
+    desc: "Accompagnement en naturalisation, réintégration et contentieux du certificat de nationalité française.",
     img: expertiseNationalite
   },
   {
     id: "03",
     title: "Droit Processuel",
-    desc: "Maîtrise rigoureuse des règles de procédure pour sécuriser vos recours devant les juridictions administratives.",
+    desc: "Application rigoureuse des règles de procédure pour les recours devant les juridictions administratives.",
     img: expertiseProcessuel
   }
 ];
@@ -84,7 +84,7 @@ const TESTIMONIALS_DATA = [
   },
   {
     id: 2,
-    quote: "Après un long parcours face à l'administration, la stratégie de Maître Elhaik a fait toute la différence devant le juge. Une rigueur impressionnante.",
+    quote: "Après un long parcours face à l'administration, la méthode de Maître Elhaik a apporté une vraie structure à mon dossier. Une rigueur impressionnante.",
     author: "Sylvie C.",
     meta: "Contentieux Administratif · 2024",
     img: t2Img,
@@ -111,7 +111,7 @@ const TESTIMONIALS_DATA = [
 const FAQ_QUESTIONS = [
   {
     q: "Comment se déroule le premier rendez-vous ?",
-    a: "J'analyse votre situation juridique, j'étudie vos documents et je définis avec vous la meilleure stratégie à adopter. Un devis transparent vous est remis à l'issue."
+    a: "J'analyse votre situation juridique, j'étudie vos documents et je définis avec vous une stratégie adaptée à votre situation. Un devis transparent vous est remis à l'issue."
   },
   {
     q: "Intervenez-vous partout en France ?",
@@ -179,30 +179,30 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-6 py-4 ${scrolled ? 'bg-acajou/95 backdrop-blur-md shadow-2xl py-3' : 'bg-transparent'}`}>
+      <nav className={`fixed top-0 left-0 right-0 z-[70] transition-all duration-300 px-6 ${(scrolled && !isOpen) ? 'bg-acajou/95 backdrop-blur-md shadow-2xl py-3' : 'bg-transparent py-4'}`}>
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <div className="flex items-center gap-3 group cursor-pointer" onClick={(e) => scrollToSection(e as any, '#')}>
-            <LogoIcon className={`transition-colors duration-300 w-8 h-10 ${scrolled ? 'text-porcelaine' : 'text-lin'}`} />
-            <LogoHorizontal className={`transition-colors duration-300 h-8 ${scrolled ? 'text-porcelaine' : 'text-lin'}`} />
+          <div className="flex items-center gap-3 group cursor-pointer" onClick={(e) => { setIsOpen(false); scrollToSection(e as any, '#'); }}>
+            <LogoIcon className="transition-colors duration-300 w-8 h-10 text-lin" />
+            <div className={`transition-all duration-500 overflow-hidden ${(scrolled || isOpen) ? 'max-w-[200px] opacity-100' : 'max-w-0 md:max-w-[200px] opacity-0 md:opacity-100'}`}>
+              <LogoHorizontal className="transition-colors duration-300 h-8 text-lin" />
+            </div>
           </div>
 
           <div className="hidden md:flex items-center gap-10">
             <button
-              onClick={(e) => scrollToSection(e, '#contact')}
-              className={`btn-interactive rounded-sm px-4 py-2 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.2em] transition-colors duration-300 ${scrolled ? 'text-lin hover:text-porcelaine' : 'text-porcelaine hover:text-lin'}`}
+              onClick={(e) => { setIsOpen(false); scrollToSection(e, '#contact'); }}
+              className={`btn-interactive rounded-sm px-4 py-2 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.2em] transition-colors duration-300 text-lin hover:text-porcelaine ${isOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
             >
               <span className="w-2 h-2 rounded-full bg-current animate-pulse" />
               Consultation Gratuite
             </button>
-            <button onClick={() => setIsOpen(true)} aria-label="Ouvrir le menu principal" className={`btn-interactive rounded-sm min-w-[44px] min-h-[44px] flex items-center justify-center transition-all duration-300 ${scrolled ? 'text-porcelaine' : 'text-lin'}`}
-            >
-              <Menu size={32} />
+            <button onClick={() => setIsOpen(!isOpen)} aria-label="Basculer le menu" className="btn-interactive rounded-sm min-w-[44px] min-h-[44px] flex items-center justify-center transition-all duration-300 text-lin">
+              {isOpen ? <X size={32} /> : <Menu size={32} />}
             </button>
           </div>
 
-          <button className="md:hidden min-w-[44px] min-h-[44px] flex items-center justify-center p-2" aria-label="Ouvrir le menu principal" onClick={() => setIsOpen(true)}
-          >
-            <Menu size={32} className={scrolled ? 'text-porcelaine' : 'text-lin'} />
+          <button className="md:hidden min-w-[44px] min-h-[44px] flex items-center justify-center p-2 text-lin z-[70]" aria-label="Basculer le menu" onClick={() => setIsOpen(!isOpen)}>
+            {isOpen ? <X size={44} className="hover:rotate-90 transition-transform duration-300" /> : <Menu size={32} />}
           </button>
         </div>
       </nav>
@@ -214,29 +214,14 @@ const Navbar = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: '-100%' }}
             transition={{ type: 'spring', damping: 30, stiffness: 200 }}
-            className="fixed inset-0 z-[60] bg-acajou text-porcelaine flex flex-col overflow-hidden"
+            className="fixed inset-0 z-[60] bg-acajou text-porcelaine flex flex-col overflow-hidden pt-20"
           >
-            {/* Header: align perfectly with default navbar */}
-            <div className="px-6 py-4 flex justify-between items-center border-b border-porcelaine/5 shrink-0">
-              <div className="flex items-center gap-3">
-                <LogoIcon className="text-lin w-8 h-10" />
-                <LogoHorizontal className="text-porcelaine h-8" />
-              </div>
-              <button 
-                onClick={() => setIsOpen(false)} 
-                className="hover:rotate-90 transition-transform duration-300 min-w-[44px] min-h-[44px] flex items-center justify-center p-2" 
-                aria-label="Fermer le menu"
-              >
-                <X size={40} />
-              </button>
-            </div>
-
             {/* Content: Fixed viewport height, flex boxes filling the space fluidly */}
-            <div className="flex-1 flex flex-col md:flex-row px-6 md:px-12 lg:px-20 py-[2dvh] md:py-[5dvh] min-h-0 gap-[2dvh] md:gap-16">
+            <div className="flex-1 flex flex-col md:flex-row px-6 md:px-12 lg:px-20 pb-[2dvh] pt-[1dvh] md:py-[5dvh] min-h-0 gap-[2dvh] md:gap-16 border-t border-porcelaine/5">
               
               {/* Left Column: Links */}
-              <div className="flex-1 flex flex-col justify-start md:justify-center min-h-0">
-                <div className="flex flex-col justify-start md:justify-center h-full gap-[0.5dvh] md:gap-[2dvh]">
+              <div className="flex-1 flex flex-col justify-center min-h-0">
+                <div className="flex flex-col justify-center h-full gap-[1.2dvh] md:gap-[2dvh]">
                   {NAV_LINKS.map((link, i) => (
                     <motion.a
                       key={link.name}
@@ -245,7 +230,7 @@ const Navbar = () => {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.1 + i * 0.05 }}
                       onClick={(e) => scrollToSection(e, link.href)}
-                      className="font-serif text-[clamp(1rem,min(7dvh,9vw),4rem)] md:text-[clamp(3rem,min(11dvh,9vw),9rem)] leading-[0.95] text-porcelaine hover:text-lin transition-all duration-300 italic md:hover:translate-x-6 origin-left block"
+                      className="font-serif text-[clamp(2rem,min(8dvh,14vw),9rem)] leading-[0.9] text-porcelaine hover:text-lin transition-all duration-300 italic md:hover:translate-x-6 origin-left block"
                     >
                       {link.name}
                     </motion.a>
@@ -257,13 +242,13 @@ const Navbar = () => {
               <div className="md:w-[350px] lg:w-[450px] flex flex-col justify-end md:justify-center gap-[1.5dvh] md:gap-[4dvh] border-t md:border-t-0 md:border-l border-porcelaine/10 pt-[2dvh] md:pt-0 pl-1 md:pl-16 shrink-0 min-h-0 mt-auto md:mt-0">
                 <div className="space-y-[0.5dvh] md:space-y-3">
                   <h4 className="text-lin uppercase tracking-[0.3em] text-[min(10px,2dvh)] md:text-sm font-sans font-light hidden md:block">Contact</h4>
-                  <p className="text-[clamp(1rem,4dvh,2.5rem)] md:text-[clamp(2rem,5dvh,4.5rem)] font-serif italic leading-[1]">06 67 83 64 43</p>
-                  <p className="text-[clamp(0.7rem,2dvh,1.5rem)] md:text-[clamp(1rem,2.5dvh,2rem)] opacity-50 hover:opacity-100 transition-opacity cursor-pointer">g.elhaik.avocat@gmail.com</p>
+                  <p className="text-[clamp(1.5rem,5.5dvh,4rem)] font-serif italic leading-[1]">06 67 83 64 43</p>
+                  <p className="text-[clamp(0.9rem,2.2dvh,1.6rem)] md:text-[clamp(1rem,2.5dvh,2rem)] opacity-50 hover:opacity-100 transition-opacity cursor-pointer">g.elhaik.avocat@gmail.com</p>
                 </div>
                 <div className="space-y-[0.5dvh] md:space-y-3">
                   <h4 className="text-lin uppercase tracking-[0.3em] text-[min(10px,2dvh)] md:text-sm font-sans font-light hidden md:block">Adresse</h4>
-                  <p className="text-[clamp(0.7rem,2dvh,1.5rem)] opacity-70 leading-relaxed md:hidden">16 rue Saint-Simon, 78000 Versailles</p>
-                  <p className="text-[clamp(0.7rem,2dvh,1.5rem)] md:text-[clamp(1rem,2.5dvh,2rem)] opacity-70 leading-relaxed hidden md:block">16 rue Saint-Simon<br />78000 Versailles</p>
+                  <p className="text-[clamp(0.9rem,2.2dvh,1.6rem)] opacity-70 leading-relaxed md:hidden">16 rue Saint-Simon, 78000 Versailles</p>
+                  <p className="text-[clamp(0.9rem,2.2dvh,1.6rem)] md:text-[clamp(1rem,2.5dvh,2rem)] opacity-70 leading-relaxed hidden md:block">16 rue Saint-Simon<br />78000 Versailles</p>
                 </div>
                 <div className="flex flex-wrap gap-4 md:gap-6 pt-[0.5dvh] md:pt-2">
                   {SOCIAL_LINKS.map((social, i) => (
@@ -362,7 +347,7 @@ const Hero = () => {
             transition={{ duration: 1, delay: 0.5 }}
             className="text-porcelaine/85 text-lg xl:text-xl leading-relaxed font-sans font-light"
           >
-            Ne laissez pas une erreur de procédure briser votre avenir en France. Une défense stratégique et engagée, dès le premier rendez-vous.
+            Cabinet d'avocat spécialisé en droit des étrangers et de la nationalité française, intervenant devant les juridictions administratives.
           </motion.p>
           <motion.button
             onClick={(e) => scrollToContact(e)}
@@ -372,7 +357,7 @@ const Hero = () => {
             whileHover={{ x: 6 }}
             className="mt-8 px-7 py-4 bg-lin text-acajou font-bold uppercase tracking-[0.2em] text-xs rounded-sm hover:bg-porcelaine transition-all duration-300 shadow-xl flex items-center gap-3 self-start"
           >
-            Protéger ma situation <ArrowRight size={14} />
+            Exposer ma situation <ArrowRight size={14} />
           </motion.button>
           <motion.p
             initial={{ opacity: 0 }}
@@ -510,7 +495,7 @@ const Hero = () => {
           className="text-center mb-5 px-2"
         >
           <p className="text-porcelaine/85 text-[15px] leading-relaxed font-sans font-light max-w-[300px] mx-auto">
-            Ne laissez pas une erreur de procédure briser votre avenir en France. Une défense stratégique, dès le premier rendez-vous.
+            Cabinet d'avocat spécialisé en droit des étrangers et de la nationalité française, intervenant devant les juridictions administratives.
           </p>
         </motion.div>
 
@@ -525,7 +510,7 @@ const Hero = () => {
             onClick={scrollToContact}
             className="w-full max-w-[300px] py-4 bg-lin text-acajou font-bold uppercase tracking-[0.2em] text-xs rounded-sm hover:bg-porcelaine transition-all duration-300 shadow-xl flex items-center justify-center gap-2"
           >
-            Protéger ma situation <ArrowRight size={13} />
+            Exposer ma situation <ArrowRight size={13} />
           </button>
           <p className="text-porcelaine/35 text-xs uppercase tracking-[0.2em] font-sans text-center">Consultation gratuite · Sans engagement</p>
         </motion.div>
@@ -591,7 +576,7 @@ const About = () => {
             className="relative"
           >
             <p className="font-serif text-[28px] md:text-5xl lg:text-7xl leading-[1.3] text-acajou italic text-balance">
-              “Une expertise forgée par des centaines de décisions rendues par les plus hautes juridictions administratives.”
+              Une pratique forgée par de nombreux dossiers traités devant les plus hautes juridictions administratives françaises.
             </p>
             <div className="mt-6 md:mt-16 flex justify-end">
               <motion.div
@@ -661,7 +646,7 @@ const Expertise = () => {
               transition={{ duration: 0.8 }}
               className="font-serif text-5xl md:text-8xl leading-[1.1] italic text-balance"
             >
-              Une défense <span className="text-lin">d'excellence</span> pour chaque dossier.
+              Un traitement <span className="text-lin">attentif</span> pour chaque dossier.
             </motion.h2>
           </div>
         </div>
@@ -850,22 +835,11 @@ const FAQ = () => {
                       <p className="text-xl md:text-2xl text-acajou/80 leading-relaxed font-light max-w-2xl">
                         {item.a}
                       </p>
-                      {/* Urgency CTA for OQTF question (last item) */}
+                      {/* Information factuelle délais OQTF */}
                       {i === 3 && (
-                        <motion.button
-                          initial={{ opacity: 0, x: -10 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: 0.2 }}
-                          onClick={() => {
-                            const el = document.getElementById('contact');
-                            if (el) { const top = el.getBoundingClientRect().top + window.scrollY - 80; window.scrollTo({ top, behavior: 'smooth' }); }
-                          }}
-                          className="mt-5 flex items-center gap-2 text-grenat font-bold text-sm uppercase tracking-widest hover:gap-4 transition-all duration-300 group"
-                        >
-                          <span className="w-2 h-2 rounded-full bg-grenat animate-pulse" />
-                          Délai en cours ? Contactez le cabinet maintenant
-                          <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-                        </motion.button>
+                        <p className="mt-5 text-acajou/60 text-sm leading-relaxed max-w-xl font-light">
+                          Si vous avez reçu une OQTF, les délais légaux sont extrêmement courts. Vous pouvez contacter le cabinet pour étudier votre situation.
+                        </p>
                       )}
                     </div>
                   </motion.div>
@@ -974,7 +948,7 @@ const Contact = () => {
               whileInView={{ opacity: 1, y: 0 }}
               className="font-serif text-6xl md:text-8xl leading-[1] italic text-balance"
             >
-              Protégez vos <span className="text-lin">droits</span>.
+              Exposez votre <span className="text-lin">situation</span>.
             </motion.h2>
           </div>
 
@@ -1026,7 +1000,7 @@ const Contact = () => {
               </motion.div>
               <p className="font-serif text-4xl italic text-porcelaine">Message reçu.</p>
               <p className="text-lin/60 text-xs uppercase tracking-[0.2em] font-sans">
-                Maître Elhaik vous contacte sous 24 heures ouvrées.
+                Le cabinet vous répondra dans les meilleurs délais.
               </p>
               <p className="text-lin/60 text-xs uppercase tracking-[0.2em] font-sans">
                 🔒 Strictement confidentiel · Secret professionnel garanti
