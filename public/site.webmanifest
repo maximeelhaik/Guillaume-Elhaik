@@ -1,0 +1,14 @@
+{
+  "name": "Maître Guillaume El Haik",
+  "short_name": "El Haik Avocat",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "theme_color": "#4A0E0E",
+  "background_color": "#FDFCFB",
+  "display": "standalone"
+}

@@ -20,6 +20,7 @@ import {
   Instagram
 } from 'lucide-react';
 import { LogoHorizontal, LogoIcon, LogoAvocat, LogoFullName } from './components/Logos';
+import { SITE_CONFIG } from './config/site-config';
 
 // --- Img Imports for Vite/Vercel compatibility ---
 import heroBg from './assets/images/hero_bg.webp';
@@ -50,9 +51,9 @@ const NAV_LINKS = [
 ];
 
 const SOCIAL_LINKS = [
-  { name: 'LinkedIn', icon: Linkedin, href: '#' },
-  { name: 'Twitter', icon: Twitter, href: '#' },
-  { name: 'Instagram', icon: Instagram, href: '#' },
+  { name: 'LinkedIn', icon: Linkedin, href: SITE_CONFIG.SOCIAL.LINKEDIN },
+  { name: 'Twitter', icon: Twitter, href: SITE_CONFIG.SOCIAL.TWITTER },
+  { name: 'Instagram', icon: Instagram, href: SITE_CONFIG.SOCIAL.INSTAGRAM },
 ];
 
 const EXPERTISE_AREAS = [
@@ -241,13 +242,13 @@ const Navbar = () => {
               <div className="md:w-[350px] lg:w-[450px] flex flex-col justify-end md:justify-center gap-[1.5dvh] md:gap-[4dvh] border-t md:border-t-0 md:border-l border-porcelaine/10 pt-[2dvh] md:pt-0 pl-1 md:pl-16 shrink-0 min-h-0 mt-auto md:mt-0">
                 <div className="space-y-[0.5dvh] md:space-y-2">
                   <h4 className="text-lin uppercase tracking-[0.3em] text-[min(10px,2dvh)] md:text-sm font-sans font-light hidden md:block">Contact</h4>
-                  <a href="tel:0667836443" className="text-[clamp(1.1rem,3dvh,2.2rem)] font-serif italic text-lin hover:text-porcelaine transition-all duration-300 block">06 67 83 64 43</a>
-                  <a href="mailto:g.elhaik.avocat@gmail.com" className="text-[clamp(1.1rem,3dvh,2.2rem)] font-serif italic text-lin hover:text-porcelaine transition-all duration-300 block">g.elhaik.avocat@gmail.com</a>
+                  <a href={SITE_CONFIG.CONTACT_PHONE_LINK} className="text-[clamp(1.1rem,3dvh,2.2rem)] font-serif italic text-lin hover:text-porcelaine transition-all duration-300 block">{SITE_CONFIG.CONTACT_PHONE}</a>
+                  <a href={`mailto:${SITE_CONFIG.CONTACT_EMAIL}`} className="text-[clamp(1.1rem,3dvh,2.2rem)] font-serif italic text-lin hover:text-porcelaine transition-all duration-300 block">{SITE_CONFIG.CONTACT_EMAIL}</a>
                 </div>
                 <div className="space-y-[0.5dvh] md:space-y-3">
                   <h4 className="text-lin uppercase tracking-[0.3em] text-[min(10px,2dvh)] md:text-sm font-sans font-light hidden md:block">Adresse</h4>
-                  <p className="text-[clamp(0.9rem,2.2dvh,1.6rem)] opacity-70 leading-relaxed md:hidden">16 rue Saint-Simon, 78000 Versailles</p>
-                  <p className="text-[clamp(0.9rem,2.2dvh,1.6rem)] md:text-[clamp(1rem,2.5dvh,2rem)] opacity-70 leading-relaxed hidden md:block">16 rue Saint-Simon<br />78000 Versailles</p>
+                  <p className="text-[clamp(0.9rem,2.2dvh,1.6rem)] opacity-70 leading-relaxed md:hidden">{SITE_CONFIG.ADDRESS_FULL}</p>
+                  <p className="text-[clamp(0.9rem,2.2dvh,1.6rem)] md:text-[clamp(1rem,2.5dvh,2rem)] opacity-70 leading-relaxed hidden md:block">{SITE_CONFIG.ADDRESS_STREET}<br />{SITE_CONFIG.ADDRESS_CITY}</p>
                 </div>
                 <div className="flex flex-wrap gap-4 md:gap-6 pt-[0.5dvh] md:pt-2">
                   {SOCIAL_LINKS.map((social, i) => (
@@ -396,6 +397,9 @@ const Hero = () => {
 
   return (
     <section className="relative h-[100dvh] min-h-[600px] lg:min-h-[650px] flex overflow-hidden bg-acajou">
+      {/* SEO H1 */}
+      <h1 className="sr-only">Maître Guillaume El Haik — Avocat au Barreau de Versailles</h1>
+
       {/* Animated background light wave */}
       <motion.div
         animate={blobAnimation}
@@ -489,8 +493,8 @@ const Hero = () => {
             transition={{ duration: 1, delay: 0.7 }}
             className="flex flex-col items-end gap-1"
           >
-            <a href="tel:0667836443" className="text-lin text-3xl xl:text-4xl font-serif hover:text-porcelaine transition-all duration-300 italic">
-              06 67 83 64 43
+            <a href={SITE_CONFIG.CONTACT_PHONE_LINK} className="text-lin text-3xl xl:text-4xl font-serif hover:text-porcelaine transition-all duration-300 italic">
+              {SITE_CONFIG.CONTACT_PHONE}
             </a>
             <p className="text-porcelaine/60 text-xs uppercase tracking-[0.3em] font-sans font-light">Ligne directe cabinet</p>
             <p className="text-porcelaine/35 text-[11px] uppercase tracking-[0.2em] font-sans font-light mt-1">Avocat au Barreau de Versailles</p>
@@ -502,8 +506,8 @@ const Hero = () => {
             transition={{ duration: 1, delay: 0.9 }}
             className="flex flex-col items-end gap-1"
           >
-            <a href="mailto:g.elhaik.avocat@gmail.com" className="text-lin text-xl xl:text-2xl font-serif hover:text-porcelaine transition-all duration-300 italic whitespace-nowrap">
-              g.elhaik.avocat@gmail.com
+            <a href={`mailto:${SITE_CONFIG.CONTACT_EMAIL}`} className="text-lin text-xl xl:text-2xl font-serif hover:text-porcelaine transition-all duration-300 italic whitespace-nowrap">
+              {SITE_CONFIG.CONTACT_EMAIL}
             </a>
             <p className="text-porcelaine/60 text-xs uppercase tracking-[0.3em] font-sans font-light">Étude de votre dossier</p>
           </motion.div>
@@ -653,7 +657,7 @@ const About = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-20 items-center">
             <div className="space-y-8">
               <p className="text-2xl text-acajou/70 leading-relaxed font-light">
-                Le Cabinet de Maître Guillaume Elhaik est situé à Versailles. Il intervient principalement devant le Tribunal administratif de Cergy-Pontoise, le Tribunal administratif de Versailles et la Cour d'appel de Versailles.
+                Le Cabinet de {SITE_CONFIG.OWNER_TITLE} est situé à Versailles. Il intervient principalement devant le Tribunal administratif de Cergy-Pontoise, le Tribunal administratif de Versailles et la Cour d'appel de Versailles.
               </p>
               <p className="text-lg text-acajou/80 leading-relaxed">
                 Ces décisions témoignent de la compétence et de l’expertise du cabinet en droit des étrangers et de la nationalité, ainsi qu'en droit processuel.
@@ -1040,9 +1044,9 @@ const Contact = () => {
 
           <div className="space-y-4 md:space-y-12 mt-2 md:mt-0">
             {[
-              { icon: Phone, label: "Téléphone", value: "06 67 83 64 43" },
-              { icon: Mail, label: "Email", value: "g.elhaik.avocat@gmail.com" },
-              { icon: MapPin, label: "Adresse", value: "16 rue Saint-Simon, 78000 Versailles" }
+              { icon: Phone, label: "Téléphone", value: SITE_CONFIG.CONTACT_PHONE },
+              { icon: Mail, label: "Email", value: SITE_CONFIG.CONTACT_EMAIL },
+              { icon: MapPin, label: "Adresse", value: SITE_CONFIG.ADDRESS_FULL }
             ].map((item, i) => (
               <motion.div
                 key={item.label}
@@ -1237,7 +1241,7 @@ const LegalModal = ({ page, onClose }: { page: LegalPage; onClose: () => void })
 
             {/* Footer */}
             <div className="border-t border-acajou/10 px-8 md:px-16 py-6 flex justify-between items-center text-[10px] uppercase tracking-[0.2em] text-acajou/40 font-sans">
-              <span>© 2026 Cabinet Guillaume Elhaik — Avocat au Barreau de Versailles</span>
+              <span>© {new Date().getFullYear()} {SITE_CONFIG.CABINET_NAME} — Avocat au {SITE_CONFIG.CABINET_BARREAU}</span>
               <button onClick={onClose} className="hover:text-acajou transition-colors">Fermer ×</button>
             </div>
           </motion.div>
@@ -1263,13 +1267,13 @@ const MentionsLegalesContent = () => (
     </div>
 
     <Section title="Éditeur du site">
-      <p><strong className="text-acajou">Raison sociale :</strong> Cabinet Guillaume Elhaik, Avocat</p>
-      <p><strong className="text-acajou">Statut :</strong> Avocat inscrit au Barreau de Versailles</p>
-      <p><strong className="text-acajou">Adresse :</strong> 16 rue Saint-Simon, 78000 Versailles, France</p>
-      <p><strong className="text-acajou">Téléphone :</strong> 06 67 83 64 43</p>
-      <p><strong className="text-acajou">Email :</strong> g.elhaik.avocat@gmail.com</p>
-      <p><strong className="text-acajou">TOQUE (N° de barreau) :</strong> Inscrit au Barreau de Versailles</p>
-      <p><strong className="text-acajou">Autorité de tutelle :</strong> Barreau de Versailles, Ordre des Avocats du Barreau de Versailles, Palais de Justice, Place André Mignot, 78000 Versailles</p>
+      <p><strong className="text-acajou">Raison sociale :</strong> {SITE_CONFIG.CABINET_NAME}, Avocat</p>
+      <p><strong className="text-acajou">Statut :</strong> Avocat inscrit au {SITE_CONFIG.CABINET_BARREAU}</p>
+      <p><strong className="text-acajou">Adresse :</strong> {SITE_CONFIG.ADDRESS_FULL}, France</p>
+      <p><strong className="text-acajou">Téléphone :</strong> {SITE_CONFIG.CONTACT_PHONE}</p>
+      <p><strong className="text-acajou">Email :</strong> {SITE_CONFIG.CONTACT_EMAIL}</p>
+      <p><strong className="text-acajou">TOQUE (N° de barreau) :</strong> Inscrit au {SITE_CONFIG.CABINET_BARREAU}</p>
+      <p><strong className="text-acajou">Autorité de tutelle :</strong> {SITE_CONFIG.CABINET_BARREAU}, {SITE_CONFIG.ORDER_ADDRESS}</p>
     </Section>
 
     <Section title="Règles professionnelles applicables">
@@ -1278,7 +1282,7 @@ const MentionsLegalesContent = () => (
         <li>La loi n° 71-1130 du 31 décembre 1971 modifiée, portant réforme de certaines professions judiciaires et juridiques</li>
         <li>Le décret n° 91-1197 du 27 novembre 1991 organisant la profession d'avocat</li>
         <li>Le Règlement Intérieur National (RIN) de la profession d'avocat</li>
-        <li>Le Règlement Intérieur du Barreau de Versailles</li>
+        <li>Le Règlement Intérieur du {SITE_CONFIG.CABINET_BARREAU}</li>
       </ul>
       <p className="mt-2">Ces textes sont accessibles sur le site du Conseil National des Barreaux : <span className="text-grenat">www.cnb.avocat.fr</span></p>
     </Section>
@@ -1288,7 +1292,7 @@ const MentionsLegalesContent = () => (
     </Section>
 
     <Section title="Directeur de la publication">
-      <p>Maître Guillaume Elhaik, en sa qualité d'éditeur du site.</p>
+      <p>{SITE_CONFIG.OWNER_TITLE}, en sa qualité d'éditeur du site.</p>
     </Section>
 
     <Section title="Hébergement">
@@ -1326,10 +1330,10 @@ const ConfidentialiteContent = () => (
     </div>
 
     <Section title="Responsable du traitement">
-      <p><strong className="text-acajou">Identité :</strong> Maître Guillaume Elhaik, Avocat</p>
-      <p><strong className="text-acajou">Adresse :</strong> 16 rue Saint-Simon, 78000 Versailles</p>
-      <p><strong className="text-acajou">Email :</strong> g.elhaik.avocat@gmail.com</p>
-      <p><strong className="text-acajou">Téléphone :</strong> 06 67 83 64 43</p>
+      <p><strong className="text-acajou">Identité :</strong> {SITE_CONFIG.OWNER_TITLE}, Avocat</p>
+      <p><strong className="text-acajou">Adresse :</strong> {SITE_CONFIG.ADDRESS_FULL}</p>
+      <p><strong className="text-acajou">Email :</strong> {SITE_CONFIG.CONTACT_EMAIL}</p>
+      <p><strong className="text-acajou">Téléphone :</strong> {SITE_CONFIG.CONTACT_PHONE}</p>
     </Section>
 
     <Section title="Données collectées">
@@ -1403,7 +1407,7 @@ const ConfidentialiteContent = () => (
         <li><strong className="text-acajou">Droit à la portabilité</strong> (art. 20 RGPD) : recevoir vos données dans un format structuré</li>
         <li><strong className="text-acajou">Droit d'opposition</strong> (art. 21 RGPD) : vous opposer au traitement de vos données pour des raisons tenant à votre situation particulière</li>
       </ul>
-      <p className="mt-3">Pour exercer ces droits, adressez votre demande par email à : <strong className="text-grenat">g.elhaik.avocat@gmail.com</strong> ou par courrier à l'adresse du cabinet. Nous répondrons dans un délai d'un mois.</p>
+      <p className="mt-3">Pour exercer ces droits, adressez votre demande par email à : <strong className="text-grenat">{SITE_CONFIG.CONTACT_EMAIL}</strong> ou par courrier à l'adresse du cabinet. Nous répondrons dans un délai d'un mois.</p>
       <p>Si vous estimez que le traitement de vos données constitue une violation de la réglementation, vous disposez du droit d'introduire une réclamation auprès de la <strong className="text-acajou">CNIL</strong> (Commission Nationale de l'Informatique et des Libertés) — <span className="text-grenat">www.cnil.fr</span>.</p>
     </Section>
 
@@ -1522,8 +1526,8 @@ const CookiesContent = () => (
 
     <Section title="Contact">
       <p>Pour toute question relative à l'utilisation des cookies sur ce site, vous pouvez nous contacter :</p>
-      <p>Email : <strong className="text-grenat">g.elhaik.avocat@gmail.com</strong></p>
-      <p>Courrier : Cabinet Guillaume Elhaik — 16 rue Saint-Simon, 78000 Versailles</p>
+      <p>Email : <strong className="text-grenat">{SITE_CONFIG.CONTACT_EMAIL}</strong></p>
+      <p>Courrier : {SITE_CONFIG.CABINET_NAME} — {SITE_CONFIG.ADDRESS_FULL}</p>
     </Section>
   </div>
 );
@@ -1552,15 +1556,15 @@ const Footer = ({ onOpenLegal }: { onOpenLegal: (page: LegalPage) => void }) => 
           <div className="col-span-2 md:col-span-6 flex flex-col">
             <div className="text-lin/40 font-light mb-6 md:mb-8 select-none text-2xl">+</div>
             <div className="space-y-4 md:space-y-6">
-              <a href="tel:0667836443" className="block text-2xl md:text-3xl font-serif text-porcelaine hover:text-lin transition-colors">
-                (06) 67 83 64 43
+              <a href={SITE_CONFIG.CONTACT_PHONE_LINK} className="block text-2xl md:text-3xl font-serif text-porcelaine hover:text-lin transition-colors">
+                {SITE_CONFIG.CONTACT_PHONE}
               </a>
               <div className="inline-block group pb-1">
-                <a href="mailto:g.elhaik.avocat@gmail.com" className="text-xl md:text-3xl font-serif text-porcelaine hover:text-lin transition-colors flex items-center gap-3 break-all">
+                <a href={`mailto:${SITE_CONFIG.CONTACT_EMAIL}`} className="text-xl md:text-3xl font-serif text-porcelaine hover:text-lin transition-colors flex items-center gap-3 break-all">
                   <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-porcelaine group-hover:bg-lin transition-colors flex items-center justify-center shrink-0">
                      <ArrowRight size={14} className="text-acajou" />
                   </div>
-                  <span className="truncate">g.elhaik.avocat@gmail.com</span>
+                  <span className="truncate">{SITE_CONFIG.CONTACT_EMAIL}</span>
                 </a>
                 <div className="h-[2px] w-full bg-porcelaine group-hover:bg-lin transition-colors mt-2 md:mt-3" />
               </div>
@@ -1612,7 +1616,7 @@ const Footer = ({ onOpenLegal }: { onOpenLegal: (page: LegalPage) => void }) => 
         {/* Bottom Legal bar */}
         <div className="w-full pt-6 md:pt-8 border-t border-porcelaine/10 flex flex-col md:flex-row justify-between items-center gap-6 md:gap-8 relative z-10">
           <p className="text-[10px] md:text-xs uppercase tracking-[0.2em] font-sans text-porcelaine/40 text-center md:text-left">
-            © {new Date().getFullYear()} Cabinet Guillaume Elhaik. Tous droits réservés.
+            © {new Date().getFullYear()} {SITE_CONFIG.CABINET_NAME}. Tous droits réservés.
           </p>
           <div className="flex flex-wrap justify-center md:justify-end gap-x-6 gap-y-3 text-[10px] md:text-xs uppercase tracking-[0.2em] font-bold text-lin">
             <button onClick={() => onOpenLegal('mentions')} className="hover:text-porcelaine transition-colors">Mentions Légales</button>

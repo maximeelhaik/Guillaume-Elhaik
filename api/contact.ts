@@ -1,4 +1,5 @@
 import { Resend } from 'resend';
+import { SITE_CONFIG } from '../src/config/site-config';
 // Types Vercel (peuvent être importés si installés, sinon on peut utiliser des types génériques)
 type VercelRequest = any;
 type VercelResponse = any;
@@ -78,7 +79,7 @@ export default async function handler(
 
     // 1. Email de Notification (pour Guillaume Elhaik)
     const notificationEmail = {
-      from: `Cabinet Guillaume Elhaik <${senderEmail}>`,
+      from: `${SITE_CONFIG.CABINET_NAME} <${senderEmail}>`,
       to: [notificationRecipient],
       subject: `Notification : Nouvelle demande — ${firstName} ${lastName}`,
       replyTo: email,
@@ -102,7 +103,7 @@ export default async function handler(
 
     // 2. Email d'Accusé de Réception (pour l'utilisateur)
     const acknowledgmentEmail = {
-      from: `Cabinet Guillaume Elhaik <${senderEmail}>`,
+      from: `${SITE_CONFIG.CABINET_NAME} <${senderEmail}>`,
       to: [email],
       subject: `Accusé de réception — Votre demande concernant : ${domain}`,
       html: `
@@ -116,12 +117,12 @@ export default async function handler(
               <p>Nous vous remercions de la confiance que vous témoignez au Cabinet.</p>
               <p style="margin-top: 30px;">
                 Cordialement,<br />
-                <strong style="color: #3D060C;">Cabinet Guillaume Elhaik</strong>
+                <strong style="color: #3D060C;">${SITE_CONFIG.CABINET_NAME}</strong>
               </p>
             </div>
           </div>
           <p style="text-align: center; font-size: 10px; color: rgba(61, 6, 12, 0.4); margin-top: 20px; text-transform: uppercase; letter-spacing: 0.2em;">
-            © ${new Date().getFullYear()} Cabinet Guillaume Elhaik. Tous droits réservés.
+            © ${new Date().getFullYear()} ${SITE_CONFIG.CABINET_NAME}. Tous droits réservés.
           </p>
         </div>
       `,
