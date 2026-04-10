@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform, useReducedMotion } from 'motion/react';
+import { motion, AnimatePresence, useScroll, useTransform, useReducedMotion, useSpring, useMotionValue } from 'motion/react';
 import {
   Menu,
   X,
@@ -23,6 +23,8 @@ import { LogoHorizontal, LogoIcon, LogoAvocat, LogoFullName } from './components
 
 // --- Img Imports for Vite/Vercel compatibility ---
 import heroBg from './assets/images/hero_bg.webp';
+import fondHero from './assets/images/fond-hero.svg';
+import guillaumeSilhouette from './assets/images/Guillaume silhouette.png';
 import guillaumeHero from './assets/images/guillaume1-R.webp';
 import cabinetOffice from './assets/images/cabinet_office.webp';
 import expertiseEtrangers from './assets/images/expertise_etrangers.webp';
@@ -35,6 +37,7 @@ import t3Img from './assets/images/julio-wolf-OG1cF0cWPfo-unsplash.webp';
 import t4Img from './assets/images/pierre-antona-wbWrY4NZLZc-unsplash.webp';
 import signatureImg from './assets/images/signature.svg';
 import carbonFibreImg from './assets/images/carbon-fibre.png';
+import logoPorcelaine from './assets/logos/ELHAIK-porcelaine.svg';
 
 
 const NAV_LINKS = [
@@ -180,7 +183,7 @@ const Navbar = () => {
   return (
     <>
       <nav className={`fixed top-0 left-0 right-0 z-[70] transition-all duration-300 px-6 ${(scrolled && !isOpen) ? 'bg-acajou/95 backdrop-blur-md shadow-2xl py-3' : 'bg-transparent py-4'}`}>
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
+        <div className="flex justify-between items-center w-full">
           <div className="flex items-center gap-3 group cursor-pointer" onClick={(e) => { setIsOpen(false); scrollToSection(e as any, '#'); }}>
             <LogoIcon className="transition-colors duration-300 w-8 h-10 text-lin" />
             <div className={`transition-all duration-500 overflow-hidden ${(scrolled || isOpen) ? 'max-w-[200px] opacity-100' : 'max-w-0 md:max-w-[200px] opacity-0 md:opacity-100'}`}>
@@ -188,22 +191,18 @@ const Navbar = () => {
             </div>
           </div>
 
-          <div className="hidden md:flex items-center gap-10">
+          <div className="flex items-center gap-4 md:gap-10">
             <button
               onClick={(e) => { setIsOpen(false); scrollToSection(e, '#contact'); }}
-              className={`btn-interactive rounded-sm px-4 py-2 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.2em] transition-colors duration-300 text-lin hover:text-porcelaine ${isOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+              className={`btn-interactive rounded-sm px-3 md:px-4 py-2 flex items-center gap-2 md:gap-3 text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] transition-colors duration-300 text-lin hover:text-porcelaine ${isOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
             >
-              <span className="w-2 h-2 rounded-full bg-current animate-pulse" />
-              Consultation Gratuite
+              <span className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-current animate-pulse" />
+              Prendre RDV
             </button>
-            <button onClick={() => setIsOpen(!isOpen)} aria-label="Basculer le menu" className="btn-interactive rounded-sm min-w-[44px] min-h-[44px] flex items-center justify-center transition-all duration-300 text-lin">
-              {isOpen ? <X size={32} /> : <Menu size={32} />}
+            <button onClick={() => setIsOpen(!isOpen)} aria-label="Basculer le menu" className="btn-interactive rounded-sm min-w-[40px] min-h-[40px] md:min-w-[44px] md:min-h-[44px] flex items-center justify-center transition-all duration-300 text-lin">
+              {isOpen ? <X size={28} className="md:w-8 md:h-8" /> : <Menu size={28} className="md:w-8 md:h-8" />}
             </button>
           </div>
-
-          <button className="md:hidden min-w-[44px] min-h-[44px] flex items-center justify-center p-2 text-lin z-[70]" aria-label="Basculer le menu" onClick={() => setIsOpen(!isOpen)}>
-            {isOpen ? <X size={44} className="hover:rotate-90 transition-transform duration-300" /> : <Menu size={32} />}
-          </button>
         </div>
       </nav>
 
@@ -217,7 +216,7 @@ const Navbar = () => {
             className="fixed inset-0 z-[60] bg-acajou text-porcelaine flex flex-col overflow-hidden pt-20"
           >
             {/* Content: Fixed viewport height, flex boxes filling the space fluidly */}
-            <div className="flex-1 flex flex-col md:flex-row px-6 md:px-12 lg:px-20 pb-[2dvh] pt-[1dvh] md:py-[5dvh] min-h-0 gap-[2dvh] md:gap-16 border-t border-porcelaine/5">
+            <div className="flex-1 flex flex-col md:flex-row px-6 pb-[2dvh] pt-[1dvh] md:py-[5dvh] min-h-0 gap-[2dvh] md:gap-16 border-t border-porcelaine/5">
               
               {/* Left Column: Links */}
               <div className="flex-1 flex flex-col justify-center min-h-0">
@@ -275,6 +274,89 @@ const Navbar = () => {
   );
 };
 
+const InteractiveHeroCard = ({ imgScale }: { imgScale: any }) => {
+  const prefersReducedMotion = useReducedMotion();
+  const mouseX = useMotionValue(0.5);
+  const mouseY = useMotionValue(0.5);
+
+  const springConfig = { damping: 20, stiffness: 100, mass: 0.5 };
+  const smoothX = useSpring(mouseX, springConfig);
+  const smoothY = useSpring(mouseY, springConfig);
+
+  useEffect(() => {
+    if (prefersReducedMotion) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      // Map entire viewport to 0-1 range
+      const x = Math.min(Math.max(e.clientX / window.innerWidth, 0), 1);
+      const y = Math.min(Math.max(e.clientY / window.innerHeight, 0), 1);
+      mouseX.set(x);
+      mouseY.set(y);
+    };
+
+    const handleMouseLeave = () => {
+      // Reset to center when mouse leaves the window
+      mouseX.set(0.5);
+      mouseY.set(0.5);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    document.documentElement.addEventListener('mouseleave', handleMouseLeave);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      document.documentElement.removeEventListener('mouseleave', handleMouseLeave);
+    };
+  }, [prefersReducedMotion, mouseX, mouseY]);
+
+  // Parallax layer movement (reduced for subtlety)
+  const bgTranslateX = useTransform(smoothX, [0, 1], [8, -8]);
+  const bgTranslateY = useTransform(smoothY, [0, 1], [8, -8]);
+
+  const fgTranslateX = useTransform(smoothX, [0, 1], [-15, 15]);
+  const fgTranslateY = useTransform(smoothY, [0, 1], [-15, 15]);
+
+  return (
+    <div className="relative w-[300px] md:w-[350px] lg:w-[500px] xl:w-[650px] 2xl:w-[850px] rounded-sm z-20 group">
+      <motion.div
+        style={{ scale: imgScale }}
+        className="relative w-full aspect-[3/4] lg:aspect-[16/10] rounded-sm will-change-transform overflow-hidden shadow-[0_40px_80px_-20px_rgba(0,0,0,0.6)]"
+      >
+        {/* Background Layer (scaled up to allow translation without showing borders) */}
+        <motion.div
+          style={{ x: bgTranslateX, y: bgTranslateY }}
+          className="absolute inset-[-5%] z-0 bg-porcelaine"
+        >
+          <img
+            src={fondHero}
+            className="w-full h-full object-cover"
+            alt="Bureau Avocat"
+            loading="eager"
+            fetchPriority="high"
+          />
+          <div className="absolute inset-0 bg-grenat/15 mix-blend-overlay z-10" />
+        </motion.div>
+
+        {/* Foreground Layer (Silhouette) */}
+        {/* Absolute bounded to completely stay inside the container to avoid cropping the top. 
+            The object-bottom and translating downwards ensures only the bottom gets cropped. */}
+        <motion.div
+          style={{ x: fgTranslateX, y: fgTranslateY }}
+          className="absolute inset-x-0 bottom-[-5%] top-[5%] flex items-end justify-center pointer-events-none z-20"
+        >
+          <img
+            src={guillaumeSilhouette}
+            className="h-[105%] w-auto max-w-none object-contain object-bottom drop-shadow-[0_15px_20px_rgba(0,0,0,0.4)]"
+            alt="Guillaume Elhaik"
+            loading="eager"
+            fetchPriority="high"
+          />
+        </motion.div>
+      </motion.div>
+    </div>
+  );
+};
+
 const Hero = () => {
   const { scrollY } = useScroll();
   const prefersReducedMotion = useReducedMotion();
@@ -296,6 +378,16 @@ const Hero = () => {
     }
   };
 
+  const scrollToAbout = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const el = document.getElementById('about');
+    if (el) {
+      const offset = 80;
+      const top = el.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+  };
+
   const blobAnimation = prefersReducedMotion ? { opacity: 0.15 } : { scale: [1, 1.2, 1], rotate: [0, 45, 0], opacity: [0.1, 0.2, 0.1] };
   const blobTransition = prefersReducedMotion ? {} : { duration: 15, repeat: Infinity, ease: 'linear' };
 
@@ -303,7 +395,7 @@ const Hero = () => {
   const flareTransition = prefersReducedMotion ? {} : { duration: 7, repeat: Infinity, ease: 'easeInOut' };
 
   return (
-    <section className="relative h-screen min-h-[650px] flex overflow-hidden bg-acajou">
+    <section className="relative h-[100dvh] min-h-[600px] lg:min-h-[650px] flex overflow-hidden bg-acajou">
       {/* Animated background light wave */}
       <motion.div
         animate={blobAnimation}
@@ -334,12 +426,12 @@ const Hero = () => {
       />
 
       {/* ===================== DESKTOP LAYOUT (lg+) ===================== */}
-      <div className="hidden lg:flex relative w-full max-w-7xl mx-auto px-8 xl:px-12 items-center justify-between gap-8 pb-32 xl:pb-40">
+      <div className="hidden lg:flex relative w-full mx-auto px-6 items-center justify-between gap-6 pb-32 xl:pb-40">
 
         {/* Left: Tagline */}
         <motion.div
           style={{ y: textY, willChange: 'transform' }}
-          className="flex-1 flex flex-col justify-center z-40 max-w-xs xl:max-w-sm"
+          className="flex-1 flex flex-col justify-center z-40 max-w-[280px] xl:max-w-[340px]"
         >
           <motion.p
             initial={{ opacity: 0, x: -20 }}
@@ -371,28 +463,17 @@ const Hero = () => {
 
         {/* Center: Portrait */}
         <div className="flex-shrink-0 flex flex-col items-center relative z-20">
-          <motion.div style={{ y: imgY, willChange: 'transform' }} className="relative w-72 xl:w-80 2xl:w-96 rounded-sm">
+          <motion.div style={{ y: imgY, willChange: 'transform' }} className="relative w-full flex justify-center">
             <motion.div
               initial={{ opacity: 0, y: 40 }}
-              animate={prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 1, y: [0, -12, 0] }}
+              animate={prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 1, y: [0, -6, 0] }}
               transition={prefersReducedMotion ? { opacity: { duration: 1, ease: [0.22, 1, 0.36, 1] } } : {
                 opacity: { duration: 1, ease: [0.22, 1, 0.36, 1] },
-                y: { duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 1 }
+                y: { duration: 6, repeat: Infinity, ease: 'easeInOut', delay: 1 }
               }}
               style={{ willChange: 'transform, opacity' }}
             >
-              <motion.div style={{ scale: imgScale, willChange: 'transform' }} className="w-full">
-                <div className="absolute inset-0 bg-grenat/15 mix-blend-overlay z-10 rounded-sm" />
-                <img
-                  src={guillaumeHero}
-                  alt="Guillaume Elhaik, Avocat spécialisé au Tribunal de Versailles"
-                  loading="eager"
-                  fetchPriority="high"
-                  width="400"
-                  height="533"
-                  className="w-full aspect-[3/4] object-cover rounded-sm shadow-[0_60px_120px_-20px_rgba(0,0,0,0.6)]"
-                />
-              </motion.div>
+              <InteractiveHeroCard imgScale={imgScale} />
             </motion.div>
           </motion.div>
         </div>
@@ -400,7 +481,7 @@ const Hero = () => {
         {/* Right: Contact info */}
         <motion.div
           style={{ y: textY }}
-          className="flex-1 flex flex-col items-end justify-center gap-8 z-40 max-w-xs xl:max-w-sm"
+          className="flex-1 flex flex-col items-end justify-center gap-8 z-40 max-w-[280px] xl:max-w-[340px]"
         >
           <motion.div
             initial={{ opacity: 0, x: 20 }}
@@ -452,100 +533,102 @@ const Hero = () => {
       </motion.div>
 
       {/* ===================== MOBILE LAYOUT (< lg) ===================== */}
-      <div className="lg:hidden relative w-full flex flex-col items-center justify-start pt-20 pb-4 px-5 z-20 overflow-y-auto">
+      <div className="lg:hidden relative w-full h-full flex flex-col items-center justify-between pt-[max(80px,10dvh)] pb-[max(20px,5dvh)] px-6 z-20">
 
         {/* 1. Name logo banner */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3 }}
-          className="w-full flex flex-col items-center mb-4"
+          className="w-full flex flex-col items-center shrink-0"
         >
-          <LogoFullName className="text-lin w-[85vw] max-w-[340px] drop-shadow-xl opacity-90" />
+          <LogoFullName className="text-lin w-[75vw] max-w-[300px] drop-shadow-xl opacity-90" />
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8, duration: 0.8 }}
-            className="-mt-3"
+            className="-mt-2 md:-mt-4"
           >
-            <LogoAvocat className="text-lin h-8 drop-shadow" />
+            <LogoAvocat className="text-lin h-8 md:h-10 drop-shadow" />
           </motion.div>
         </motion.div>
 
-        {/* 2. Portrait */}
+        {/* 2. Portrait - Flexible space */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.9, delay: 0.5 }}
-          className="relative z-20 mb-5"
+          className="relative z-20 flex-1 flex items-center justify-center w-full min-h-0 py-0 sm:py-4"
         >
-          <div className="absolute inset-0 bg-grenat/15 mix-blend-overlay z-10 rounded-sm" />
-          <img
-            src={guillaumeHero}
-            alt="Guillaume Elhaik, Avocat à Versailles"
-            className="w-[220px] aspect-[3/4] object-cover rounded-sm shadow-[0_30px_80px_-10px_rgba(0,0,0,0.7)]"
-          />
+          <div className="scale-[0.8] sm:scale-[0.85] md:scale-95 origin-center flex items-center justify-center">
+            <InteractiveHeroCard imgScale={1} />
+          </div>
         </motion.div>
 
-        {/* 3. Tagline */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
-          className="text-center mb-5 px-2"
-        >
-          <p className="text-porcelaine/85 text-[15px] leading-relaxed font-sans font-light max-w-[300px] mx-auto">
-            Cabinet d'avocat spécialisé en droit des étrangers et de la nationalité française, intervenant devant les juridictions administratives.
-          </p>
-        </motion.div>
-
-        {/* 4. CTA primaire mobile */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.95 }}
-          className="flex flex-col items-center gap-2 w-full mb-4"
-        >
-          <button
-            onClick={scrollToContact}
-            className="w-full max-w-[300px] py-4 bg-lin text-acajou font-bold uppercase tracking-[0.2em] text-xs rounded-sm hover:bg-porcelaine transition-all duration-300 shadow-xl flex items-center justify-center gap-2"
+        {/* 3. Text & CTA Group - Clustered at bottom for better thumb reach */}
+        <div className="w-full flex flex-col items-center gap-4 sm:gap-6 shrink-0 mt-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+            className="text-center px-2"
           >
-            Exposer ma situation <ArrowRight size={13} />
-          </button>
-          <p className="text-porcelaine/35 text-xs uppercase tracking-[0.2em] font-sans text-center">Étude de votre dossier</p>
-        </motion.div>
+            <p className="text-porcelaine/85 text-[14px] sm:text-base leading-relaxed font-sans font-light max-w-[280px] sm:max-w-[320px] mx-auto">
+              Cabinet d'avocat spécialisé en droit des étrangers et de la nationalité française, intervenant devant les juridictions administratives.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.95 }}
+            className="flex flex-col items-center gap-2 w-full"
+          >
+            <button
+              onClick={scrollToContact}
+              className="w-full max-w-[280px] sm:max-w-[320px] py-3.5 sm:py-4 bg-lin text-acajou font-bold uppercase tracking-[0.2em] text-[10px] sm:text-xs rounded-sm hover:bg-porcelaine transition-all duration-300 shadow-xl flex items-center justify-center gap-2"
+            >
+              Exposer ma situation <ArrowRight size={13} />
+            </button>
+            <p className="text-porcelaine/35 text-[9px] sm:text-[10px] uppercase tracking-[0.2em] font-sans text-center">Étude de votre dossier</p>
+          </motion.div>
+        </div>
       </div>
 
       {/* Scroll indicator */}
-      <motion.div
+      <motion.button
+        onClick={scrollToAbout}
         animate={prefersReducedMotion ? { y: 0 } : { y: [0, 10, 0] }}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
         style={{ opacity: scrollOpacity, willChange: 'transform, opacity' }}
         transition={prefersReducedMotion ? {} : { duration: 2, repeat: Infinity }}
-        className="absolute bottom-4 left-1/2 -translate-x-1/2 text-lin/40"
+        className="absolute bottom-4 left-1/2 -translate-x-1/2 text-lin/40 hover:text-lin transition-all duration-300 z-50 cursor-pointer p-2"
+        aria-label="Défiler vers la section À Propos"
       >
         <ChevronDown size={28} />
-      </motion.div>
+      </motion.button>
     </section>
   );
 };
 
 const About = () => {
   return (
-    <section id="about" className="py-24 md:py-32 px-6 bg-porcelaine relative overflow-hidden">
+    <section id="about" className="py-16 md:py-32 px-6 bg-porcelaine relative overflow-hidden">
       <div className="absolute top-0 right-0 w-1/3 h-full bg-lin/5 -skew-x-12 translate-x-1/2" />
 
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16 items-start relative z-10">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-16 items-start relative z-10">
         <div className="md:col-span-3">
           <motion.h3
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            className="text-grenat mb-4 md:mb-8"
+            className="text-grenat mb-2 md:mb-8"
           >
             Le Cabinet
           </motion.h3>
         </div>
 
-        <div className="md:col-span-9 flex flex-col gap-10 md:gap-20">
+        <div className="md:col-span-9 flex flex-col gap-8 md:gap-20">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -603,11 +686,11 @@ const About = () => {
 const Expertise = () => {
 
   return (
-    <section id="expertise" className="py-24 md:py-32 px-6 bg-acajou text-porcelaine relative overflow-hidden">
+    <section id="expertise" className="py-16 md:py-32 px-6 bg-acajou text-porcelaine relative overflow-hidden">
       <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
 
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16 mb-16 md:mb-32">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-16 mb-10 md:mb-32">
           <div className="md:col-span-3">
             <motion.h3
               initial={{ opacity: 0 }}
@@ -693,7 +776,7 @@ const Testimonials = () => {
       <div className="sticky top-0 h-screen flex items-center overflow-hidden">
 
         {/* Section Title - Fixed during scroll */}
-        <div className="absolute top-12 md:top-24 left-6 md:left-[10%] z-20 pointer-events-none">
+        <div className="absolute top-8 md:top-24 left-6 md:left-[10%] z-20 pointer-events-none">
           <h3 className="text-grenat mix-blend-multiply opacity-80 md:opacity-100">Témoignages</h3>
         </div>
 
@@ -725,7 +808,7 @@ const Testimonials = () => {
                   </div>
 
                   {/* IMAGE CONTENT */}
-                  <div className={`order-1 ${t.layoutReversed ? 'md:order-1 md:col-span-4 md:col-start-2' : 'md:order-2 md:col-span-4 md:col-start-8'} flex justify-center mt-24 md:mt-0 relative`}>
+                  <div className={`order-1 ${t.layoutReversed ? 'md:order-1 md:col-span-4 md:col-start-2' : 'md:order-2 md:col-span-4 md:col-start-8'} flex justify-center mt-4 md:mt-0 relative`}>
 
                     {/* Mobile Bubble Layout */}
                     <motion.div
@@ -771,12 +854,12 @@ const FAQ = () => {
 
 
   return (
-    <section id="faq" className="py-24 md:py-32 px-6 bg-porcelaine relative">
+    <section id="faq" className="py-16 md:py-32 px-6 bg-porcelaine relative">
       <div className="max-w-4xl mx-auto">
         <motion.h3
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          className="text-grenat mb-10 md:mb-20"
+          className="text-grenat mb-6 md:mb-20"
         >
           Questions Fréquentes
         </motion.h3>
@@ -848,6 +931,8 @@ const Contact = () => {
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const [serverError, setServerError] = useState('');
 
   const validateEmail = (email: string) => /^\S+@\S+\.\S+$/.test(email);
 
@@ -900,26 +985,49 @@ const Contact = () => {
       return;
     }
 
-    // Show success without alert()
-    setSubmitted(true);
-    setFormData({ firstName: '', lastName: '', email: '', domain: 'Droit des étrangers', message: '' });
+    // Send to API
+    setIsSending(true);
+    setServerError('');
+    
+    fetch('/api/contact', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    })
+    .then(async (res) => {
+      if (res.ok) {
+        setSubmitted(true);
+        setFormData({ firstName: '', lastName: '', email: '', domain: 'Droit des étrangers', message: '' });
+      } else {
+        const data = await res.json();
+        setServerError(data.error || "Une erreur est survenue lors de l'envoi.");
+      }
+    })
+    .catch(() => {
+      setServerError("Impossible de contacter le serveur. Vérifiez votre connexion.");
+    })
+    .finally(() => {
+      setIsSending(false);
+    });
   };
 
   return (
-    <section id="contact" className="py-24 md:py-32 px-6 bg-grenat text-porcelaine relative overflow-hidden">
+    <section id="contact" className="py-16 md:py-32 px-6 bg-grenat text-porcelaine relative overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none">
         <div className="absolute inset-0" style={{ backgroundImage: `url(${carbonFibreImg})` }} />
       </div>
 
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-24 relative z-10">
-        <div className="flex flex-col gap-10 md:gap-16">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-24 relative z-10">
+        <div className="flex flex-col gap-6 md:gap-16">
           <div>
             <motion.h3
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              className="text-lin mb-12"
-            >
-              Contact
+              className="text-lin mb-4 md:mb-12"
+             >
+              Prendre RDV
             </motion.h3>
             <motion.h2
               initial={{ opacity: 0, y: 30 }}
@@ -930,7 +1038,7 @@ const Contact = () => {
             </motion.h2>
           </div>
 
-          <div className="space-y-8 md:space-y-12">
+          <div className="space-y-4 md:space-y-12 mt-2 md:mt-0">
             {[
               { icon: Phone, label: "Téléphone", value: "06 67 83 64 43" },
               { icon: Mail, label: "Email", value: "g.elhaik.avocat@gmail.com" },
@@ -1038,12 +1146,16 @@ const Contact = () => {
               <p className="text-porcelaine/35 text-xs uppercase tracking-[0.2em] text-center font-sans">
                 🔒 Strictement confidentiel · Protégé par le secret professionnel de l’avocat
               </p>
+              {serverError && (
+                <p className="text-red-400 text-sm text-center font-bold mb-4">{serverError}</p>
+              )}
               <motion.button
                 type="submit"
+                disabled={isSending}
                 whileTap={{ scale: 0.98 }}
-                className="btn-interactive w-full py-4 md:py-8 min-h-[44px] bg-lin text-acajou font-bold uppercase tracking-[0.3em] text-xs hover:bg-porcelaine transition-all duration-300 shadow-xl rounded-sm mt-4 md:mt-8"
+                className={`btn-interactive w-full py-4 md:py-8 min-h-[44px] bg-lin text-acajou font-bold uppercase tracking-[0.3em] text-xs hover:bg-porcelaine transition-all duration-300 shadow-xl rounded-sm mt-4 md:mt-8 ${isSending ? 'opacity-70 cursor-not-allowed' : ''}`}
               >
-                Envoyer la demande
+                {isSending ? 'Envoi en cours...' : 'Envoyer la demande'}
               </motion.button>
             </form>
           )}
@@ -1417,34 +1529,96 @@ const CookiesContent = () => (
 );
 
 const Footer = ({ onOpenLegal }: { onOpenLegal: (page: LegalPage) => void }) => {
+  const scrollToSection = (id: string) => {
+    if (id === '#' || id === '') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+    const element = document.getElementById(id.replace('#', ''));
+    if (element) {
+      const offset = 80;
+      const top = element.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+  };
+
   return (
-    <footer className="py-20 px-6 bg-acajou border-t border-porcelaine/5 text-porcelaine/60">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
-        <div className="flex items-center gap-4 group cursor-pointer">
-          <LogoIcon className="w-8 h-10 text-lin/50 group-hover:text-lin transition-colors" />
-          <LogoHorizontal className="h-8 text-porcelaine/80" />
-        </div>
-
-        <div className="flex flex-col items-center gap-4">
-          <p className="text-xs uppercase tracking-[0.2em] font-medium">© 2026 Cabinet Guillaume Elhaik. Tous droits réservés.</p>
-          <div className="flex gap-10 text-[10px] uppercase tracking-[0.3em] font-bold">
-            <button onClick={() => onOpenLegal('mentions')} className="hover:text-lin transition-colors cursor-pointer">Mentions Légales</button>
-            <button onClick={() => onOpenLegal('confidentialite')} className="hover:text-lin transition-colors cursor-pointer">Confidentialité</button>
-            <button onClick={() => onOpenLegal('cookies')} className="hover:text-lin transition-colors cursor-pointer">Cookies</button>
+    <footer className="bg-acajou text-porcelaine relative overflow-hidden pt-10 pb-6 md:pt-12 md:pb-8 px-6 border-t border-porcelaine/5">
+      <div className="max-w-7xl mx-auto w-full">
+        {/* Top Grid */}
+        <div className="w-full grid grid-cols-2 md:grid-cols-12 gap-x-6 gap-y-10 md:gap-8 mb-10 md:mb-20 relative z-10">
+          
+          {/* Contact Info */}
+          <div className="col-span-2 md:col-span-6 flex flex-col">
+            <div className="text-lin/40 font-light mb-6 md:mb-8 select-none text-2xl">+</div>
+            <div className="space-y-4 md:space-y-6">
+              <a href="tel:0667836443" className="block text-2xl md:text-3xl font-serif text-porcelaine hover:text-lin transition-colors">
+                (06) 67 83 64 43
+              </a>
+              <div className="inline-block group pb-1">
+                <a href="mailto:g.elhaik.avocat@gmail.com" className="text-xl md:text-3xl font-serif text-porcelaine hover:text-lin transition-colors flex items-center gap-3 break-all">
+                  <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-porcelaine group-hover:bg-lin transition-colors flex items-center justify-center shrink-0">
+                     <ArrowRight size={14} className="text-acajou" />
+                  </div>
+                  <span className="truncate">g.elhaik.avocat@gmail.com</span>
+                </a>
+                <div className="h-[2px] w-full bg-porcelaine group-hover:bg-lin transition-colors mt-2 md:mt-3" />
+              </div>
+            </div>
           </div>
+
+          {/* Navigation */}
+          <div className="col-span-1 md:col-span-3 flex flex-col">
+            <h4 className="text-[10px] md:text-xs uppercase tracking-[0.2em] text-porcelaine/40 font-sans mb-4 md:mb-8">Navigation</h4>
+            <ul className="space-y-3 md:space-y-4">
+              {NAV_LINKS.map(link => (
+                <li key={link.name}>
+                  <button 
+                    onClick={() => scrollToSection(link.href)}
+                    className="text-lg md:text-xl font-serif text-porcelaine hover:text-lin hover:translate-x-2 transition-all duration-300 block text-left"
+                  >
+                    {link.name}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Social */}
+          <div className="col-span-1 md:col-span-3 flex flex-col">
+            <h4 className="text-[10px] md:text-xs uppercase tracking-[0.2em] text-porcelaine/40 font-sans mb-4 md:mb-8">Social</h4>
+            <ul className="space-y-3 md:space-y-4">
+              {SOCIAL_LINKS.map(social => (
+                <li key={social.name}>
+                  <a 
+                    href={social.href}
+                    className="text-lg md:text-xl font-serif text-porcelaine hover:text-lin group flex items-center gap-2 transition-colors w-max"
+                  >
+                    {social.name}
+                    <ArrowRight size={16} className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all -rotate-45" />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+          
         </div>
 
-        <div className="flex flex-wrap gap-6">
-          {SOCIAL_LINKS.map(social => (
-            <a 
-              key={social.name} 
-              href={social.href} 
-              aria-label={`Aller sur ${social.name}`} 
-              className="btn-interactive w-12 h-12 min-w-[44px] min-h-[44px] rounded-full border border-porcelaine/10 flex items-center justify-center hover:border-lin hover:text-lin transition-all duration-300 cursor-pointer text-xs font-bold"
-            >
-              <social.icon size={20} />
-            </a>
-          ))}
+        {/* Huge Logo Section */}
+        <div className="w-full relative z-10 mb-8 md:mb-10 flex justify-start">
+          <img src={logoPorcelaine} alt="Logo Cabinet Guillaume Elhaik" className="w-full md:w-[85%] lg:w-full h-auto drop-shadow-2xl" />
+        </div>
+
+        {/* Bottom Legal bar */}
+        <div className="w-full pt-6 md:pt-8 border-t border-porcelaine/10 flex flex-col md:flex-row justify-between items-center gap-6 md:gap-8 relative z-10">
+          <p className="text-[10px] md:text-xs uppercase tracking-[0.2em] font-sans text-porcelaine/40 text-center md:text-left">
+            © {new Date().getFullYear()} Cabinet Guillaume Elhaik. Tous droits réservés.
+          </p>
+          <div className="flex flex-wrap justify-center md:justify-end gap-x-6 gap-y-3 text-[10px] md:text-xs uppercase tracking-[0.2em] font-bold text-lin">
+            <button onClick={() => onOpenLegal('mentions')} className="hover:text-porcelaine transition-colors">Mentions Légales</button>
+            <button onClick={() => onOpenLegal('confidentialite')} className="hover:text-porcelaine transition-colors">Confidentialité</button>
+            <button onClick={() => onOpenLegal('cookies')} className="hover:text-porcelaine transition-colors">Cookies</button>
+          </div>
         </div>
       </div>
     </footer>
