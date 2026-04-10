@@ -25,11 +25,15 @@ export default async function handler(
     }
 
     // Envoi de l'e-mail via Resend
-    // Remarque : Si vous n'avez pas encore validé un domaine sur Resend, 
-    // l'expéditeur doit être 'onboarding@resend.dev' et le destinataire votre mail vérifié.
+    // Remarque : Tant que vous n'avez pas validé de domaine sur Resend, 
+    // l'expéditeur doit être 'onboarding@resend.dev' et le destinataire votre mail de compte vérifié.
+    const recipient = process.env.CONTACT_RECIPIENT_EMAIL || 'maxime.elhaik@gmail.com';
+    
+    console.log(`Tentative d'envoi d'email à: ${recipient}`);
+
     const { data, error } = await resend.emails.send({
       from: 'Cabinet Elhaik <onboarding@resend.dev>',
-      to: [process.env.CONTACT_RECIPIENT_EMAIL || 'g.elhaik.avocat@gmail.com'],
+      to: [recipient],
       subject: `Nouveau message de ${firstName} ${lastName} - ${domain}`,
       html: `
         <h2>Nouveau message depuis le formulaire de contact</h2>
