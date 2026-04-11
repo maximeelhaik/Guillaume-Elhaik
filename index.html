@@ -1,57 +1,62 @@
 <!doctype html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    <!-- SEO Primaire -->
-    <title>Maître Guillaume El Haik | Avocat à Versailles</title>
-    <meta name="description" content="Cabinet de Maître Guillaume El Haik, avocat au Barreau de Versailles. Conseil et défense devant les juridictions administratives." />
-    <meta name="keywords" content="avocat Versailles, droit public, tribunal administratif, recours, OQTF, naturalisation, Maître Guillaume El Haik, Barreau de Versailles" />
-    <meta name="author" content="Guillaume El Haik" />
-    <meta name="robots" content="index, follow" />
 
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://elhaik.fr/" />
-    <meta property="og:title" content="Maître Guillaume El Haik | Avocat à Versailles" />
-    <meta property="og:description" content="Cabinet de Maître Guillaume El Haik, avocat au Barreau de Versailles. Conseil et défense devant les juridictions administratives." />
-    <meta property="og:image" content="/og-image.webp" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://elhaik.fr/" />
-    <meta property="twitter:title" content="Maître Guillaume El Haik | Avocat à Versailles" />
-    <meta property="twitter:description" content="Cabinet de Maître Guillaume El Haik, avocat au Barreau de Versailles. Conseil et défense devant les juridictions administratives." />
-    <meta property="twitter:image" content="/og-image.webp" />
+  <!-- SEO Primaire -->
+  <title>%SITE_TITLE%</title>
+  <meta name="description"
+    content="%SITE_DESCRIPTION%" />
+  <meta name="keywords"
+    content="%SITE_KEYWORDS%" />
+  <meta name="author" content="%OWNER_NAME%" />
+  <meta name="robots" content="index, follow" />
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="shortcut icon" href="/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="%SITE_URL%/" />
+  <meta property="og:title" content="%SITE_TITLE%" />
+  <meta property="og:description"
+    content="%SITE_DESCRIPTION%" />
+  <meta property="og:image" content="/og-image.webp" />
 
-    <!-- Données structurées JSON-LD (Google Rich Snippets) -->
-    <script type="application/ld+json">
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="%SITE_URL%/" />
+  <meta property="twitter:title" content="%SITE_TITLE%" />
+  <meta property="twitter:description"
+    content="%SITE_DESCRIPTION%" />
+  <meta property="twitter:image" content="/og-image.webp" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+  <!-- Données structurées JSON-LD (Google Rich Snippets) -->
+  <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "Lawyer",
-        "name": "Cabinet de Maître Guillaume El Haik",
+        "name": "Cabinet de %OWNER_NAME%",
         "image": "/og-image.webp",
-        "@id": "https://elhaik.fr",
-        "url": "https://elhaik.fr",
-        "telephone": "06 67 83 64 43",
-        "email": "contact@elhaik.fr",
+        "@id": "%SITE_URL%",
+        "url": "%SITE_URL%",
+        "telephone": "%CONTACT_PHONE%",
+        "email": "%CONTACT_EMAIL%",
         "address": {
           "@type": "PostalAddress",
-          "streetAddress": "16 rue Saint-Simon",
-          "addressLocality": "Versailles",
-          "postalCode": "78000",
+          "streetAddress": "%ADDRESS_STREET%",
+          "addressLocality": "%ADDRESS_LOCALITY%",
+          "postalCode": "%ADDRESS_POSTAL_CODE%",
           "addressCountry": "FR"
         },
         "geo": {
           "@type": "GeoCoordinates",
-          "latitude": 48.8014,
-          "longitude": 2.1301
+          "latitude": %GEO_LAT%,
+          "longitude": %GEO_LNG%
         },
         "openingHoursSpecification": {
           "@type": "OpeningHoursSpecification",
@@ -66,13 +71,14 @@
           "closes": "19:00"
         },
         "priceRange": "$$",
-        "description": "Cabinet de Maître Guillaume El Haik, avocat au Barreau de Versailles. Conseil et défense devant les juridictions administratives."
+        "description": "%SITE_DESCRIPTION%"
       }
     </script>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>
+</head>
 
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
+</html>

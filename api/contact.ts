@@ -34,7 +34,7 @@ export default async function handler(
     // Configuration des destinataires et expéditeur
     const notificationRecipient = process.env.CONTACT_RECIPIENT_EMAIL || 'maxime.elhaik@gmail.com';
     const senderEmail = process.env.CONTACT_FROM_EMAIL || 'contact@elhaik.fr';
-    
+
     // Style commun inspiré des fiches du site
     // Couleurs : Acajou (#3D060C), Lin (#CDBDA3), Porcelaine (#F5F6F1)
     const emailStyles = `
@@ -113,7 +113,7 @@ export default async function handler(
             <div style="${contentStyles}">
               <p>Cher/Chère ${firstName},</p>
               <p>Nous avons bien reçu votre demande concernant le domaine suivant : <strong>${domain}</strong>.</p>
-              <p>Guillaume Elhaik a été personnellement informé de votre message et reviendra vers vous dans les plus brefs délais pour une étude attentive de votre dossier.</p>
+              <p>Le Cabinet a été informé de votre message et reviendra vers vous dans les plus brefs délais pour une étude attentive de votre dossier.</p>
               <p>Nous vous remercions de la confiance que vous témoignez au Cabinet.</p>
               <p style="margin-top: 30px;">
                 Cordialement,<br />
@@ -130,18 +130,18 @@ export default async function handler(
 
     // Envoi simultané des deux emails
     console.log(`Envoi des emails : Notification à ${notificationRecipient} et Accusé à ${email}`);
-    
+
     const results = await Promise.all([
       resend.emails.send(notificationEmail),
       resend.emails.send(acknowledgmentEmail)
     ]);
 
     const errors = results.filter(res => res.error);
-    
+
     if (errors.length > 0) {
       console.error('Erreurs lors de l\'envoi des emails:', errors);
       // On retourne une erreur si au moins un envoi a échoué
-      return response.status(400).json({ 
+      return response.status(400).json({
         error: 'Une erreur est survenue lors de l\'envoi des messages.',
         details: errors.map(e => e.error?.message)
       });

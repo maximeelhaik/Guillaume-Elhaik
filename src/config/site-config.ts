@@ -22,15 +22,44 @@ const RAW_DATA = {
     title: "Maître Guillaume El Haik | Avocat à Versailles",
     description: "Cabinet de Maître Guillaume El Haik, avocat au Barreau de Versailles. Conseil et défense devant les juridictions administratives.",
     keywords: "avocat Versailles, droit public, tribunal administratif, recours, OQTF, naturalisation, Maître Guillaume El Haik, Barreau de Versailles",
-    ogImage: "/og-image.webp", // À ajouter dans public/
+    ogImage: "/og-image.webp",
+    latitude: 48.8014,
+    longitude: 2.1301,
   }
 };
+
+interface SiteConfig {
+  CONTACT_PHONE: string;
+  CONTACT_PHONE_LINK: string;
+  CONTACT_EMAIL: string;
+  ADDRESS_STREET: string;
+  ADDRESS_CITY: string;
+  ADDRESS_FULL: string;
+  SOCIAL: {
+    LINKEDIN: string;
+    TWITTER: string;
+    INSTAGRAM: string;
+  };
+  OWNER_NAME: string;
+  OWNER_TITLE: string;
+  CABINET_NAME: string;
+  CABINET_BARREAU: string;
+  ORDER_ADDRESS: string;
+  SEO: {
+    TITLE: string;
+    DESCRIPTION: string;
+    KEYWORDS: string;
+    OG_IMAGE: string;
+    LATITUDE: number;
+    LONGITUDE: number;
+  };
+}
 
 /**
  * EXPORT DE LA CONFIGURATION
  * Ne pas modifier cette partie, elle sert à formater les données pour le site.
  */
-export const SITE_CONFIG = {
+export const SITE_CONFIG: SiteConfig = {
   // Coordonnées
   CONTACT_PHONE: RAW_DATA.phone,
   get CONTACT_PHONE_LINK() {
@@ -65,5 +94,7 @@ export const SITE_CONFIG = {
     DESCRIPTION: RAW_DATA.seo.description,
     KEYWORDS: RAW_DATA.seo.keywords,
     OG_IMAGE: RAW_DATA.seo.ogImage,
+    LATITUDE: RAW_DATA.seo.latitude,
+    LONGITUDE: RAW_DATA.seo.longitude,
   }
 };

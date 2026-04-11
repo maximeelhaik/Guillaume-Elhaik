@@ -1,5 +1,5 @@
 ---
-description: Audit complet et optimisation automatique des performances React/Frontend
+description: Audit + Optimisation automatique des performances React/Frontend
 ---
 
 Ce workflow permet de réaliser un audit de performance profond et d'appliquer les correctifs nécessaires pour garantir un site fluide et rapide.

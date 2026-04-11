@@ -25,19 +25,22 @@ import { SITE_CONFIG } from './config/site-config';
 // --- Img Imports for Vite/Vercel compatibility ---
 import heroBg from './assets/images/hero_bg.webp';
 import fondHero from './assets/images/fond-hero.svg';
-import guillaumeSilhouette from './assets/images/Guillaume silhouette.png';
+import guillaumeSilhouette from './assets/images/Guillaume silhouette.webp';
 import guillaumeHero from './assets/images/guillaume1-R.webp';
 import cabinetOffice from './assets/images/cabinet_office.webp';
-import expertiseEtrangers from './assets/images/expertise_etrangers.webp';
-import expertiseNationalite from './assets/images/expertise_nationalite.webp';
-import expertiseProcessuel from './assets/images/expertise_processuel.webp';
+import expertiseEtrangers from './assets/images/expertise_etrangers.png';
+import expertiseFamille from './assets/images/expertise_famille.png';
+import expertiseTravail from './assets/images/expertise_travail.png';
+import expertisePenal from './assets/images/expertise_penal.png';
+import expertiseDommage from './assets/images/expertise_dommage_corporel.png';
+import expertiseCivil from './assets/images/expertise_civil_immobilier.png';
 
+import signatureImg from './assets/images/signature.svg';
 import t1Img from './assets/images/hansjorg-keller-m_-8_AhhJjE-unsplash.webp';
 import t2Img from './assets/images/kateryna-hliznitsova-v2MxvXK9OU-unsplash.webp';
 import t3Img from './assets/images/julio-wolf-OG1cF0cWPfo-unsplash.webp';
 import t4Img from './assets/images/pierre-antona-wbWrY4NZLZc-unsplash.webp';
-import signatureImg from './assets/images/signature.svg';
-import carbonFibreImg from './assets/images/carbon-fibre.png';
+import carbonFibreImg from './assets/images/carbon-fibre.webp';
 import logoPorcelaine from './assets/logos/ELHAIK-porcelaine.svg';
 
 
@@ -60,20 +63,38 @@ const EXPERTISE_AREAS = [
   {
     id: "01",
     title: "Droit des Étrangers",
-    desc: "Accompagnement pour les titres de séjour, visas et recours contre les mesures d'éloignement (OQTF).",
+    desc: "Titres de séjour, visas, naturalisation et recours contre les mesures d'éloignement (OQTF).",
     img: expertiseEtrangers
   },
   {
     id: "02",
-    title: "Nationalité Française",
-    desc: "Accompagnement en naturalisation, réintégration et contentieux du certificat de nationalité française.",
-    img: expertiseNationalite
+    title: "Droit de la Famille",
+    desc: "Divorce, garde d'enfants, pensions alimentaires et gestion des successions complexes.",
+    img: expertiseFamille
   },
   {
     id: "03",
-    title: "Droit Processuel",
-    desc: "Application rigoureuse des règles de procédure pour les recours devant les juridictions administratives.",
-    img: expertiseProcessuel
+    title: "Droit du Travail",
+    desc: "Conseils et défense pour les licenciements, ruptures conventionnelles et harcèlement.",
+    img: expertiseTravail
+  },
+  {
+    id: "04",
+    title: "Droit Pénal",
+    desc: "Défense en garde à vue, devant le tribunal correctionnel et assistance aux parties civiles.",
+    img: expertisePenal
+  },
+  {
+    id: "05",
+    title: "Dommage Corporel",
+    desc: "Optimisation de l'indemnisation pour les victimes d'accidents et de fautes médicales.",
+    img: expertiseDommage
+  },
+  {
+    id: "06",
+    title: "Droit Civil & Immobilier",
+    desc: "Litiges contractuels, baux d'habitation, copropriété et recouvrement de créances.",
+    img: expertiseCivil
   }
 ];
 
@@ -115,19 +136,19 @@ const TESTIMONIALS_DATA = [
 const FAQ_QUESTIONS = [
   {
     q: "Comment se déroule le premier rendez-vous ?",
-    a: "J'analyse votre situation juridique, j'étudie vos documents et je définis avec vous une stratégie adaptée à votre situation. Un devis transparent vous est remis à l'issue."
+    a: "J'analyse votre situation juridique, j'étudie vos documents et je définis avec vous une stratégie adaptée à vos intérêts. Un devis transparent vous est remis à l'issue."
   },
   {
     q: "Intervenez-vous partout en France ?",
-    a: "Bien que basé à Versailles, j'interviens devant toutes les juridictions administratives françaises pour les dossiers de droit des étrangers et de nationalité."
+    a: "Bien que basé à Versailles, j'interviens devant les juridictions de toute l'Île-de-France et me déplace partout en France selon les enjeux de votre dossier."
   },
   {
     q: "Quels sont vos honoraires ?",
-    a: "Mes honoraires sont fixés en toute transparence, généralement au forfait selon la complexité du dossier. Une convention d'honoraires est systématiquement signée."
+    a: "Mes honoraires sont fixés en toute transparence, selon la complexité du dossier (forfait ou temps passé). Une convention d'honoraires est systématiquement régularisée."
   },
   {
-    q: "Quel est le délai pour un recours OQTF ?",
-    a: "Les délais sont extrêmement courts (souvent 48h, 15 jours ou 30 jours). Il est impératif de me contacter dès réception de la décision."
+    q: "Proposez-vous des consultations en ligne ?",
+    a: "Oui, le cabinet propose des consultations par visioconférence ou téléphone pour faciliter vos démarches, quel que soit votre lieu de résidence."
   }
 ];
 
@@ -218,7 +239,7 @@ const Navbar = () => {
           >
             {/* Content: Fixed viewport height, flex boxes filling the space fluidly */}
             <div className="flex-1 flex flex-col md:flex-row px-6 pb-[2dvh] pt-[1dvh] md:py-[5dvh] min-h-0 gap-[2dvh] md:gap-16 border-t border-porcelaine/5">
-              
+
               {/* Left Column: Links */}
               <div className="flex-1 flex flex-col justify-center min-h-0">
                 <div className="flex flex-col justify-center h-full gap-[1.2dvh] md:gap-[2dvh]">
@@ -252,13 +273,13 @@ const Navbar = () => {
                 </div>
                 <div className="flex flex-wrap gap-4 md:gap-6 pt-[0.5dvh] md:pt-2">
                   {SOCIAL_LINKS.map((social, i) => (
-                    <motion.a 
-                      key={social.name} 
-                      href={social.href} 
+                    <motion.a
+                      key={social.name}
+                      href={social.href}
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.4 + i * 0.1 }}
-                      aria-label={`Lien vers ${social.name}`} 
+                      aria-label={`Lien vers ${social.name}`}
                       className="btn-interactive w-10 h-10 md:w-12 md:h-12 min-w-[40px] min-h-[40px] rounded-full border border-porcelaine/10 flex items-center justify-center hover:border-lin transition-all duration-300 cursor-pointer"
                     >
                       <social.icon size={20} />
@@ -287,27 +308,84 @@ const InteractiveHeroCard = ({ imgScale }: { imgScale: any }) => {
   useEffect(() => {
     if (prefersReducedMotion) return;
 
-    const handleMouseMove = (e: MouseEvent) => {
-      // Map entire viewport to 0-1 range
-      const x = Math.min(Math.max(e.clientX / window.innerWidth, 0), 1);
-      const y = Math.min(Math.max(e.clientY / window.innerHeight, 0), 1);
-      mouseX.set(x);
-      mouseY.set(y);
-    };
+    // Detect mobile by user agent - more reliable for gyroscope intent than just touch
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-    const handleMouseLeave = () => {
-      // Reset to center when mouse leaves the window
-      mouseX.set(0.5);
-      mouseY.set(0.5);
-    };
+    if (isMobile) {
+      let initialBeta: number | null = null;
+      let initialGamma: number | null = null;
 
-    window.addEventListener('mousemove', handleMouseMove);
-    document.documentElement.addEventListener('mouseleave', handleMouseLeave);
+      const handleOrientation = (e: DeviceOrientationEvent) => {
+        const { beta, gamma } = e;
+        if (beta === null || gamma === null) return;
 
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      document.documentElement.removeEventListener('mouseleave', handleMouseLeave);
-    };
+        // Capture initial position as "center"
+        if (initialBeta === null) initialBeta = beta;
+        if (initialGamma === null) initialGamma = gamma;
+
+        // Calculate deltas
+        const deltaX = gamma - initialGamma;
+        const deltaY = beta - initialBeta;
+
+        // Define a comfortable range for movement (+/- 15 degrees for full sweep)
+        const RANGE = 15;
+
+        // Normalize to 0-1 (0.5 being center)
+        const nx = Math.min(Math.max((deltaX / (RANGE * 2)) + 0.5, 0), 1);
+        const ny = Math.min(Math.max((deltaY / (RANGE * 2)) + 0.5, 0), 1);
+
+        mouseX.set(nx);
+        mouseY.set(ny);
+      };
+
+      const startOrientation = () => {
+        // iOS 13+ requires explicit permission
+        if (typeof (DeviceOrientationEvent as any).requestPermission === 'function') {
+          (DeviceOrientationEvent as any).requestPermission()
+            .then((permissionState: string) => {
+              if (permissionState === 'granted') {
+                window.addEventListener('deviceorientation', handleOrientation);
+              }
+            })
+            .catch(console.error);
+        } else {
+          // Android and older iOS
+          window.addEventListener('deviceorientation', handleOrientation);
+        }
+      };
+
+      // Try to start immediately
+      startOrientation();
+      
+      // Also attach to first touch as fallback (iOS safari often blocks silent requests)
+      window.addEventListener('touchstart', startOrientation, { once: true });
+
+      return () => {
+        window.removeEventListener('deviceorientation', handleOrientation);
+        window.removeEventListener('touchstart', startOrientation);
+      };
+    } else {
+      // Desktop - Mouse tracking
+      const handleMouseMove = (e: MouseEvent) => {
+        const x = Math.min(Math.max(e.clientX / window.innerWidth, 0), 1);
+        const y = Math.min(Math.max(e.clientY / window.innerHeight, 0), 1);
+        mouseX.set(x);
+        mouseY.set(y);
+      };
+
+      const handleMouseLeave = () => {
+        mouseX.set(0.5);
+        mouseY.set(0.5);
+      };
+
+      window.addEventListener('mousemove', handleMouseMove);
+      document.documentElement.addEventListener('mouseleave', handleMouseLeave);
+
+      return () => {
+        window.removeEventListener('mousemove', handleMouseMove);
+        document.documentElement.removeEventListener('mouseleave', handleMouseLeave);
+      };
+    }
   }, [prefersReducedMotion, mouseX, mouseY]);
 
   // Parallax layer movement (reduced for subtlety)
@@ -443,7 +521,7 @@ const Hero = () => {
             transition={{ duration: 1, delay: 0.5 }}
             className="text-porcelaine/85 text-lg xl:text-xl leading-relaxed font-sans font-light"
           >
-            Cabinet d'avocat spécialisé en droit des étrangers et de la nationalité française, intervenant devant les juridictions administratives.
+            Avocat pluridisciplinaire au Barreau de Versailles, Maître Guillaume El Haik assure votre défense et vous conseille dans vos enjeux juridiques majeurs.
           </motion.p>
           <motion.button
             onClick={(e) => scrollToContact(e)}
@@ -453,7 +531,7 @@ const Hero = () => {
             whileHover={{ x: 6 }}
             className="mt-8 px-7 py-4 bg-lin text-acajou font-bold uppercase tracking-[0.2em] text-xs rounded-sm hover:bg-porcelaine transition-all duration-300 shadow-xl flex items-center gap-3 self-start"
           >
-            Exposer ma situation <ArrowRight size={14} />
+            Prendre RDV <ArrowRight size={14} />
           </motion.button>
           <motion.p
             initial={{ opacity: 0 }}
@@ -497,7 +575,7 @@ const Hero = () => {
               {SITE_CONFIG.CONTACT_PHONE}
             </a>
             <p className="text-porcelaine/60 text-xs uppercase tracking-[0.3em] font-sans font-light">Ligne directe cabinet</p>
-            <p className="text-porcelaine/35 text-[11px] uppercase tracking-[0.2em] font-sans font-light mt-1">Avocat au Barreau de Versailles</p>
+            <p className="text-porcelaine/0 text-[11px] uppercase tracking-[0.2em] font-sans font-light mt-1">Avocat au Barreau de Versailles</p>
           </motion.div>
 
           <motion.div
@@ -578,7 +656,7 @@ const Hero = () => {
             className="text-center px-2"
           >
             <p className="text-porcelaine/85 text-[14px] sm:text-base leading-relaxed font-sans font-light max-w-[280px] sm:max-w-[320px] mx-auto">
-              Cabinet d'avocat spécialisé en droit des étrangers et de la nationalité française, intervenant devant les juridictions administratives.
+              Avocat au Barreau de Versailles, assurant votre défense et vous conseillant dans vos enjeux juridiques majeurs.
             </p>
           </motion.div>
 
@@ -592,7 +670,7 @@ const Hero = () => {
               onClick={scrollToContact}
               className="w-full max-w-[280px] sm:max-w-[320px] py-3.5 sm:py-4 bg-lin text-acajou font-bold uppercase tracking-[0.2em] text-[10px] sm:text-xs rounded-sm hover:bg-porcelaine transition-all duration-300 shadow-xl flex items-center justify-center gap-2"
             >
-              Exposer ma situation <ArrowRight size={13} />
+              Prenez Rendez-vous<ArrowRight size={13} />
             </button>
             <p className="text-porcelaine/35 text-[9px] sm:text-[10px] uppercase tracking-[0.2em] font-sans text-center">Étude de votre dossier</p>
           </motion.div>
@@ -641,7 +719,7 @@ const About = () => {
             className="relative"
           >
             <p className="font-serif text-[28px] md:text-5xl lg:text-7xl leading-[1.3] text-acajou italic text-balance">
-              Une pratique forgée par de nombreux dossiers traités devant les plus hautes juridictions administratives françaises.
+              Une expertise juridique pluridisciplinaire au service de la défense de vos intérêts.
             </p>
             <div className="mt-6 md:mt-16 flex justify-end">
               <motion.div
@@ -657,10 +735,10 @@ const About = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-20 items-center">
             <div className="space-y-8">
               <p className="text-2xl text-acajou/70 leading-relaxed font-light">
-                Le Cabinet de {SITE_CONFIG.OWNER_TITLE} est situé à Versailles. Il intervient principalement devant le Tribunal administratif de Cergy-Pontoise, le Tribunal administratif de Versailles et la Cour d'appel de Versailles.
+                Le Cabinet de {SITE_CONFIG.OWNER_TITLE} est situé à Versailles. Il intervient devant les juridictions administratives et judiciaires, notamment le Tribunal Judiciaire et la Cour d'appel de Versailles.
               </p>
               <p className="text-lg text-acajou/80 leading-relaxed">
-                Ces décisions témoignent de la compétence et de l’expertise du cabinet en droit des étrangers et de la nationalité, ainsi qu'en droit processuel.
+                Ces décisions et son approche rigoureuse témoignent de la compétence du cabinet dans ses domaines d'intervention, avec un attachement particulier à la rigueur procédurale.
               </p>
               <button
                 onClick={() => {
@@ -669,7 +747,7 @@ const About = () => {
                 }}
                 className="btn-interactive group rounded-sm px-6 py-4 bg-acajou/5 flex items-center gap-6 text-acajou font-bold uppercase tracking-[0.2em] text-xs border border-acajou/10 hover:shadow-lg hover:bg-acajou/10 hover:translate-x-2 transition-transform duration-300"
               >
-                Consulter le cabinet → <ArrowRight size={18} className="text-grenat group-hover:translate-x-1 transition-transform" />
+                Consulter le cabinet<ArrowRight size={18} className="text-grenat group-hover:translate-x-1 transition-transform" />
               </button>
             </div>
             <div className="aspect-[4/3] bg-acajou/5 rounded-sm overflow-hidden relative group shadow-2xl">
@@ -734,6 +812,8 @@ const Expertise = () => {
                 <img
                   src={area.img}
                   alt={area.title}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover group-hover:scale-110 transition-all duration-700"
                   referrerPolicy="no-referrer"
                 />
@@ -992,7 +1072,7 @@ const Contact = () => {
     // Send to API
     setIsSending(true);
     setServerError('');
-    
+
     fetch('/api/contact', {
       method: 'POST',
       headers: {
@@ -1000,21 +1080,21 @@ const Contact = () => {
       },
       body: JSON.stringify(formData),
     })
-    .then(async (res) => {
-      if (res.ok) {
-        setSubmitted(true);
-        setFormData({ firstName: '', lastName: '', email: '', domain: 'Droit des étrangers', message: '' });
-      } else {
-        const data = await res.json();
-        setServerError(data.error || "Une erreur est survenue lors de l'envoi.");
-      }
-    })
-    .catch(() => {
-      setServerError("Impossible de contacter le serveur. Vérifiez votre connexion.");
-    })
-    .finally(() => {
-      setIsSending(false);
-    });
+      .then(async (res) => {
+        if (res.ok) {
+          setSubmitted(true);
+          setFormData({ firstName: '', lastName: '', email: '', domain: 'Droit des étrangers', message: '' });
+        } else {
+          const data = await res.json();
+          setServerError(data.error || "Une erreur est survenue lors de l'envoi.");
+        }
+      })
+      .catch(() => {
+        setServerError("Impossible de contacter le serveur. Vérifiez votre connexion.");
+      })
+      .finally(() => {
+        setIsSending(false);
+      });
   };
 
   return (
@@ -1030,15 +1110,15 @@ const Contact = () => {
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               className="text-lin mb-4 md:mb-12"
-             >
-              Prendre RDV
+            >
+              CONTACT
             </motion.h3>
             <motion.h2
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               className="font-serif text-6xl md:text-8xl leading-[1] italic text-balance"
             >
-              Exposez votre <span className="text-lin">situation</span>.
+              Prenez <span className="text-lin">rendez-vous</span>.
             </motion.h2>
           </div>
 
@@ -1147,9 +1227,12 @@ const Contact = () => {
                 <textarea id="message" value={formData.message} onChange={handleChange} onBlur={() => handleBlur('message')} rows={3} className={`w-full bg-transparent border-b py-2 md:py-4 outline-none transition-all duration-300 resize-y min-h-[60px] md:min-h-[120px] placeholder:text-porcelaine/30 text-base md:text-lg ${errors.message ? 'border-red-400 focus:border-red-500' : 'border-porcelaine/20 focus:border-lin'}`} placeholder="Décrivez brièvement votre situation..." aria-invalid={!!errors.message}></textarea>
                 {errors.message && <span className="absolute -bottom-5 left-0 text-red-400 text-[10px] md:text-xs font-bold">{errors.message}</span>}
               </div>
-              <p className="text-porcelaine/35 text-xs uppercase tracking-[0.2em] text-center font-sans">
-                🔒 Strictement confidentiel · Protégé par le secret professionnel de l’avocat
-              </p>
+              <div className="space-y-3">
+                <p className="text-porcelaine/35 text-xs uppercase tracking-[0.2em] text-center font-sans">
+                  🔒 Strictement confidentiel • Protégé par le secret professionnel de l’avocat •  En soumettant ce formulaire, j'accepte que les informations saisies soient exploitées dans le cadre strict de ma demande de contact.
+                </p>
+
+              </div>
               {serverError && (
                 <p className="text-red-400 text-sm text-center font-bold mb-4">{serverError}</p>
               )}
@@ -1551,10 +1634,9 @@ const Footer = ({ onOpenLegal }: { onOpenLegal: (page: LegalPage) => void }) => 
       <div className="max-w-7xl mx-auto w-full">
         {/* Top Grid */}
         <div className="w-full grid grid-cols-2 md:grid-cols-12 gap-x-6 gap-y-10 md:gap-8 mb-10 md:mb-20 relative z-10">
-          
+
           {/* Contact Info */}
           <div className="col-span-2 md:col-span-6 flex flex-col">
-            <div className="text-lin/40 font-light mb-6 md:mb-8 select-none text-2xl">+</div>
             <div className="space-y-4 md:space-y-6">
               <a href={SITE_CONFIG.CONTACT_PHONE_LINK} className="block text-2xl md:text-3xl font-serif text-porcelaine hover:text-lin transition-colors">
                 {SITE_CONFIG.CONTACT_PHONE}
@@ -1562,7 +1644,7 @@ const Footer = ({ onOpenLegal }: { onOpenLegal: (page: LegalPage) => void }) => 
               <div className="inline-block group pb-1">
                 <a href={`mailto:${SITE_CONFIG.CONTACT_EMAIL}`} className="text-xl md:text-3xl font-serif text-porcelaine hover:text-lin transition-colors flex items-center gap-3 break-all">
                   <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-porcelaine group-hover:bg-lin transition-colors flex items-center justify-center shrink-0">
-                     <ArrowRight size={14} className="text-acajou" />
+                    <ArrowRight size={14} className="text-acajou" />
                   </div>
                   <span className="truncate">{SITE_CONFIG.CONTACT_EMAIL}</span>
                 </a>
@@ -1577,7 +1659,7 @@ const Footer = ({ onOpenLegal }: { onOpenLegal: (page: LegalPage) => void }) => 
             <ul className="space-y-3 md:space-y-4">
               {NAV_LINKS.map(link => (
                 <li key={link.name}>
-                  <button 
+                  <button
                     onClick={() => scrollToSection(link.href)}
                     className="text-lg md:text-xl font-serif text-porcelaine hover:text-lin hover:translate-x-2 transition-all duration-300 block text-left"
                   >
@@ -1594,7 +1676,7 @@ const Footer = ({ onOpenLegal }: { onOpenLegal: (page: LegalPage) => void }) => 
             <ul className="space-y-3 md:space-y-4">
               {SOCIAL_LINKS.map(social => (
                 <li key={social.name}>
-                  <a 
+                  <a
                     href={social.href}
                     className="text-lg md:text-xl font-serif text-porcelaine hover:text-lin group flex items-center gap-2 transition-colors w-max"
                   >
@@ -1605,12 +1687,12 @@ const Footer = ({ onOpenLegal }: { onOpenLegal: (page: LegalPage) => void }) => 
               ))}
             </ul>
           </div>
-          
+
         </div>
 
         {/* Huge Logo Section */}
         <div className="w-full relative z-10 mb-8 md:mb-10 flex justify-start">
-          <img src={logoPorcelaine} alt="Logo Cabinet Guillaume Elhaik" className="w-full md:w-[85%] lg:w-full h-auto drop-shadow-2xl" />
+          <img src={logoPorcelaine} alt="Logo Cabinet Guillaume Elhaik" loading="lazy" decoding="async" className="w-full md:w-[85%] lg:w-full h-auto drop-shadow-2xl" />
         </div>
 
         {/* Bottom Legal bar */}
